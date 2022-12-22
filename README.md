@@ -5,8 +5,8 @@ Mathpad is a javascript library for creating maths web contents.
 The officials links are :
 
 
-<link rel="stylesheet" type="text/css" href="http://sarmate.free.fr/mathpad/mathpad.css" />
-<script type="text/javascript" src="http://sarmate.free.fr/mathpad/mathpad.js"></script>
+<link rel="stylesheet" type="text/css" href="https://sarmate.xyz/mathpad/mathpad.css" />
+<script type="text/javascript" src="https://sarmate.xyz/mathpad/mathpad.js"></script>
 
 
 But you need in your document to add before these links :
@@ -74,13 +74,13 @@ A minimun code page is :
 
 <!-- Python with Skulp -->
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js" type="text/javascript"></script> 
-<script src="http://www.skulpt.org/static/skulpt.min.js" type="text/javascript"></script> 
-<script src="http://www.skulpt.org/static/skulpt-stdlib.js" type="text/javascript"></script> 
+<script src="https://skulpt.org/static/skulpt.min.js" type="text/javascript"></script> 
+<script src="https://skulpt.org/static/skulpt-stdlib.js" type="text/javascript"></script> 
 
 
 <!-- MathPad -->
-<link rel="stylesheet" type="text/css" href="http://sarmate.free.fr/mathpad/mathpad.css" />
-<script type="text/javascript" src="http://sarmate.free.fr/mathpad/mathpad.js"></script>
+<link rel="stylesheet" type="text/css" href="https://sarmate.xyz/mathpad/mathpad.css" />
+<script type="text/javascript" src="https://sarmate.xyz/mathpad/mathpad.js"></script>
 
 <script>
 var rouge = true;
