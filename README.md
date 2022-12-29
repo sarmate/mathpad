@@ -7,7 +7,7 @@ The officials links are :
 
 &lt;link rel="stylesheet" type="text/css" href="https://sarmate.xyz/mathpad/mathpad.css" />
 
-&lt;script type="text/javascript" src="https://sarmate.xyz/mathpad/mathpad.js">&lt;/script>
+&lt;script type="text/javascript" src="https://sarmate.xyz/mathpad/mathpad.js"></script>
 
 
 You need in your document to add these librarys : JQuery, Skulpt, Mathjax or KaTeX, IPGrid and CodeMirror.
