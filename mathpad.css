@@ -22,13 +22,9 @@
 
 .trou{visibility: hidden;display: inline-block;}
 
-
-
 .star{
 	float: right;
 }
-
-
 
 .jxgbox {
 	border-radius: 0px;
@@ -42,7 +38,6 @@
 	transform: scale(0);
 	display: none;
 }
-
 
 prop, def, theo, propo, lemme, propN{
 	margin-left: 8px;
@@ -228,9 +223,6 @@ tabvar{
 	visibility: hidden;
 	display: none;
 	}
-
-
-
 
 
 

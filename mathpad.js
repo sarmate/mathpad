@@ -18,8 +18,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 
-
-
 */
 
 
@@ -27,8 +25,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // mathpad.js utilise python skulpt et jQuery
 //
 
-
-//console.log(" Language 2"+navigator.languages[0]);
 
 
 function va_en_bas() {
@@ -44,9 +40,6 @@ var editorHTML = [];
 var editorCode = [];
 var editorCodeGraphe = [];
 var theme;
-
-
-
 
 
 
@@ -310,10 +303,8 @@ function corrige(n) {
 		elt.style.transform = 'scale(1)';
 		//elt.style.height = h+"px";
 		},0);
-
-		
-	
 }
+
 function decorrige(n) {
 	var nom = "correction_"+n;
 	var elt = document.getElementById(nom);
@@ -354,13 +345,11 @@ function slide(k,n) {
 
 
 function curseur(a,b,c,d,e) {
-	
 	return true;
 }
 
 
 function curseurChange(i,largeur,hauteur) {
-	
 	return parseFloat(document.getElementById("curseur"+i).value);
 	
 }
@@ -371,11 +360,11 @@ function curseurChange(i,largeur,hauteur) {
 function algo(nNn) {
 	function afficher(t) {
 		document.getElementById('resultats'+nNn).innerHTML += t+"<br />";
-	}
+		}
 	
 	function entAlea(a,b){
 		return a+ Math.floor( (b-a+1)*Math.random() );	
-	}
+		}
 	
 	var today = new Date();	
 	var date = today.toLocaleDateString()+"--"+today.getHours()+"h"+today.getMinutes()+"min"+today.getSeconds()+","+today.getMilliseconds()+"s";
@@ -411,7 +400,6 @@ function algo(nNn) {
 
 
 function algoGraphe(nNn,dimensionL,dimensionH) {
-	
 	var couleur = "#000000";
 	var peinture = "#ffffff";
 	var transparence = 0;
@@ -425,12 +413,9 @@ function algoGraphe(nNn,dimensionL,dimensionH) {
 	var AxeX = false;
 	var AxeY = false;
 	var Grille = false;
-	
 	var canvasGraphe = document.getElementById("resultatsGraphe"+nNn);
-
 	var context = canvasGraphe.getContext('2d');
 	//context.scale(0.9,0.5);
-	
 	
 	function effaceEcran() {
 		context.fillStyle = "#fff";
@@ -447,30 +432,22 @@ function algoGraphe(nNn,dimensionL,dimensionH) {
 }
 
 function traceG() {	
-			var coul = couleur;
-			couleur = "#c0c0c0";
-			for (var i = 0;i<(Xmax)/GradX;i++) {
-
-				segment([i*GradX,Ymin],[i*GradX,Ymax]);
-				
+		var coul = couleur;
+		couleur = "#c0c0c0";
+		for (var i = 0;i<(Xmax)/GradX;i++) {
+			segment([i*GradX,Ymin],[i*GradX,Ymax]);
 			}
-			for (var i = 0;i>(Xmin)/GradX;i--) {
-
-				segment([i*GradX,Ymin],[i*GradX,Ymax]);
-				
+		for (var i = 0;i>(Xmin)/GradX;i--) {
+			segment([i*GradX,Ymin],[i*GradX,Ymax]);
 			}
-			for (var i = 0;i<(Ymax)/GradY;i++) {
-
-				segment([Xmin,i*GradY],[Xmax,i*GradY]);
-				
+		for (var i = 0;i<(Ymax)/GradY;i++) {
+			segment([Xmin,i*GradY],[Xmax,i*GradY]);	
 			}
-			for (var i = 0;i>(Ymin)/GradY;i--) {
-
-				segment([Xmin,i*GradY],[Xmax,i*GradY]);
-				
+		for (var i = 0;i>(Ymin)/GradY;i--) {
+			segment([Xmin,i*GradY],[Xmax,i*GradY]);
 			}
-			couleur = coul;
-}
+		couleur = coul;
+	}
 
 function traceX() {	
 			couleur = "#000000";
@@ -482,7 +459,6 @@ function traceX() {
 }
 
 function traceY() {
-
 			segment([0,Ymin],[0,Ymax]);
 			trait = 2*trait;
 			segment([(Xmax-Xmin)/100,Ymax-(Ymax-Ymin)/100],[0,Ymax]);
@@ -490,16 +466,15 @@ function traceY() {
 			trait = trait/2;
 }
 
-	
-	function point(X) {		
-		if (X.length == 3) { X = convert3_2(X) }	
-		context.strokeStyle = couleur;
-		context.fillStyle = couleur;
-		context.lineWidth = trait;
-		context.beginPath();
-		context.arc(coordX(X[0]),coordY(X[1]),3*trait,0,2*Math.PI);
-		context.fill();
-		context.closePath();
+function point(X) {		
+	if (X.length == 3) { X = convert3_2(X) }	
+	context.strokeStyle = couleur;
+	context.fillStyle = couleur;
+	context.lineWidth = trait;
+	context.beginPath();
+	context.arc(coordX(X[0]),coordY(X[1]),3*trait,0,2*Math.PI);
+	context.fill();
+	context.closePath();
 	}
 	
 	
@@ -520,7 +495,7 @@ function segment(A,B,P) {
 	if (A.length == 3) {
 		A = convert3_2(A);
 		B = convert3_2(B);
-	}
+		}
 	if ( !P ) { P = [] }
 	context.setLineDash(P);
 	context.strokeStyle = couleur;
@@ -549,12 +524,9 @@ function droite(A,B,P) {
 	
 	var varH = B[0]-A[0];
 	if ( varH ==0 ) { varH = 0.00000001; }
-	
 	var a = (B[1]-A[1])/(varH);
 	var b = A[1]-a*A[0];
-	
 	segment( [Xmin,a*Xmin+b], [Xmax,a*Xmax+b] );
-
 	}
 
 
@@ -593,7 +565,6 @@ function cercle(X,r,P) {
 	var rayonY = r*dimensionH/(Ymax-Ymin);
 	
 	context.ellipse(coordX(X[0]),coordY(X[1]),rayonX,rayonY,0,0,2*Math.PI);
-	
 	context.fill();
 	context.closePath();
 	context.globalAlpha = 1
@@ -614,7 +585,6 @@ function arcCercle(X,r,ad,af,P) {
 	
 	context.moveTo(coordX(X[0]),coordY(X[1]));
 	context.ellipse(coordX(X[0]),coordY(X[1]),rayonX,rayonY,0,-af,-ad);
-	
 	context.fill();
 	context.closePath();
 	context.globalAlpha = 1;
@@ -634,7 +604,6 @@ function rectangle(A,L,l,P) {
 	var ly = l* dimensionH/(Ymax-Ymin)
 	
 	context.rect(coordX(A[0]),coordY(A[1]),Lx,ly);
-	
 	context.fill();
 	context.closePath();
 	context.globalAlpha = 1;
@@ -734,12 +703,10 @@ function quadri(A,B,C,D,P) {
 	
 }
 
-	function graphe(f,a,b) {
-	
+function graphe(f,a,b) {
 		context.strokeStyle = couleur;
 		context.fillStyle = peinture;
-		context.lineWidth = trait;
-			
+		context.lineWidth = trait;o
 		var pas = (b-a)/1000;
 		for (var i = 1;i<1000;i++) {
 			context.beginPath();
@@ -844,7 +811,7 @@ function quadri(A,B,C,D,P) {
 	var Q = [];
 	for (var i = 0; i < U.length; i++) {
 		Q.push( U[i]+P[i] );
-	}
+		}
 	return Q;
 }
 
@@ -853,7 +820,7 @@ function symC(C,P){
 	var Q = [];
 	for (var i = 0; i < C.length; i++) {
 		Q.push( 2*C[i]-P[i] );
-	}
+		}
 	return Q;
 }
 
@@ -869,7 +836,7 @@ function ht(C,k,P) {
 	var Q = [];
 	for (var i = 0; i < C.length; i++) {
 		Q.push( k*(P[i]-C[i])+C[i] );
-	}
+		}
 	return Q;
 }
 
@@ -878,25 +845,24 @@ function vec(A,B) {
 	var Q = [];
 	for (var i = 0; i < A.length; i++) {
 		Q.push( B[i] - A[i] );
-	}
+		}
 	return Q;
 }
 
 
 
-	function entAlea(a,b){
+function entAlea(a,b){
 		return a+ Math.floor( (b-a+1)*Math.random() );	
 	}
 	
-	function convert3_2(P) {
-	
+function convert3_2(P) {
 		T = [-2,-2];
 		T[0] = -2-0.4*P[0]+P[1];
 		T[1] = -2-0.3*P[0]+P[2];
 		return T;
 	}
 
-	function traceAxes3d() {
+function traceAxes3d() {
 		var O = [0,0,0];
 		var I = [Ymax/0.4-2,0,0];
 		var J = [0,Xmax+2,0];
@@ -1039,7 +1005,6 @@ function algoGrapheInv(nNn,dimensionLInv,dimensionHInv) {
 	}
 
 	function traceX() {	
-
 			segment([Xmin,0],[Xmax,0]);
 			trait = 2*trait;
 			segment([Xmax-(Xmax-Xmin)/100,(Ymax-Ymin)/100],[Xmax,0]);
@@ -1048,7 +1013,6 @@ function algoGrapheInv(nNn,dimensionLInv,dimensionHInv) {
 	}
 
 	function traceY() {
-
 			segment([0,Ymin],[0,Ymax]);
 			trait = 2*trait;
 			segment([(Xmax-Xmin)/100,Ymax-(Ymax-Ymin)/100],[0,Ymax]);
@@ -1086,7 +1050,7 @@ function algoGrapheInv(nNn,dimensionLInv,dimensionHInv) {
 		if (A.length == 3) {
 			A = convert3_2(A);
 			B = convert3_2(B);
-		}
+			}
 		if ( !P ) { P = [] }
 		context.setLineDash(P);
 		context.strokeStyle = couleur;
@@ -1193,14 +1157,15 @@ function algoGrapheInv(nNn,dimensionLInv,dimensionHInv) {
 		context.stroke();
 	}
 
-function triangle(A,B,C,P) {
-	if ( !P ) { P = [] }
-	context.setLineDash(P);
-	if (A.length == 3) {
-		A = convert3_2(A);
-		B = convert3_2(B);
-		C = convert3_2(C);
-	}
+	function triangle(A,B,C,P) {
+		if ( !P ) { P = [] }
+		context.setLineDash(P);
+		if (A.length == 3) {
+			A = convert3_2(A);
+			B = convert3_2(B);
+			C = convert3_2(C);
+		}
+		
 	context.globalAlpha = transparence;
 	context.strokeStyle = couleur;
 	context.fillStyle = peinture;
@@ -1459,16 +1424,12 @@ function vec(A,B) {
 		segment(O,I);
 		segment(O,J);
 		segment(O,K);
-
 	}
 	
 
-	
 
 	Texte = "\n"+document.getElementById("textareaCodeGrapheInv"+nNn).value;
 	Texte += '\n'+'couleur = "#000000";peinture = "#ffffff";transparence = 0;trait = 1;';
-	
-	
 	Texte = Texte.replace( new RegExp( 'rand[(]' , 'g' )  ,'Math.random(' );
 	Texte = Texte.replace( new RegExp( 'puissance[(]' , 'g' )  ,'Math.pow(' );	
 	Texte = Texte.replace( new RegExp( 'ln[(]' , 'g' )  ,'Math.log(' );
@@ -1494,7 +1455,6 @@ function vec(A,B) {
 	Texte = Texte.replace( new RegExp( "couleur = indigo", 'g' )  ,'couleur = "indigo"' );
 	Texte = Texte.replace( new RegExp( "couleur = orange", 'g' )  ,'couleur = "orange"' );
 	Texte = Texte.replace( new RegExp( "couleur = blanc", 'g' )  ,'couleur = "white"' );
-	
 	Texte = Texte.replace( new RegExp( "peinture = rouge", 'g' )  ,'peinture = "red"' );
 	Texte = Texte.replace( new RegExp( "peinture = vert", 'g' )  ,'peinture = "green"' );
 	Texte = Texte.replace( new RegExp( "peinture = bleu", 'g' )  ,'peinture = "blue"' );
@@ -1510,20 +1470,15 @@ function vec(A,B) {
 	
 	
 	if ( Texte.match("curseur[(]") ) {
-		
 		var deb = Texte.match("curseur[(]").index;
 		var sousTexte = Texte.substring( deb , Texte.length );
 		var fin =  sousTexte.match("[)]").index;
 		var chaineTexte = sousTexte.substring( 8 , fin );
 		var tabInfo = chaineTexte.split(",");
-		
 		var nomCurseur = "{"+tabInfo[0].replace( new RegExp( '\"', 'g' )  ,'' )+"}";
-		
 		Texte = Texte.replace( new RegExp(  nomCurseur , 'g' )  , curseurChange(nNn) );
 		
-	
 		// Modification du textarea
-		
 		var debT = document.getElementById("textareaCodeGrapheInv"+nNn).value.match("curseur[(]").index;
 		var sousTexteT =  document.getElementById("textareaCodeGrapheInv"+nNn).value.substring( debT ,  document.getElementById("textareaCodeGrapheInv"+nNn).value.length );
 		var finT =  sousTexteT.match("[)]").index;
@@ -1532,12 +1487,8 @@ function vec(A,B) {
 		tabInfoT[1] = curseurChange(nNn);
 		chaineT = tabInfoT.join();
 		var numT = debT+8;
-				
 		var ancienT = document.getElementById("textareaCodeGrapheInv"+nNn).value;
 		document.getElementById("textareaCodeGrapheInv"+nNn).value = ancienT.substring(0,numT)+chaineT+ancienT.substring(debT+finT, ancienT.length);
-		
-		
-		
 	}
 	/*
 	if ( Texte.match( new RegExp( 'Grille = true' , 'g' ) ) || 
@@ -1565,8 +1516,6 @@ function vec(A,B) {
 	eval(Texte);
 	
 	}
-
-	
 }
 
 
