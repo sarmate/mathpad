@@ -1,6 +1,6 @@
 
 
-Mathpad is a javascript library for creating maths web contents.
+Mathpad is a javascript library for creating math web contents.
 
 The officials links are :
 
@@ -9,7 +9,7 @@ The officials links are :
 <script type="text/javascript" src="https://sarmate.xyz/mathpad/mathpad.js"></script>
 
 
-But you need in your document to add these librarys : JQuery, Skulpt, Mathjax or KaTeX, IPGrid and CodeMirror.
+You need in your document to add these librarys : JQuery, Skulpt, Mathjax or KaTeX, IPGrid and CodeMirror.
 
 We recommend to use JSXGraph too.
 
