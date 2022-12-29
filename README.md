@@ -6,6 +6,7 @@ The officials links are :
 
 
 &lt;link rel="stylesheet" type="text/css" href="https://sarmate.xyz/mathpad/mathpad.css" />
+
 &lt;script type="text/javascript" src="https://sarmate.xyz/mathpad/mathpad.js">&lt;/script>
 
 
