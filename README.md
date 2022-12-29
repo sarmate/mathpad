@@ -18,9 +18,9 @@ We recommend to use JSXGraph too.
 A minimun code page is :
 
 
-
-<!DOCTYPE html>
-<html>
+<pre>
+&lt;!DOCTYPE html>
+&lt;html>
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -90,7 +90,7 @@ renderMathInElement(
 
 </body>
 </html>
-
+</pre>
 
 
 
