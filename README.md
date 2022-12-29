@@ -5,7 +5,7 @@ Mathpad is a javascript library for creating math web contents.
 The officials links are :
 
 
-<link rel="stylesheet" type="text/css" href="https://sarmate.xyz/mathpad/mathpad.css" />
+&lt;link rel="stylesheet" type="text/css" href="https://sarmate.xyz/mathpad/mathpad.css" />
 <script type="text/javascript" src="https://sarmate.xyz/mathpad/mathpad.js"></script>
 
 
