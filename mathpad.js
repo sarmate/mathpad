@@ -1543,7 +1543,7 @@ function runit(n) {
    	var mypre = document.getElementById("output"+n); 
    	mypre.innerHTML = ''; 
    	Sk.pre = "output"+n;
-   	Sk.configure({output:eval("outf"+n), read:builtinRead}); 
+   	Sk.configure({output:eval("outf"+n), read:builtinRead, __future__: Sk.python3});  
    	(Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas'+n;
    	var myPromise = Sk.misceval.asyncToPromise(function() {
       	 return Sk.importMainWithBody("<stdin>", false, prog, true);
