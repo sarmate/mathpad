@@ -1034,7 +1034,7 @@ function algoGrapheInv(nNn,dimensionLInv,dimensionHInv) {
 				segment([Xmin,i*GradY],[Xmax,i*GradY]);
 			}
 			couleur = coul;
-			console.log("Grille");
+			//console.log("Grille");
 		}
 	
 		function peintTout(coulPeinture) {
@@ -1826,14 +1826,14 @@ if (!localStorage.getItem("checked"+document.URL) ){
 	}
 
 
-$('input').each(function(i){
+
+$('.check-box').each(function(i){
 	$(this).attr('id',"check_"+i);
     $(this).on('click', function (){changeChecked(i)});
     console.log(i);
 });
 
-
-let n = $('input').length;
+let n = $('.check-box').length;
 
 for(var i = 0; i < n ; i++){
 	let nom = "check_"+i;
@@ -2310,7 +2310,7 @@ $("algoGrapheInv").each(function(i) {
 	// pour réutiliser le curseur dans le code {n}
 	
 	if ( contenu.match("curseur[(]") ) {
-		console.log("Curseur 0 ! ");
+		//console.log("Curseur 0 ! ");
 		//for (var j = 0; j < tabCurseur.length; j++) {
 		
 		var deb = contenu.match("curseur[(]").index;
@@ -2839,5 +2839,6 @@ $('.numSubPara').css("color", $couleurNumPara);
 $('.clicGauche').remove();
 $('.clicDroit').remove();
 }
+
 
 
