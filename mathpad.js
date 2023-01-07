@@ -445,9 +445,9 @@ function algoGraphe(nNn,dimensionL,dimensionH) {
 		context.lineTo(0,0);
 		context.fill();
 		context.closePath();
-}
+	}
 
-function traceG() {	
+	function traceG() {	
 			var coul = couleur;
 			couleur = "#c0c0c0";
 			for (var i = 0;i<(Xmax)/GradX;i++) {
@@ -471,25 +471,24 @@ function traceG() {
 				
 			}
 			couleur = coul;
-}
+	}
 
-function traceX() {	
+	function traceX() {	
 			couleur = "#000000";
 			segment([Xmin,0],[Xmax,0]);
 			trait = 2*trait;
 			segment([Xmax-(Xmax-Xmin)/100,(Ymax-Ymin)/100],[Xmax,0]);
 			segment([Xmax-(Xmax-Xmin)/100,-(Ymax-Ymin)/100],[Xmax,0]);
 			trait = trait/2;
-}
+	}
 
-function traceY() {
-
+	function traceY() {
 			segment([0,Ymin],[0,Ymax]);
 			trait = 2*trait;
 			segment([(Xmax-Xmin)/100,Ymax-(Ymax-Ymin)/100],[0,Ymax]);
 			segment([-(Xmax-Xmin)/100,Ymax-(Ymax-Ymin)/100],[0,Ymax])
 			trait = trait/2;
-}
+	}
 
 	
 	function point(X) {		
@@ -504,239 +503,234 @@ function traceY() {
 	}
 	
 	
-function coordX(x) {
-	var a = dimensionL/(Xmax-Xmin);
-	var b = -Xmin*a;
-	return a*x+b;
+	function coordX(x) {
+		var a = dimensionL/(Xmax-Xmin);
+		var b = -Xmin*a;
+		return a*x+b;
 	}
 
-function coordY(y) {
-	var a = dimensionH/(Ymin-Ymax);
-	var b = -Ymax*a;
-	return a*y+b;
-	}
-
-
-function segment(A,B,P) {
-	if (A.length == 3) {
-		A = convert3_2(A);
-		B = convert3_2(B);
-	}
-	if ( !P ) { P = [] }
-	context.setLineDash(P);
-	context.strokeStyle = couleur;
-	context.fillStyle = peinture;
-	context.lineWidth = trait;
-	context.beginPath();	
-	context.moveTo(coordX(A[0]),coordY(A[1]));
-	context.lineTo(coordX(B[0]),coordY(B[1]));
-	context.stroke();
-	context.closePath();
-	}
-
-
-function hachure(P) {
-	context.setLineDash(P);
-}
-
-
-function droite(A,B,P) {
-	if ( !P ) { P = [] }
-	context.setLineDash(P);
-	if (A.length == 3) {
-		A = convert3_2(A);
-		B = convert3_2(B);
-	}
-	
-	var varH = B[0]-A[0];
-	if ( varH ==0 ) { varH = 0.00000001; }
-	
-	var a = (B[1]-A[1])/(varH);
-	var b = A[1]-a*A[0];
-	
-	segment( [Xmin,a*Xmin+b], [Xmax,a*Xmax+b] );
-
-	}
-
-
-// Ajouter le param fs dans les instructions
-function texte(T,A,fs) {
-	if (A.length == 3) {
-		A = convert3_2(A);
+	function coordY(y) {
+		var a = dimensionH/(Ymin-Ymax);
+		var b = -Ymax*a;
+		return a*y+b;
 		}
-	if (!fs) { fs = 15 }
-	
-	context.font = fs+"px Helvetica";
-	context.fillStyle = couleur;
-	context.fillText( T, coordX(A[0]),coordY(A[1]) );
-}
 
+
+	function segment(A,B,P) {
+		if (A.length == 3) {
+			A = convert3_2(A);
+			B = convert3_2(B);
+		}
+		if ( !P ) { P = [] }
+		context.setLineDash(P);
+		context.strokeStyle = couleur;
+		context.fillStyle = peinture;
+		context.lineWidth = trait;
+		context.beginPath();	
+		context.moveTo(coordX(A[0]),coordY(A[1]));
+		context.lineTo(coordX(B[0]),coordY(B[1]));
+		context.stroke();
+		context.closePath();
+	}
+
+
+	function hachure(P) {
+		context.setLineDash(P);
+	}
+
+
+	function droite(A,B,P) {
+		if ( !P ) { P = [] }
+		context.setLineDash(P);
+		if (A.length == 3) {
+			A = convert3_2(A);
+			B = convert3_2(B);
+		}
+		
+		var varH = B[0]-A[0];
+		if ( varH ==0 ) { varH = 0.00000001; }
+		
+		var a = (B[1]-A[1])/(varH);
+		var b = A[1]-a*A[0];
+		
+		segment( [Xmin,a*Xmin+b], [Xmax,a*Xmax+b] );
+		}
+
+	// Ajouter le param fs dans les instructions
+	function texte(T,A,fs) {
+		if (A.length == 3) {
+			A = convert3_2(A);
+		}
+		if (!fs) { fs = 15 }
+		
+		context.font = fs+"px Helvetica";
+		context.fillStyle = couleur;
+		context.fillText( T, coordX(A[0]),coordY(A[1]) );
+	}
+	
 	function distance(A,B) {
-	var n = A.length;
-	var d = 0;
-	for (var i = 0;i < n; i++) {
-		d = d+(A[i]-B[i])*(A[i]-B[i]);
+		var n = A.length;
+		var d = 0;
+		for (var i = 0;i < n; i++) {
+			d = d+(A[i]-B[i])*(A[i]-B[i]);
 		}
-	d = Math.sqrt(d);
-	return d;
-}
-
-function cercle(X,r,P) {
-	if ( !P ) { P = [] }
-	context.setLineDash(P);
-	context.globalAlpha = transparence;
-	context.strokeStyle = couleur;
-	context.fillStyle = peinture;
-	context.lineWidth = trait;
-	context.beginPath();	
-	
-	var rayonX = r*dimensionL/(Xmax-Xmin);
-	var rayonY = r*dimensionH/(Ymax-Ymin);
-	
-	context.ellipse(coordX(X[0]),coordY(X[1]),rayonX,rayonY,0,0,2*Math.PI);
-	
-	context.fill();
-	context.closePath();
-	context.globalAlpha = 1
-	context.stroke();
-}
-
-function arcCercle(X,r,ad,af,P) {
-	if ( !P ) { P = [] }
-	context.setLineDash(P);
-	context.globalAlpha = transparence;
-	context.strokeStyle = couleur;
-	context.fillStyle = peinture;
-	context.lineWidth = trait;
-	context.beginPath();	
-	
-	var rayonX = dimensionL/(Xmax-Xmin)*r;
-	var rayonY = r*dimensionH/(Ymax-Ymin);
-	
-	context.moveTo(coordX(X[0]),coordY(X[1]));
-	context.ellipse(coordX(X[0]),coordY(X[1]),rayonX,rayonY,0,-af,-ad);
-	
-	context.fill();
-	context.closePath();
-	context.globalAlpha = 1;
-	context.stroke();
-}
-
-function rectangle(A,L,l,P) {
-	if ( !P ) { P = [] }
-	context.setLineDash(P);
-	context.globalAlpha = transparence;
-	context.strokeStyle = couleur;
-	context.fillStyle = peinture;
-	context.lineWidth = trait;
-	context.beginPath();	
-	
-	var Lx = L*	dimensionL/(Xmax-Xmin);
-	var ly = l* dimensionH/(Ymax-Ymin)
-	
-	context.rect(coordX(A[0]),coordY(A[1]),Lx,ly);
-	
-	context.fill();
-	context.closePath();
-	context.globalAlpha = 1;
-	context.stroke();
-}
-
-function triangle(A,B,C,P) {
-	if ( !P ) { P = [] }
-	context.setLineDash(P);
-	if (A.length == 3) {
-		A = convert3_2(A);
-		B = convert3_2(B);
-		C = convert3_2(C);
-		}
-	context.globalAlpha = transparence;
-	context.strokeStyle = couleur;
-	context.fillStyle = peinture;
-	context.lineWidth = trait;
-	context.beginPath();
-	
-	context.moveTo(coordX(A[0]),coordY(A[1]));
-	context.lineTo(coordX(B[0]),coordY(B[1]));
-	context.lineTo(coordX(C[0]),coordY(C[1]));
-	context.lineTo(coordX(A[0]),coordY(A[1]));
-	
-	context.fill();
-	context.closePath();
-	context.globalAlpha = 1;
-	context.stroke();
-
-}
-
-function quadri(A,B,C,D,P) {
-	if ( !P ) { P = [] }
-	context.setLineDash(P);
-	if (A.length == 3) {
-		A = convert3_2(A);
-		B = convert3_2(B);
-		C = convert3_2(C);
-		D = convert3_2(D);
+		d = Math.sqrt(d);
+		return d;
 	}
-	context.globalAlpha = transparence;
-	context.strokeStyle = couleur;
-	context.fillStyle = peinture;
-	context.lineWidth = trait;
-	context.beginPath();
 	
-	context.moveTo(coordX(A[0]),coordY(A[1]));
-	context.lineTo(coordX(B[0]),coordY(B[1]));
-	context.lineTo(coordX(C[0]),coordY(C[1]));
-	context.lineTo(coordX(D[0]),coordY(D[1]));
-	context.lineTo(coordX(A[0]),coordY(A[1]));
+	function cercle(X,r,P) {
+		if ( !P ) { P = [] }
+		context.setLineDash(P);
+		context.globalAlpha = transparence;
+		context.strokeStyle = couleur;
+		context.fillStyle = peinture;
+		context.lineWidth = trait;
+		context.beginPath();	
+		
+		var rayonX = r*dimensionL/(Xmax-Xmin);
+		var rayonY = r*dimensionH/(Ymax-Ymin);
+		
+		context.ellipse(coordX(X[0]),coordY(X[1]),rayonX,rayonY,0,0,2*Math.PI);
+		
+		context.fill();
+		context.closePath();
+		context.globalAlpha = 1
+		context.stroke();
+	}
 	
-	context.fill();
-	context.closePath();
-	context.globalAlpha = 1;
-	context.stroke();
+	function arcCercle(X,r,ad,af,P) {
+		if ( !P ) { P = [] }
+		context.setLineDash(P);
+		context.globalAlpha = transparence;
+		context.strokeStyle = couleur;
+		context.fillStyle = peinture;
+		context.lineWidth = trait;
+		context.beginPath();	
+		
+		var rayonX = dimensionL/(Xmax-Xmin)*r;
+		var rayonY = r*dimensionH/(Ymax-Ymin);
+		
+		context.moveTo(coordX(X[0]),coordY(X[1]));
+		context.ellipse(coordX(X[0]),coordY(X[1]),rayonX,rayonY,0,-af,-ad);
+		
+		context.fill();
+		context.closePath();
+		context.globalAlpha = 1;
+		context.stroke();
+	}
+	
+	function rectangle(A,L,l,P) {
+		if ( !P ) { P = [] }
+		context.setLineDash(P);
+		context.globalAlpha = transparence;
+		context.strokeStyle = couleur;
+		context.fillStyle = peinture;
+		context.lineWidth = trait;
+		context.beginPath();	
+		
+		var Lx = L*	dimensionL/(Xmax-Xmin);
+		var ly = l* dimensionH/(Ymax-Ymin)
+		
+		context.rect(coordX(A[0]),coordY(A[1]),Lx,ly);
+		
+		context.fill();
+		context.closePath();
+		context.globalAlpha = 1;
+		context.stroke();
+	}
+	
+	function triangle(A,B,C,P) {
+		if ( !P ) { P = [] }
+		context.setLineDash(P);
+		if (A.length == 3) {
+			A = convert3_2(A);
+			B = convert3_2(B);
+			C = convert3_2(C);
+		}
+		context.globalAlpha = transparence;
+		context.strokeStyle = couleur;
+		context.fillStyle = peinture;
+		context.lineWidth = trait;
+		context.beginPath();
+		
+		context.moveTo(coordX(A[0]),coordY(A[1]));
+		context.lineTo(coordX(B[0]),coordY(B[1]));
+		context.lineTo(coordX(C[0]),coordY(C[1]));
+		context.lineTo(coordX(A[0]),coordY(A[1]));
+		
+		context.fill();
+		context.closePath();
+		context.globalAlpha = 1;
+		context.stroke();
+	
+	}
 
-}
-
+	function quadri(A,B,C,D,P) {
+		if ( !P ) { P = [] }
+		context.setLineDash(P);
+		if (A.length == 3) {
+			A = convert3_2(A);
+			B = convert3_2(B);
+			C = convert3_2(C);
+			D = convert3_2(D);
+		}
+		context.globalAlpha = transparence;
+		context.strokeStyle = couleur;
+		context.fillStyle = peinture;
+		context.lineWidth = trait;
+		context.beginPath();
+		
+		context.moveTo(coordX(A[0]),coordY(A[1]));
+		context.lineTo(coordX(B[0]),coordY(B[1]));
+		context.lineTo(coordX(C[0]),coordY(C[1]));
+		context.lineTo(coordX(D[0]),coordY(D[1]));
+		context.lineTo(coordX(A[0]),coordY(A[1]));
+		
+		context.fill();
+		context.closePath();
+		context.globalAlpha = 1;
+		context.stroke();
+	}
+	
 	function poly(L,P) {
-	if ( !P ) { P = [] }
-	context.setLineDash(P);
-	var n = L.length;
-	if ( L[0].length == 3 ) {
-		for (var i = 0; i < n; i++) {
-			L[i] = convert3_2(L[i]);
+		if ( !P ) { P = [] }
+		context.setLineDash(P);
+		var n = L.length;
+		if ( L[0].length == 3 ) {
+			for (var i = 0; i < n; i++) {
+				L[i] = convert3_2(L[i]);
+			}
 		}
+		context.globalAlpha = transparence;
+		context.strokeStyle = couleur;
+		context.fillStyle = peinture;
+		context.lineWidth = trait;
+		context.beginPath();
+		context.moveTo(coordX(L[0][0]),coordY(L[0][1]));
+		for (var i = 1; i < n; i++) {
+			context.lineTo(coordX(L[i][0]),coordY(L[i][1]));
+		}
+		context.fill();
+		context.closePath();
+		context.globalAlpha = 1;
+		context.stroke();
 	}
-	context.globalAlpha = transparence;
-	context.strokeStyle = couleur;
-	context.fillStyle = peinture;
-	context.lineWidth = trait;
-	context.beginPath();
-	context.moveTo(coordX(L[0][0]),coordY(L[0][1]));
-	for (var i = 1; i < n; i++) {
-		context.lineTo(coordX(L[i][0]),coordY(L[i][1]));
-	}
-	context.fill();
-	context.closePath();
-	context.globalAlpha = 1;
-	context.stroke();
-}
 
 	function chaine(L,P) {
-	if ( !P ) { P = [] }
-	context.setLineDash(P);
-	var n = L.length;
-	if ( L[0].length == 3 ) {
-		for (var i = 0; i < n; i++) {
-			L[i] = convert3_2(L[i]);
+		if ( !P ) { P = [] }
+		context.setLineDash(P);
+		var n = L.length;
+		if ( L[0].length == 3 ) {
+			for (var i = 0; i < n; i++) {
+				L[i] = convert3_2(L[i]);
+			}
+		}
+		for (var i = 1; i < n; i++) {
+			segment(L[i-1],L[i],P);
 		}
 	}
-	for (var i = 1; i < n; i++) {
-		segment(L[i-1],L[i],P);
-	}
-	
-}
 
 	function graphe(f,a,b) {
-	
 		context.strokeStyle = couleur;
 		context.fillStyle = peinture;
 		context.lineWidth = trait;
@@ -780,109 +774,104 @@ function quadri(A,B,C,D,P) {
 	}
 	
 	function rotation2d(C,a,P) {
-	var Q = [0,0];
-	var c = Math.cos(a);
-	var s = Math.sin(a);
-	Q[0] = (P[0]-C[0])*c-(P[1]-C[1])*s+C[0];
-	Q[1] = (P[0]-C[0])*s+(P[1]-C[1])*c+C[1];
-	
-	return Q;
-}
+		var Q = [0,0];
+		var c = Math.cos(a);
+		var s = Math.sin(a);
+		Q[0] = (P[0]-C[0])*c-(P[1]-C[1])*s+C[0];
+		Q[1] = (P[0]-C[0])*s+(P[1]-C[1])*c+C[1];
+		return Q;
+	}
 	
 	function rotation3d(U,a,C,P) {
-	var Q = [0,0,0];
-	var D = [0,0,0];
-	var c = Math.cos(a);
-	var s = Math.sin(a);
-	var d = Math.sqrt( U[0]*U[0]+U[1]*U[1]+U[2]*U[2] )
-	U[0] = U[0]/d;
-	U[1] = U[1]/d;
-	U[2] = U[2]/d;
-	
-	var cst = -(U[0]*P[0]+U[1]*P[1]+U[2]*P[2]);
-	var t = -cst-U[0]*C[0]-U[1]*C[1]-U[2]*C[2];
-	D[0] = U[0]*t+C[0];
-	D[1] = U[1]*t+C[1];
-	D[2] = U[2]*t+C[2];
-	
-	Q[0] = (P[0]-D[0])*( U[0]*U[0]*(1-c)+c )+(P[1]-D[1])*( U[0]*U[1]*(1-c)-U[2]*s )+(P[2]-D[2])*( U[0]*U[2]*(1-c)+U[1]*s )+D[0];
-	Q[1] = (P[0]-D[0])*( U[0]*U[1]*(1-c)+U[2]*s )+(P[1]-D[1])*( U[1]*U[1]*(1-c)+c )+(P[2]-D[2])*( U[1]*U[2]*(1-c)-U[0]*s )+D[1];
-	Q[2] = (P[0]-D[0])*( U[0]*U[2]*(1-c)-U[1]*s )+(P[1]-D[1])*( U[1]*U[2]*(1-c)+U[0]*s )+(P[2]-D[2])*( U[2]*U[2]*(1-c)+c )+D[2];
-
-	return Q
-}
-
-	function proj(U,C,P) {
-	
-	if ( U.length < 3) {
-		var D = [0,0];
-		var d = Math.sqrt( U[0]*U[0]+U[1]*U[1] )
-		U[0] = U[0]/d;
-		U[1] = U[1]/d;
-		var cst = -(U[0]*P[0]+U[1]*P[1]);
-		var t = -cst-U[0]*C[0]-U[1]*C[1];
-		D[0] = U[0]*t+C[0];
-		D[1] = U[1]*t+C[1];
-	}
-	else {
+		var Q = [0,0,0];
 		var D = [0,0,0];
+		var c = Math.cos(a);
+		var s = Math.sin(a);
 		var d = Math.sqrt( U[0]*U[0]+U[1]*U[1]+U[2]*U[2] )
 		U[0] = U[0]/d;
 		U[1] = U[1]/d;
 		U[2] = U[2]/d;
+		
 		var cst = -(U[0]*P[0]+U[1]*P[1]+U[2]*P[2]);
 		var t = -cst-U[0]*C[0]-U[1]*C[1]-U[2]*C[2];
 		D[0] = U[0]*t+C[0];
 		D[1] = U[1]*t+C[1];
-		D[2] = U[2]*t+C[2];	
-	}
+		D[2] = U[2]*t+C[2];
+		
+		Q[0] = (P[0]-D[0])*( U[0]*U[0]*(1-c)+c )+(P[1]-D[1])*( U[0]*U[1]*(1-c)-U[2]*s )+(P[2]-D[2])*( U[0]*U[2]*(1-c)+U[1]*s )+D[0];
+		Q[1] = (P[0]-D[0])*( U[0]*U[1]*(1-c)+U[2]*s )+(P[1]-D[1])*( U[1]*U[1]*(1-c)+c )+(P[2]-D[2])*( U[1]*U[2]*(1-c)-U[0]*s )+D[1];
+		Q[2] = (P[0]-D[0])*( U[0]*U[2]*(1-c)-U[1]*s )+(P[1]-D[1])*( U[1]*U[2]*(1-c)+U[0]*s )+(P[2]-D[2])*( U[2]*U[2]*(1-c)+c )+D[2];
 	
-	return D;
-}
+		return Q
+	}
+
+	function proj(U,C,P) {
+	
+		if ( U.length < 3) {
+			var D = [0,0];
+			var d = Math.sqrt( U[0]*U[0]+U[1]*U[1] )
+			U[0] = U[0]/d;
+			U[1] = U[1]/d;
+			var cst = -(U[0]*P[0]+U[1]*P[1]);
+			var t = -cst-U[0]*C[0]-U[1]*C[1];
+			D[0] = U[0]*t+C[0];
+			D[1] = U[1]*t+C[1];
+		}
+		else {
+			var D = [0,0,0];
+			var d = Math.sqrt( U[0]*U[0]+U[1]*U[1]+U[2]*U[2] )
+			U[0] = U[0]/d;
+			U[1] = U[1]/d;
+			U[2] = U[2]/d;
+			var cst = -(U[0]*P[0]+U[1]*P[1]+U[2]*P[2]);
+			var t = -cst-U[0]*C[0]-U[1]*C[1]-U[2]*C[2];
+			D[0] = U[0]*t+C[0];
+			D[1] = U[1]*t+C[1];
+			D[2] = U[2]*t+C[2];	
+		}
+		return D;
+	}
 	
 	
 	function translation(U,P) {
-	var Q = [];
-	for (var i = 0; i < U.length; i++) {
-		Q.push( U[i]+P[i] );
+		var Q = [];
+		for (var i = 0; i < U.length; i++) {
+			Q.push( U[i]+P[i] );
+		}
+		return Q;
 	}
-	return Q;
-}
 
 
-function symC(C,P){
-	var Q = [];
-	for (var i = 0; i < C.length; i++) {
-		Q.push( 2*C[i]-P[i] );
+	function symC(C,P){
+		var Q = [];
+		for (var i = 0; i < C.length; i++) {
+			Q.push( 2*C[i]-P[i] );
+		}
+		return Q;
 	}
-	return Q;
-}
 
-
-function symA(U,C,P) {
-	var Q = proj(U,C,P);
-	var Q = symC(Q,P);
-	return Q;
-}
-
-
-function ht(C,k,P) {
-	var Q = [];
-	for (var i = 0; i < C.length; i++) {
-		Q.push( k*(P[i]-C[i])+C[i] );
+	function symA(U,C,P) {
+		var Q = proj(U,C,P);
+		var Q = symC(Q,P);
+		return Q;
 	}
-	return Q;
-}
 
-
-function vec(A,B) {
-	var Q = [];
-	for (var i = 0; i < A.length; i++) {
-		Q.push( B[i] - A[i] );
+	function ht(C,k,P) {
+		var Q = [];
+		for (var i = 0; i < C.length; i++) {
+			Q.push( k*(P[i]-C[i])+C[i] );
+		}
+		return Q;
 	}
-	return Q;
-}
 
+
+	function vec(A,B) {
+		var Q = [];
+		for (var i = 0; i < A.length; i++) {
+			Q.push( B[i] - A[i] );
+		}
+		return Q;
+	}
 
 
 	function entAlea(a,b){
@@ -1959,7 +1948,7 @@ $(this).css("padding","5px");
 $(this).css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
 $(this).css("border-radius","0px");
 $(this).css("color",$texteProp);
-if( navigator.languages[0] == "fr" ){
+if( navigator.languages[0] == "fr" || navigator.languages[0] == "fr-FR" || navigator.languages[0] == "fr-fr" ){
 	$(this).prepend("<span class='prop' >Définition " + j+"</span>");
 }
 else {
@@ -1976,7 +1965,7 @@ $(this).css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
 $(this).css("color","#000000");
 $(this).css("border-radius","0px");
 $(this).css("color",$texteProp);
-if( navigator.languages[0] == "fr" ){
+if( navigator.languages[0] == "fr" || navigator.languages[0] == "fr-FR" || navigator.languages[0] == "fr-fr" ){
 	$(this).prepend("<span class='prop'>Propriété " + j+"</span>");
 	}
 else {
@@ -1994,7 +1983,7 @@ $(this).css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
 $(this).css("color","#000000");
 $(this).css("border-radius","0px");
 $(this).css("color",$texteProp);
-if( navigator.languages[0] == "fr" ){
+if( navigator.languages[0] == "fr" || navigator.languages[0] == "fr-FR" || navigator.languages[0] == "fr-fr" ){
 	$(this).prepend("<span class='prop'>Propriété " + j+"</span>");
 	}
 else {
@@ -2014,7 +2003,7 @@ $(this).css("color","#000000");
 $(this).css("border-radius","0px");
 $(this).css("color",$texteProp);
 $(this).prepend("<span class='prop'>Proposition </span><br />");
-if( navigator.languages[0] == "fr" ){
+if( navigator.languages[0] == "fr" || navigator.languages[0] == "fr-FR"  || navigator.languages[0] == "fr-fr"){
 	$(this).prepend("<span class='prop'>Proposition </span><br />");
 	}
 else {
@@ -2034,7 +2023,7 @@ $(this).css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
 $(this).css("border-radius","0px");
 $(this).css("color",$texteProp);
 
-if( navigator.languages[0] == "fr" ){
+if( navigator.languages[0] == "fr" || navigator.languages[0] == "fr-FR" || navigator.languages[0] == "fr-fr" ){
 	$(this).prepend("<span class='prop'>Théorème " + j+"</span>");
 	}
 else {
@@ -2052,7 +2041,7 @@ $(this).css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
 $(this).css("border-radius","0px");
 $(this).css("color",$texteProp);
 
-if( navigator.languages[0] == "fr" ){
+if( navigator.languages[0] == "fr" || navigator.languages[0] == "fr-FR" || navigator.languages[0] == "fr-fr" ){
 	$(this).prepend("<span class='prop'>Lemme " + j+"</span>");
 	}
 else {
@@ -2071,7 +2060,7 @@ $(this).css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
 $(this).css("border-radius","0px");
 $(this).css("color",$texteProp);
 
-if( navigator.languages[0] == "fr" ){
+if( navigator.languages[0] == "fr" || navigator.languages[0] == "fr-FR" || navigator.languages[0] == "fr-fr" ){
 	$(this).prepend("<span style='font-weight:bold;'>Remarque " + j+"</span>");
 	}
 else {
