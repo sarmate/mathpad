@@ -18,8 +18,6 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 
-
-
 */
 
 
@@ -28,13 +26,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 
 
-//console.log(" Language 2"+navigator.languages[0]);
 
 
 function va_en_bas() {
 	var obj = document.body;
 	obj.scrollTop = obj.scrollHeight;
-}
+	}
 
 var maxTrou = 0;
 var maxSlide = 0;
@@ -47,16 +44,10 @@ var theme;
 
 
 
-
-
-
-
 // Thèmes 
-
 
 if( theme === undefined ){ 
 	theme = 'classique';
-	
 	}
 
 
@@ -248,16 +239,12 @@ var themesGraphique = {
 
 
 $(document).ready(
-function(){
-
-	mathpad();
-	$("body").after("<div class='clicGauche' onclick='retourne()'></div>");
-	$("body").after("<div class='clicDroit' onclick='avance()'></div>");
-
-}
-);
-
-
+	function(){
+		mathpad();
+		$("body").after("<div class='clicGauche' onclick='retourne()'></div>");
+		$("body").after("<div class='clicDroit' onclick='avance()'></div>");
+		}
+	);
 
 
 // Pour faire apparaître ou disparaître les "<pause></pause>"
@@ -266,18 +253,15 @@ function allume(n) {
 	var nom = "trou_"+n;
 	document.getElementById(nom).style.backgroundImage = "radial-gradient( red, rgba(255,255,255,0) )";
 	document.getElementById(nom).style.borderRadius = "10px";
-	
-	console.log("allume "+n);
+	//console.log("allume "+n);
 	setTimeout( function () {eteint(n)}, 1000  );
-}
+	}
 
 function eteint(n) {
 	var nom = "trou_"+n;
 	document.getElementById(nom).style.backgroundImage = "";
-	
-	
-	console.log("Eteint "+n);
-}
+	//console.log("Eteint "+n);
+	}
 
 var trou = 0;
 function retourne() {
@@ -300,7 +284,6 @@ function avance() {
 // Pour la zone déroulable des corrections
 
 function corrige(n) {
-	
 	var nom = "correction_"+n;
 	var elt = document.getElementById(nom);	
 	elt.style.display = "block";
@@ -311,10 +294,8 @@ function corrige(n) {
 		elt.style.transform = 'scale(1)';
 		//elt.style.height = h+"px";
 		},0);
+	}
 
-		
-	
-}
 function decorrige(n) {
 	var nom = "correction_"+n;
 	var elt = document.getElementById(nom);
@@ -326,9 +307,7 @@ function decorrige(n) {
 		elt.style.display = "none";
 		//elt.style.height = h+"px";
 		},700);
-	
-}
-
+	}
 
 
 // Pour gagner du temps pour compléter les "trous"
@@ -350,21 +329,19 @@ function slide(k,n) {
 	var l = k+n;
 	$("#slide_"+k).css("display","none");
 	$("#slide_"+l).css("display","block");
-}
+	}
 
 
 
 function curseur(a,b,c,d,e) {
-	
 	return true;
-}
+	}
 
 
 function curseurChange(i,largeur,hauteur) {
 	//console.log( document.getElementById("curseur"+i).value );
 	return parseFloat(document.getElementById("curseur"+i).value);
-	
-}
+	}
 
 
 // Les zones d'algorithmes
@@ -376,7 +353,7 @@ function algo(nNn) {
 	
 	function entAlea(a,b){
 		return a+ Math.floor( (b-a+1)*Math.random() );	
-	}
+		}
 	
 	var today = new Date();	
 	var date = today.toLocaleDateString()+"--"+today.getHours()+"h"+today.getMinutes()+"min"+today.getSeconds()+","+today.getMilliseconds()+"s";
@@ -385,7 +362,6 @@ function algo(nNn) {
 	
 	//var texte = document.getElementById("textareaCode"+nNn).value;
 	var texte = editorCode[nNn].getValue();
-	
 	texte = texte.replace( new RegExp( 'rand[(]' , 'g' )  ,'Math.random(' );
 	texte = texte.replace( new RegExp( 'puissance[(]' , 'g' )  ,'Math.pow(' );	
 	texte = texte.replace( new RegExp( 'ln[(]' , 'g' )  ,'Math.log(' );
@@ -398,21 +374,17 @@ function algo(nNn) {
 	texte = texte.replace( new RegExp( '%E' , 'g' )  ,'Math.E' );
 	texte = texte.replace( new RegExp( 'OU' , 'g' )  ,'||' );
 	texte = texte.replace( new RegExp( 'ET' , 'g' )  ,'&&' );
-	
-	console.log( texte );
-	
+	//console.log( texte );
 	console.log( eval(texte) );
-	
 	var obj = document.getElementById("resultats"+nNn);
 	obj.scrollTop = obj.scrollHeight;
-}
+	}
 
 
 // algorithmes graphiques
 
-
+/*
 function algoGraphe(nNn,dimensionL,dimensionH) {
-	
 	var couleur = "#000000";
 	var peinture = "#ffffff";
 	var transparence = 0;
@@ -445,33 +417,25 @@ function algoGraphe(nNn,dimensionL,dimensionH) {
 		context.lineTo(0,0);
 		context.fill();
 		context.closePath();
-	}
+		}
 
 	function traceG() {	
 			var coul = couleur;
 			couleur = "#c0c0c0";
 			for (var i = 0;i<(Xmax)/GradX;i++) {
-
 				segment([i*GradX,Ymin],[i*GradX,Ymax]);
-				
-			}
+				}
 			for (var i = 0;i>(Xmin)/GradX;i--) {
-
 				segment([i*GradX,Ymin],[i*GradX,Ymax]);
-				
-			}
+				}
 			for (var i = 0;i<(Ymax)/GradY;i++) {
-
 				segment([Xmin,i*GradY],[Xmax,i*GradY]);
-				
-			}
+				}
 			for (var i = 0;i>(Ymin)/GradY;i--) {
-
 				segment([Xmin,i*GradY],[Xmax,i*GradY]);
-				
-			}
+				}
 			couleur = coul;
-	}
+		}
 
 	function traceX() {	
 			couleur = "#000000";
@@ -480,7 +444,7 @@ function algoGraphe(nNn,dimensionL,dimensionH) {
 			segment([Xmax-(Xmax-Xmin)/100,(Ymax-Ymin)/100],[Xmax,0]);
 			segment([Xmax-(Xmax-Xmin)/100,-(Ymax-Ymin)/100],[Xmax,0]);
 			trait = trait/2;
-	}
+		}
 
 	function traceY() {
 			segment([0,Ymin],[0,Ymax]);
@@ -488,8 +452,7 @@ function algoGraphe(nNn,dimensionL,dimensionH) {
 			segment([(Xmax-Xmin)/100,Ymax-(Ymax-Ymin)/100],[0,Ymax]);
 			segment([-(Xmax-Xmin)/100,Ymax-(Ymax-Ymin)/100],[0,Ymax])
 			trait = trait/2;
-	}
-
+		}
 	
 	function point(X) {		
 		if (X.length == 3) { X = convert3_2(X) }	
@@ -500,14 +463,14 @@ function algoGraphe(nNn,dimensionL,dimensionH) {
 		context.arc(coordX(X[0]),coordY(X[1]),3*trait,0,2*Math.PI);
 		context.fill();
 		context.closePath();
-	}
+		}
 	
 	
 	function coordX(x) {
 		var a = dimensionL/(Xmax-Xmin);
 		var b = -Xmin*a;
 		return a*x+b;
-	}
+		}
 
 	function coordY(y) {
 		var a = dimensionH/(Ymin-Ymax);
@@ -520,7 +483,7 @@ function algoGraphe(nNn,dimensionL,dimensionH) {
 		if (A.length == 3) {
 			A = convert3_2(A);
 			B = convert3_2(B);
-		}
+			}
 		if ( !P ) { P = [] }
 		context.setLineDash(P);
 		context.strokeStyle = couleur;
@@ -531,12 +494,12 @@ function algoGraphe(nNn,dimensionL,dimensionH) {
 		context.lineTo(coordX(B[0]),coordY(B[1]));
 		context.stroke();
 		context.closePath();
-	}
+		}
 
 
 	function hachure(P) {
 		context.setLineDash(P);
-	}
+		}
 
 
 	function droite(A,B,P) {
@@ -545,7 +508,7 @@ function algoGraphe(nNn,dimensionL,dimensionH) {
 		if (A.length == 3) {
 			A = convert3_2(A);
 			B = convert3_2(B);
-		}
+			}
 		
 		var varH = B[0]-A[0];
 		if ( varH ==0 ) { varH = 0.00000001; }
@@ -560,23 +523,23 @@ function algoGraphe(nNn,dimensionL,dimensionH) {
 	function texte(T,A,fs) {
 		if (A.length == 3) {
 			A = convert3_2(A);
-		}
+			}
 		if (!fs) { fs = 15 }
 		
 		context.font = fs+"px Helvetica";
 		context.fillStyle = couleur;
 		context.fillText( T, coordX(A[0]),coordY(A[1]) );
-	}
+		}
 	
 	function distance(A,B) {
 		var n = A.length;
 		var d = 0;
 		for (var i = 0;i < n; i++) {
 			d = d+(A[i]-B[i])*(A[i]-B[i]);
-		}
+			}
 		d = Math.sqrt(d);
 		return d;
-	}
+		}
 	
 	function cercle(X,r,P) {
 		if ( !P ) { P = [] }
@@ -596,7 +559,7 @@ function algoGraphe(nNn,dimensionL,dimensionH) {
 		context.closePath();
 		context.globalAlpha = 1
 		context.stroke();
-	}
+		}
 	
 	function arcCercle(X,r,ad,af,P) {
 		if ( !P ) { P = [] }
@@ -617,7 +580,7 @@ function algoGraphe(nNn,dimensionL,dimensionH) {
 		context.closePath();
 		context.globalAlpha = 1;
 		context.stroke();
-	}
+		}
 	
 	function rectangle(A,L,l,P) {
 		if ( !P ) { P = [] }
@@ -637,7 +600,7 @@ function algoGraphe(nNn,dimensionL,dimensionH) {
 		context.closePath();
 		context.globalAlpha = 1;
 		context.stroke();
-	}
+		}
 	
 	function triangle(A,B,C,P) {
 		if ( !P ) { P = [] }
@@ -646,7 +609,7 @@ function algoGraphe(nNn,dimensionL,dimensionH) {
 			A = convert3_2(A);
 			B = convert3_2(B);
 			C = convert3_2(C);
-		}
+			}
 		context.globalAlpha = transparence;
 		context.strokeStyle = couleur;
 		context.fillStyle = peinture;
@@ -662,8 +625,7 @@ function algoGraphe(nNn,dimensionL,dimensionH) {
 		context.closePath();
 		context.globalAlpha = 1;
 		context.stroke();
-	
-	}
+		}
 
 	function quadri(A,B,C,D,P) {
 		if ( !P ) { P = [] }
@@ -673,7 +635,7 @@ function algoGraphe(nNn,dimensionL,dimensionH) {
 			B = convert3_2(B);
 			C = convert3_2(C);
 			D = convert3_2(D);
-		}
+			}
 		context.globalAlpha = transparence;
 		context.strokeStyle = couleur;
 		context.fillStyle = peinture;
@@ -690,7 +652,7 @@ function algoGraphe(nNn,dimensionL,dimensionH) {
 		context.closePath();
 		context.globalAlpha = 1;
 		context.stroke();
-	}
+		}
 	
 	function poly(L,P) {
 		if ( !P ) { P = [] }
@@ -699,8 +661,8 @@ function algoGraphe(nNn,dimensionL,dimensionH) {
 		if ( L[0].length == 3 ) {
 			for (var i = 0; i < n; i++) {
 				L[i] = convert3_2(L[i]);
+				}
 			}
-		}
 		context.globalAlpha = transparence;
 		context.strokeStyle = couleur;
 		context.fillStyle = peinture;
@@ -709,12 +671,12 @@ function algoGraphe(nNn,dimensionL,dimensionH) {
 		context.moveTo(coordX(L[0][0]),coordY(L[0][1]));
 		for (var i = 1; i < n; i++) {
 			context.lineTo(coordX(L[i][0]),coordY(L[i][1]));
-		}
+			}
 		context.fill();
 		context.closePath();
 		context.globalAlpha = 1;
 		context.stroke();
-	}
+		}
 
 	function chaine(L,P) {
 		if ( !P ) { P = [] }
@@ -723,12 +685,12 @@ function algoGraphe(nNn,dimensionL,dimensionH) {
 		if ( L[0].length == 3 ) {
 			for (var i = 0; i < n; i++) {
 				L[i] = convert3_2(L[i]);
+				}
 			}
-		}
 		for (var i = 1; i < n; i++) {
 			segment(L[i-1],L[i],P);
+			}
 		}
-	}
 
 	function graphe(f,a,b) {
 		context.strokeStyle = couleur;
@@ -742,8 +704,8 @@ function algoGraphe(nNn,dimensionL,dimensionH) {
 			context.lineTo(coordX(a+i*pas),coordY(f(a+i*pas))  );
 			context.stroke();
 			context.closePath();
+			}
 		}
-	}
 
 	function peintureCourbe(f,a,b) {
 		context.globalAlpha = transparence;
@@ -758,20 +720,20 @@ function algoGraphe(nNn,dimensionL,dimensionH) {
 		context.fill();
 		context.closePath();
 		context.globalAlpha = 1;
-	}
+		}
 
 	function droiteParam(X,U,P) {
 		var Y = [];
 		for (var i = 0;i<X.length;i++) {
 			Y[i] = X[i]+U[i];
-		}
+			}
 
 		if (U.length == 3) {
 			X = convert3_2(X);
 			Y = convert3_2(Y);
-		}
+			}
 		droite(X,Y,P);
-	}
+		}
 	
 	function rotation2d(C,a,P) {
 		var Q = [0,0];
@@ -780,7 +742,7 @@ function algoGraphe(nNn,dimensionL,dimensionH) {
 		Q[0] = (P[0]-C[0])*c-(P[1]-C[1])*s+C[0];
 		Q[1] = (P[0]-C[0])*s+(P[1]-C[1])*c+C[1];
 		return Q;
-	}
+		}
 	
 	function rotation3d(U,a,C,P) {
 		var Q = [0,0,0];
@@ -803,7 +765,7 @@ function algoGraphe(nNn,dimensionL,dimensionH) {
 		Q[2] = (P[0]-D[0])*( U[0]*U[2]*(1-c)-U[1]*s )+(P[1]-D[1])*( U[1]*U[2]*(1-c)+U[0]*s )+(P[2]-D[2])*( U[2]*U[2]*(1-c)+c )+D[2];
 	
 		return Q
-	}
+		}
 
 	function proj(U,C,P) {
 	
@@ -816,7 +778,7 @@ function algoGraphe(nNn,dimensionL,dimensionH) {
 			var t = -cst-U[0]*C[0]-U[1]*C[1];
 			D[0] = U[0]*t+C[0];
 			D[1] = U[1]*t+C[1];
-		}
+			}
 		else {
 			var D = [0,0,0];
 			var d = Math.sqrt( U[0]*U[0]+U[1]*U[1]+U[2]*U[2] )
@@ -828,63 +790,61 @@ function algoGraphe(nNn,dimensionL,dimensionH) {
 			D[0] = U[0]*t+C[0];
 			D[1] = U[1]*t+C[1];
 			D[2] = U[2]*t+C[2];	
-		}
+			}
 		return D;
-	}
+		}
 	
 	
 	function translation(U,P) {
 		var Q = [];
 		for (var i = 0; i < U.length; i++) {
 			Q.push( U[i]+P[i] );
-		}
+			}
 		return Q;
-	}
+		}
 
 
 	function symC(C,P){
 		var Q = [];
 		for (var i = 0; i < C.length; i++) {
 			Q.push( 2*C[i]-P[i] );
-		}
+			}
 		return Q;
-	}
+		}
 
 	function symA(U,C,P) {
 		var Q = proj(U,C,P);
 		var Q = symC(Q,P);
 		return Q;
-	}
+		}
 
 	function ht(C,k,P) {
 		var Q = [];
 		for (var i = 0; i < C.length; i++) {
 			Q.push( k*(P[i]-C[i])+C[i] );
-		}
+			}
 		return Q;
-	}
+		}
 
 
 	function vec(A,B) {
 		var Q = [];
 		for (var i = 0; i < A.length; i++) {
 			Q.push( B[i] - A[i] );
-		}
+			}
 		return Q;
-	}
-
+		}
 
 	function entAlea(a,b){
 		return a+ Math.floor( (b-a+1)*Math.random() );	
-	}
+		}
 	
 	function convert3_2(P) {
-	
 		T = [-2,-2];
 		T[0] = -2-0.4*P[0]+P[1];
 		T[1] = -2-0.3*P[0]+P[2];
 		return T;
-	}
+		}
 
 	function traceAxes3d() {
 		var O = [0,0,0];
@@ -894,7 +854,7 @@ function algoGraphe(nNn,dimensionL,dimensionH) {
 		segment(O,I);
 		segment(O,J);
 		segment(O,K);
-	}
+		}
 
 
 	//var Texte = document.getElementById("textareaCodeGraphe"+nNn).value;
@@ -959,377 +919,355 @@ function algoGraphe(nNn,dimensionL,dimensionH) {
 	eval(Texte);	
 }
 
+*/
 
 
-
-// algorithmes graphiques sans code
-
-function algoGrapheInv(nNn,dimensionLInv,dimensionHInv) {
-	
-	
-	
-	var couleur = "#000000";
-	var peinture = "#ffffff";
-	var transparence = 0;
-	var trait = 1;
-	var Xmin = -10;
-	var Xmax = 10;
-	var Ymin = -10;
-	var Ymax = 10;
-	var GradX = 1;
-	var GradY = 1;
-	var AxeX = false;
-	var AxeY = false;
-	var Grille = false;
-
-	//document.getElementById("resultatsGrapheInv"+nNn).remove();
-	
-	var canvasGraphe = document.getElementById("resultatsGrapheInv"+nNn);
-	
-	
-	if( canvasGraphe != null ){
-	
-		var context = canvasGraphe.getContext('2d');
+class SarmateGraphe {
+	constructor(nNn, dimensionL, dimensionH, context){
+		this.nNn = nNn;
+		this.dimensionL = dimensionL;
+		this.dimensionH = dimensionH;
+		this.context = context;
+		let couleur, peinture, transparence, trait, Xmin, Xmax, Ymin, Ymax, GradX, GradY, AxeX, AxeY, Grille;
 		
-		//console.log( context );
+		this.couleur = '#000000';
+		this.peinture = '#ffffff'; 
+		this.transparence = 0;
+		this.trait = 1;
+		this.Xmin = -10;
+		this.Xmax = 10;
+		this.Ymin = -10;
+		this.Ymax = 10;
+		this.GradX = 1;
+		this.GradY = 1;
+		this.AxeX = false;
+		this.AxeY = false;
+		this.Grille = false;
 		
-		function effaceEcran() {
+		this.convert3_2 = function (P) {
+			let T = [-2,-2];
+			T[0] = -2-0.3*P[0]+P[1];
+			T[1] = -2-0.3*P[0]+P[2];
+			return T;
+			}
+	
+		this.coordX = function (x) {
+			var a = this.dimensionL/(this.Xmax-this.Xmin);
+			var b = -this.Xmin*a;
+			return a*x+b;
+			}
+		this.coordY = function (y) {
+			var a = this.dimensionH/(this.Ymin-this.Ymax);
+			var b = -this.Ymax*a;
+			return a*y+b;
+			}
+		this.point = function (X) {
+			if (X.length == 3) { X = this.convert3_2(X) }	
+			context.strokeStyle = this.couleur;
+			context.fillStyle = this.couleur;
+			context.lineWidth = this.trait;
+			context.beginPath();
+			context.arc(this.coordX(X[0]),this.coordY(X[1]),3*this.trait,0,2*Math.PI);
+			context.fill();
+			context.closePath();		
+			}
+		this.effaceEcran = function () {
 			context.fillStyle = "#fff";
-			context.strokeStyle = couleur;
-			context.lineWidth = trait;
+			context.strokeStyle = this.couleur;
+			context.lineWidth = this.trait;
 			context.beginPath();
 			context.moveTo(0,0);
-			context.lineTo(dimensionLInv,0);
-			context.lineTo(dimensionLInv,dimensionHInv);
-			context.lineTo(0,dimensionHInv);
+			context.lineTo(this.dimensionL,0);
+			context.lineTo(this.dimensionL,this.dimensionH);
+			context.lineTo(0,this.dimensionH);
 			context.lineTo(0,0);
 			context.fill();
 			context.closePath();	
 			}
 	
-		function traceG() {
-			var coul = couleur;
-			couleur = "#c0c0c0";
-			for (var i = 0;i<(Xmax)/GradX;i++) {
-				segment([i*GradX,Ymin],[i*GradX,Ymax]);
+		this.traceG = function () {
+			var coul = this.couleur;
+			this.couleur = "#c0c0c0";
+			for (var i = 0; i < (this.Xmax)/this.GradX ; i++) {
+				this.segment([i*this.GradX,this.Ymin],[i*this.GradX,this.Ymax]);
 				}
-			for (var i = 0;i>(Xmin)/GradX;i--) {
-				segment([i*GradX,Ymin],[i*GradX,Ymax]);
+			for (var i = 0; i > (this.Xmin)/this.GradX ; i--) {
+				this.segment([i*this.GradX,this.Ymin],[i*this.GradX,this.Ymax]);
 			}
-			for (var i = 0;i<(Ymax)/GradY;i++) {
-				segment([Xmin,i*GradY],[Xmax,i*GradY]);
+			for (var i = 0;i < (this.Ymax)/this.GradY ; i++) {
+				this.segment([this.Xmin,i*this.GradY],[this.Xmax,i*this.GradY]);
 			}
-			for (var i = 0;i>(Ymin)/GradY;i--) {
-				segment([Xmin,i*GradY],[Xmax,i*GradY]);
+			for (var i = 0; i > (this.Ymin)/this.GradY ; i--) {
+				this.segment([this.Xmin,i*this.GradY],[this.Xmax,i*this.GradY]);
 			}
-			couleur = coul;
-			//console.log("Grille");
-		}
+			this.couleur = coul;
+			}
 	
-		function peintTout(coulPeinture) {
+		this.peintTout = function (coulPeinture) {
 			context.fillStyle = coulPeinture;
-			context.strokeStyle = couleur;
-			context.lineWidth = trait;
+			context.strokeStyle = this.couleur;
+			context.lineWidth = this.trait;
 			context.beginPath();
 			context.moveTo(0,0);
-			context.lineTo(dimensionLInv,0);
-			context.lineTo(dimensionLInv,dimensionHInv);
-			context.lineTo(0,dimensionHInv);
+			context.lineTo(dimensionL,0);
+			context.lineTo(dimensionL,dimensionH);
+			context.lineTo(0,dimensionH);
 			context.lineTo(0,0);
 			context.fill();
 			context.closePath();
 			}
 
-		function traceX() {
-			segment([Xmin,0],[Xmax,0]);
-			trait = 2*trait;
-			segment([Xmax-(Xmax-Xmin)/100,(Ymax-Ymin)/100],[Xmax,0]);
-			segment([Xmax-(Xmax-Xmin)/100,-(Ymax-Ymin)/100],[Xmax,0]);
-			trait = trait/2;
-		}
-
-		function traceY() {
-			segment([0,Ymin],[0,Ymax]);
-			trait = 2*trait;
-			segment([(Xmax-Xmin)/100,Ymax-(Ymax-Ymin)/100],[0,Ymax]);
-			segment([-(Xmax-Xmin)/100,Ymax-(Ymax-Ymin)/100],[0,Ymax])
-			trait = trait/2;
-		}
-
-	
-		function point(X) {
-			if (X.length == 3) { X = convert3_2(X) }	
-			context.strokeStyle = couleur;
-			context.fillStyle = couleur;
-			context.lineWidth = trait;
-			context.beginPath();
-			context.arc(coordX(X[0]),coordY(X[1]),3*trait,0,2*Math.PI);
-			context.fill();
-			context.closePath();		
-		}
-	
-	
-		function coordX(x) {
-			var a = dimensionLInv/(Xmax-Xmin);
-			var b = -Xmin*a;
-			return a*x+b;
-		}
-
-		function coordY(y) {
-			var a = dimensionHInv/(Ymin-Ymax);
-			var b = -Ymax*a;
-			return a*y+b;
-		}
-
-
-		function segment(A,B,P) {
-			if (A.length == 3) {
-				A = convert3_2(A);
-				B = convert3_2(B);
+		this.traceX = function () {
+			this.segment([this.Xmin,0],[this.Xmax,0]);
+			this.trait = 2*this.trait;
+			this.segment([this.Xmax-(this.Xmax-this.Xmin)/100,(this.Ymax-this.Ymin)/100],[this.Xmax,0]);
+			this.segment([this.Xmax-(this.Xmax-this.Xmin)/100,-(this.Ymax-this.Ymin)/100],[this.Xmax,0]);
+			this.trait = this.trait/2;
 			}
+
+		this.traceY = function () {
+			this.segment([0,this.Ymin],[0,this.Ymax]);
+			this.trait = 2*this.trait;
+			this.segment([(this.Xmax-this.Xmin)/100,this.Ymax-(this.Ymax-this.Ymin)/100],[0,this.Ymax]);
+			this.segment([-(this.Xmax-this.Xmin)/100,this.Ymax-(this.Ymax-this.Ymin)/100],[0,this.Ymax])
+			this.trait = this.trait/2;
+			}
+	
+		this.segment = function (A,B,P) {
+			if (A.length == 3) {
+				A = this.convert3_2(A);
+				B = this.convert3_2(B);
+				}
 			if ( !P ) { P = [] }
 			context.setLineDash(P);
-			context.strokeStyle = couleur;
-			context.fillStyle = peinture;
-			context.lineWidth = trait;
+			context.strokeStyle = this.couleur;
+			context.fillStyle = this.peinture;
+			context.lineWidth = this.trait;
 			context.beginPath();	
-			context.moveTo(coordX(A[0]),coordY(A[1]));
-			context.lineTo(coordX(B[0]),coordY(B[1]));
+			context.moveTo(this.coordX(A[0]),this.coordY(A[1]));
+			context.lineTo(this.coordX(B[0]),this.coordY(B[1]));
 			context.stroke();
 			context.closePath();
-		}
-
-
-		function hachure(P) {
+			}
+		
+		
+		this.hachure = function (P) {
 			context.setLineDash(P);
 		}
 
-
-		function droite(A,B,P) {
+		this.droite = function (A,B,P) {
 			if ( !P ) { P = [] }
 			context.setLineDash(P);
 			if (A.length == 3) {
-				A = convert3_2(A);
-				B = convert3_2(B);
-			}
+				A = this.convert3_2(A);
+				B = this.convert3_2(B);
+				}
 			var varH = B[0]-A[0];
-			if ( varH ==0 ) { varH = 0.00000001; }
+			if ( varH == 0 ) { varH = 0.00000001; }
 			var a = (B[1]-A[1])/(varH);
 			var b = A[1]-a*A[0];
-			segment( [Xmin,a*Xmin+b], [Xmax,a*Xmax+b] );
-		}
-
-
-
-		function texte(T,A,fs) {
-			if (A.length == 3) {
-				A = convert3_2(A);
+			this.segment( [this.Xmin,a*this.Xmin+b], [this.Xmax,a*this.Xmax+b] );
 			}
+
+		this.texte = function (T,A,fs) {
+			if (A.length == 3) {
+				A = this.convert3_2(A);
+				}
 			if (!fs) { fs = 15 }
 			context.font = fs+"px Helvetica";
-			context.fillStyle = couleur;
-			context.fillText( T, coordX(A[0]),coordY(A[1]) );
-		}
+			context.fillStyle = this.couleur;
+			context.fillText( T, this.coordX(A[0]), this.coordY(A[1]) );
+			}
 	
-		function cercle(X,r,P) {
+		this.cercle = function (X,r,P) {
 			if ( !P ) { P = [] }
 			context.setLineDash(P);
-			context.globalAlpha = transparence;
-			context.strokeStyle = couleur;
-			context.fillStyle = peinture;
-			context.lineWidth = trait;
+			context.globalAlpha = this.transparence;
+			context.strokeStyle = this.couleur;
+			context.fillStyle = this.peinture;
+			context.lineWidth = this.trait;
 			context.beginPath();	
-			var rayonX = r*dimensionLInv/(Xmax-Xmin);
-			var rayonY = r*dimensionHInv/(Ymax-Ymin);
-			context.ellipse(coordX(X[0]),coordY(X[1]),rayonX,rayonY,0,0,2*Math.PI);
+			var rayonX = r*this.dimensionL/(this.Xmax-this.Xmin);
+			var rayonY = r*this.dimensionH/(this.Ymax-this.Ymin);
+			context.ellipse(this.coordX(X[0]),this.coordY(X[1]),rayonX,rayonY,0,0,2*Math.PI);
 			context.fill();
 			context.closePath();
 			context.globalAlpha = 1
 			context.stroke();
-		}
+			}
 
-		function arcCercle(X,r,ad,af,P) {
+		this.arcCercle = function (X,r,ad,af,P) {
 			if ( !P ) { P = [] }
 			context.setLineDash(P);
-			context.globalAlpha = transparence;
-			context.strokeStyle = couleur;
-			context.fillStyle = peinture;
-			context.lineWidth = trait;
+			context.globalAlpha = this.transparence;
+			context.strokeStyle = this.couleur;
+			context.fillStyle = this.peinture;
+			context.lineWidth = this.trait;
 			context.beginPath();	
-			var rayonX = dimensionLInv/(Xmax-Xmin)*r;
-			var rayonY = r*dimensionHInv/(Ymax-Ymin);
-			context.moveTo(coordX(X[0]),coordY(X[1]));
-			context.ellipse(coordX(X[0]),coordY(X[1]),rayonX,rayonY,0,-af,-ad);
+			var rayonX = this.dimensionL/(this.Xmax-this.Xmin)*r;
+			var rayonY = r*this.dimensionH/(this.Ymax-this.Ymin);
+			context.moveTo(this.coordX(X[0]),this.coordY(X[1]));
+			context.ellipse(this.coordX(X[0]),this.coordY(X[1]),rayonX,rayonY,0,-af,-ad);
 			context.fill();
 			context.closePath();
 			context.globalAlpha = 1;
 			context.stroke();
-		}
+			}
 
-		function rectangle(A,L,l,P) {
+		this.rectangle = function (A,L,l,P) {
 			if ( !P ) { P = [] }
 			context.setLineDash(P);
-			context.globalAlpha = transparence;
-			context.strokeStyle = couleur;
-			context.fillStyle = peinture;
-			context.lineWidth = trait;
-			context.beginPath();	
-		
-			var Lx = L*	dimensionLInv/(Xmax-Xmin);
-			var ly = l*dimensionHInv/(Ymax-Ymin)
-		
-			context.rect(coordX(A[0]),coordY(A[1]),Lx,ly);	
+			context.globalAlpha = this.transparence;
+			context.strokeStyle = this.couleur;
+			context.fillStyle = this.peinture;
+			context.lineWidth = this.trait;
+			context.beginPath();		
+			var Lx = L*	this.dimensionL/(this.Xmax-this.Xmin);
+			var ly = l*this.dimensionH/(this.Ymax-this.Ymin);		
+			context.rect(this.coordX(A[0]),this.coordY(A[1]),Lx,ly);	
 			context.fill();
 			context.closePath();
 			context.globalAlpha = 1;
 			context.stroke();
-		}
+			}
 
-		function triangle(A,B,C,P) {
+		this.triangle = function (A,B,C,P) {
 			if ( !P ) { P = [] }
 			context.setLineDash(P);
 			if (A.length == 3) {
-				A = convert3_2(A);
-				B = convert3_2(B);
-				C = convert3_2(C);
-			}
-			context.globalAlpha = transparence;
-			context.strokeStyle = couleur;
-			context.fillStyle = peinture;
-			context.lineWidth = trait;
+				A = this.convert3_2(A);
+				B = this.convert3_2(B);
+				C = this.convert3_2(C);
+				}
+			context.globalAlpha = this.transparence;
+			context.strokeStyle = this.couleur;
+			context.fillStyle = this.peinture;
+			context.lineWidth = this.trait;
 			context.beginPath();
-			
-			context.moveTo(coordX(A[0]),coordY(A[1]));
-			context.lineTo(coordX(B[0]),coordY(B[1]));
-			context.lineTo(coordX(C[0]),coordY(C[1]));
-			context.lineTo(coordX(A[0]),coordY(A[1]));
-			
+			context.moveTo(this.coordX(A[0]),this.coordY(A[1]));
+			context.lineTo(this.coordX(B[0]),this.coordY(B[1]));
+			context.lineTo(this.coordX(C[0]),this.coordY(C[1]));
+			context.lineTo(this.coordX(A[0]),this.coordY(A[1]));			
 			context.fill();
 			context.closePath();
 			context.globalAlpha = 1;
 			context.stroke();
-		
-		}
+			}
 
-		function quadri(A,B,C,D,P) {
+		this.quadri = function (A,B,C,D,P) {
 			if ( !P ) { P = [] }
 			context.setLineDash(P);
 			if (A.length == 3) {
-				A = convert3_2(A);
-				B = convert3_2(B);
-				C = convert3_2(C);
-				D = convert3_2(D);
-			}
-			context.globalAlpha = transparence;
-			context.strokeStyle = couleur;
-			context.fillStyle = peinture;
-			context.lineWidth = trait;
-			context.beginPath();
-			
-			context.moveTo(coordX(A[0]),coordY(A[1]));
-			context.lineTo(coordX(B[0]),coordY(B[1]));
-			context.lineTo(coordX(C[0]),coordY(C[1]));
-			context.lineTo(coordX(D[0]),coordY(D[1]));
-			context.lineTo(coordX(A[0]),coordY(A[1]));
-			
+				A = this.convert3_2(A);
+				B = this.convert3_2(B);
+				C = this.convert3_2(C);
+				D = this.convert3_2(D);
+				}
+			context.globalAlpha = this.transparence;
+			context.strokeStyle = this.couleur;
+			context.fillStyle = this.peinture;
+			context.lineWidth = this.trait;
+			context.beginPath();			
+			context.moveTo(this.coordX(A[0]),this.coordY(A[1]));
+			context.lineTo(this.coordX(B[0]),this.coordY(B[1]));
+			context.lineTo(this.coordX(C[0]),this.coordY(C[1]));
+			context.lineTo(this.coordX(D[0]),this.coordY(D[1]));
+			context.lineTo(this.coordX(A[0]),this.coordY(A[1]));			
 			context.fill();
 			context.closePath();
 			context.globalAlpha = 1;
 			context.stroke();
-		}
+			}
 	
-		function poly(L,P) {
+		this.poly = function (L,P) {
 			if ( !P ) { P = [] }
 			context.setLineDash(P);
 			var n = L.length;
 			if ( L[0].length == 3 ) {
 				for (var i = 0; i < n; i++) {
-					L[i] = convert3_2(L[i]);
+					L[i] = this.convert3_2(L[i]);
+					}
 				}
-			}
-			context.globalAlpha = transparence;
-			context.strokeStyle = couleur;
-			context.fillStyle = peinture;
-			context.lineWidth = trait;
+			context.globalAlpha = this.transparence;
+			context.strokeStyle = this.couleur;
+			context.fillStyle = this.peinture;
+			context.lineWidth = this.trait;
 			context.beginPath();
-			context.moveTo(coordX(L[0][0]),coordY(L[0][1]));
+			context.moveTo(this.coordX(L[0][0]),this.coordY(L[0][1]));
 			for (var i = 1; i < n; i++) {
-				context.lineTo(coordX(L[i][0]),coordY(L[i][1]));
-			}
+				context.lineTo(this.coordX(L[i][0]),this.coordY(L[i][1]));
+				}
 			context.fill();
 			context.closePath();
 			context.globalAlpha = 1;
 			context.stroke();
-		}
+			}
 		
-		function chaine(L,P) {
+		this.chaine = function (L,P) {
 			if ( !P ) { P = [] }
 			context.setLineDash(P);
 			var n = L.length;
 			if ( L[0].length == 3 ) {
 				for (var i = 0; i < n; i++) {
-					L[i] = convert3_2(L[i]);
+					L[i] = this.convert3_2(L[i]);
+					}
+				}
+			for (var i = 1; i < n; i++) {
+				this.segment(L[i-1],L[i],P);
 				}
 			}
-			for (var i = 1; i < n; i++) {
-				segment(L[i-1],L[i],P);
-			}
-		}
 	
-		function graphe(f,a,b) {
-		
-			context.strokeStyle = couleur;
-			context.fillStyle = peinture;
-			context.lineWidth = trait;
-				
+		this.graphe = function (f,a,b) {
+			context.strokeStyle = this.couleur;
+			context.fillStyle = this.peinture;
+			context.lineWidth = this.trait;
 			var pas = (b-a)/1000;
-			for (var i = 1;i<1000;i++) {
+			for (var i = 1; i < 1000 ; i++) {
 				context.beginPath();
-				context.moveTo(coordX(a+(i-1)*pas),coordY(f(a+(i-1)*pas))  );
-				context.lineTo(coordX(a+i*pas),coordY(f(a+i*pas))  );
+				context.moveTo(this.coordX(a+(i-1)*pas),this.coordY(f(a+(i-1)*pas))  );
+				context.lineTo(this.coordX(a+i*pas),this.coordY(f(a+i*pas))  );
 				context.stroke();
 				context.closePath();
+				}
 			}
-		}
 
-		function peintureCourbe(f,a,b) {
-			context.globalAlpha = transparence;
-			context.fillStyle = peinture;
+		this.peintureCourbe = function (f,a,b) {
+			context.globalAlpha = this.transparence;
+			context.fillStyle = this.peinture;
 			context.beginPath();
-			context.moveTo(coordX(a),coordY(0)  );
+			context.moveTo(this.coordX(a),this.coordY(0)  );
 			var pas = (b-a)/1000;
-			for (var i = 0;i<1000;i++) {
-				context.lineTo(coordX(a+i*pas),coordY(f(a+i*pas))  );		
-			}
-			context.lineTo(coordX(b),coordY(0)  );
+			for (var i = 0 ; i < 1000 ; i++) {
+				context.lineTo( this.coordX(a+i*pas), this.coordY(f(a+i*pas)) );		
+				}
+			context.lineTo(this.coordX(b),this.coordY(0)  );
 			context.fill();
 			context.closePath();
 			context.globalAlpha = 1;
-		}
+			}
 	
-		function droiteParam(X,U,P) {
+		this.droiteParam = function (X,U,P) {
 			var Y = [];
 			for (var i = 0;i<X.length;i++) {
 				Y[i] = X[i]+U[i];
-			}
-	
+				}	
 			if (U.length == 3) {
-				X = convert3_2(X);
-				Y = convert3_2(Y);
+				X = this.convert3_2(X);
+				Y = this.convert3_2(Y);
+				}
+			this.droite(X,Y,P);
 			}
-			droite(X,Y,P);
-		}
 		
-		function rotation2d(C,a,P) {
+		this.rotation2d = function (C,a,P) {
 			var Q = [0,0];
 			var c = Math.cos(a);
 			var s = Math.sin(a);
 			Q[0] = (P[0]-C[0])*c-(P[1]-C[1])*s+C[0];
 			Q[1] = (P[0]-C[0])*s+(P[1]-C[1])*c+C[1];
 			return Q;
-		}
+			}
 		
-		function rotation3d(U,a,C,P) {
+		this.rotation3d = function (U,a,C,P) {
 			var Q = [0,0,0];
 			var D = [0,0,0];
 			var c = Math.cos(a);
@@ -1350,10 +1288,9 @@ function algoGrapheInv(nNn,dimensionLInv,dimensionHInv) {
 			Q[2] = (P[0]-D[0])*( U[0]*U[2]*(1-c)-U[1]*s )+(P[1]-D[1])*( U[1]*U[2]*(1-c)+U[0]*s )+(P[2]-D[2])*( U[2]*U[2]*(1-c)+c )+D[2];
 		
 			return Q
-		}
+			}
 	
-		function proj(U,C,P) {
-		
+		this.proj = function (U,C,P) {
 			if ( U.length < 3) {
 				var D = [0,0];
 				var d = Math.sqrt( U[0]*U[0]+U[1]*U[1] )
@@ -1363,7 +1300,7 @@ function algoGrapheInv(nNn,dimensionLInv,dimensionHInv) {
 				var t = -cst-U[0]*C[0]-U[1]*C[1];
 				D[0] = U[0]*t+C[0];
 				D[1] = U[1]*t+C[1];
-			}
+				}
 			else {
 				var D = [0,0,0];
 				var d = Math.sqrt( U[0]*U[0]+U[1]*U[1]+U[2]*U[2] )
@@ -1375,82 +1312,110 @@ function algoGrapheInv(nNn,dimensionLInv,dimensionHInv) {
 				D[0] = U[0]*t+C[0];
 				D[1] = U[1]*t+C[1];
 				D[2] = U[2]*t+C[2];
+				}
+			return D;
 			}
 		
-			return D;
-		}
 		
-		
-		function translation(U,P) {
+		this.translation = function (U,P) {
 			var Q = [];
 			for (var i = 0; i < U.length; i++) {
 				Q.push( U[i]+P[i] );
-			}
+				}
 			return Q;
-		}
+			}
 	
-	
-		function symC(C,P){
+		this.symC = function (C,P){
 			var Q = [];
 			for (var i = 0; i < C.length; i++) {
 				Q.push( 2*C[i]-P[i] );
+				}
+			return Q;
 			}
+	
+	
+		this.symA = function (U,C,P) {
+			var Q = this.proj(U,C,P);
+			var Q = this.symC(Q,P);
 			return Q;
-		}
-	
-	
-		function symA(U,C,P) {
-			var Q = proj(U,C,P);
-			var Q = symC(Q,P);
-			return Q;
-		}
-	
-	
-		function ht(C,k,P) {
+			}
+		
+		this.ht = function (C,k,P) {
 			var Q = [];
 			for (var i = 0; i < C.length; i++) {
 				Q.push( k*(P[i]-C[i])+C[i] );
-			}
+				}
 			return Q;
-		}
+			}
 	
-	
-		function vec(A,B) {
+		this.vec = function (A,B) {
 			var Q = [];
 			for (var i = 0; i < A.length; i++) {
 				Q.push( B[i] - A[i] );
-			}
+				}
 			return Q;	
-		}
+			}
 		
-		function entAlea(a,b){
+		this.entAlea = function (a,b){
 			return a+ Math.floor( (b-a+1)*Math.random() );	
-		}
+			}
 		
-		
-		function convert3_2(P) {
-			T = [-2,-2];
-			T[0] = -2-0.3*P[0]+P[1];
-			T[1] = -2-0.3*P[0]+P[2];
-			return T;
-		}
-	
-		function traceAxes3d() {
+		this.traceAxes3d = function () {
 			var O = [0,0,0];
-			var I = [Ymax/0.4-2,0,0];
-			var J = [0,Xmax+2,0];
-			var K = [0,0,Ymax+2];
-			segment(O,I);
-			segment(O,J);
-			segment(O,K);
+			var I = [this.Ymax/0.4-2,0,0];
+			var J = [0,this.Xmax+2,0];
+			var K = [0,0,this.Ymax+2];
+			this.segment(O,I);
+			this.segment(O,J);
+			this.segment(O,K);
+			}
+		
+		this.distance = function (A,B) {
+			var n = A.length;
+			var d = 0;
+			for (var i = 0;i < n; i++) {
+				d = d+(A[i]-B[i])*(A[i]-B[i]);
+				}
+			d = Math.sqrt(d);
+			return d;
+			}
 		}
-		
-	
-		
-	
-		Texte = "\n"+document.getElementById("textareaCodeGrapheInv"+nNn).value;
+	}
+
+function convertSarmateGraphe(textarea, nNn) {
+		let eltName = textarea+nNn;
+		console.log(eltName);
+		let Texte = "\n"+document.getElementById(eltName).value;
 		Texte += '\n'+'couleur = "#000000";peinture = "#ffffff";transparence = 0;trait = 1;';
-		
+		Texte = Texte.replace( new RegExp( 'point' , 'g' )  ,'sarmateGraphe.point' );
+		Texte = Texte.replace( new RegExp( 'traceG' , 'g' )  ,'sarmateGraphe.traceG' );
+		Texte = Texte.replace( new RegExp( 'effaceEcran' , 'g' )  ,'sarmateGraphe.effaceEcran' );
+		Texte = Texte.replace( new RegExp( 'traceX' , 'g' )  ,'sarmateGraphe.traceX' );
+		Texte = Texte.replace( new RegExp( 'traceY' , 'g' )  ,'sarmateGraphe.traceY' );
+		Texte = Texte.replace( new RegExp( 'segment' , 'g' )  ,'sarmateGraphe.segment' );
+		Texte = Texte.replace( new RegExp( 'droite' , 'g' )  ,'sarmateGraphe.droite' );
+		Texte = Texte.replace( new RegExp( 'texte' , 'g' )  ,'sarmateGraphe.texte' );
+		Texte = Texte.replace( new RegExp( 'cercle' , 'g' )  ,'sarmateGraphe.cercle' );
+		Texte = Texte.replace( new RegExp( 'arcCercle' , 'g' )  ,'sarmateGraphe.arcCercle' );
+		Texte = Texte.replace( new RegExp( 'rectangle' , 'g' )  ,'sarmateGraphe.rectangle' );
+		Texte = Texte.replace( new RegExp( 'triangle' , 'g' )  ,'sarmateGraphe.triangle' );
+		Texte = Texte.replace( new RegExp( 'quadri' , 'g' )  ,'sarmateGraphe.quadri' );
+		Texte = Texte.replace( new RegExp( 'poly' , 'g' )  ,'sarmateGraphe.poly' );
+		Texte = Texte.replace( new RegExp( 'chaine' , 'g' )  ,'sarmateGraphe.chaine' );
+		Texte = Texte.replace( new RegExp( 'hachure' , 'g' )  ,'sarmateGraphe.hachure' );
+		Texte = Texte.replace( new RegExp( 'graphe' , 'g' )  ,'sarmateGraphe.graphe' );
+		Texte = Texte.replace( new RegExp( 'rotation2d' , 'g' )  ,'sarmateGraphe.rotation2d' );
+		Texte = Texte.replace( new RegExp( 'rotation3d' , 'g' )  ,'sarmateGraphe.rotation3d' );
+		Texte = Texte.replace( new RegExp( 'proj' , 'g' )  ,'sarmateGraphe.proj' );
+		Texte = Texte.replace( new RegExp( 'translation' , 'g' )  ,'sarmateGraphe.translation' );
+		Texte = Texte.replace( new RegExp( 'symC' , 'g' )  ,'sarmateGraphe.symC' );
+		Texte = Texte.replace( new RegExp( 'symA' , 'g' )  ,'sarmateGraphe.symA' );
+		Texte = Texte.replace( new RegExp( 'ht' , 'g' )  ,'sarmateGraphe.ht' );
+		Texte = Texte.replace( new RegExp( 'vec' , 'g' )  ,'sarmateGraphe.vec' );
+		Texte = Texte.replace( new RegExp( 'entAlea' , 'g' )  ,'sarmateGraphe.entAlea' );
+		Texte = Texte.replace( new RegExp( 'traceAxes3d' , 'g' )  ,'sarmateGraphe.traceAxes3d' );
+		Texte = Texte.replace( new RegExp( 'distance' , 'g' )  ,'sarmateGraphe.distance' );
+				
 		Texte = Texte.replace( new RegExp( 'rand[(]' , 'g' )  ,'Math.random(' );
 		Texte = Texte.replace( new RegExp( 'puissance[(]' , 'g' )  ,'Math.pow(' );	
 		Texte = Texte.replace( new RegExp( 'ln[(]' , 'g' )  ,'Math.log(' );
@@ -1464,6 +1429,16 @@ function algoGrapheInv(nNn,dimensionLInv,dimensionHInv) {
 		Texte = Texte.replace( new RegExp( '%E' , 'g' )  ,'Math.E' );
 		Texte = Texte.replace( new RegExp( 'OU' , 'g' )  ,'||' );
 		Texte = Texte.replace( new RegExp( 'ET' , 'g' )  ,'&&' );
+		
+		Texte = Texte.replace( new RegExp( 'transparence', 'g' )  ,'sarmateGraphe.transparence' );
+		Texte = Texte.replace( new RegExp( 'peinture', 'g' )  ,'sarmateGraphe.peinture' );
+		Texte = Texte.replace( new RegExp( 'couleur', 'g' )  ,'sarmateGraphe.couleur' );
+		Texte = Texte.replace( new RegExp( 'trait', 'g' )  ,'sarmateGraphe.trait' );
+		Texte = Texte.replace( new RegExp( 'Xmin', 'g' )  ,'sarmateGraphe.Xmin' );
+		Texte = Texte.replace( new RegExp( 'Xmax', 'g' )  ,'sarmateGraphe.Xmax' );
+		Texte = Texte.replace( new RegExp( 'Ymin', 'g' )  ,'sarmateGraphe.Ymin' );
+		Texte = Texte.replace( new RegExp( 'Ymax', 'g' )  ,'sarmateGraphe.Ymax' );
+		
 		Texte = Texte.replace( new RegExp( "couleur = rouge", 'g' )  ,'couleur = "red"' );
 		Texte = Texte.replace( new RegExp( "couleur = vert", 'g' )  ,'couleur = "green"' );
 		Texte = Texte.replace( new RegExp( "couleur = bleu", 'g' )  ,'couleur = "blue"' );
@@ -1490,73 +1465,57 @@ function algoGrapheInv(nNn,dimensionLInv,dimensionHInv) {
 		Texte = Texte.replace( new RegExp( "peinture = orange", 'g' )  ,'peinture = "orange"' );
 		Texte = Texte.replace( new RegExp( "peinture = blanc", 'g' )  ,'peinture = "white"' );
 		
+		// Modification du textarea
 		if ( Texte.match("curseur[(]") ) {
-			
 			var deb = Texte.match("curseur[(]").index;
 			var sousTexte = Texte.substring( deb , Texte.length );
 			var fin =  sousTexte.match("[)]").index;
 			var chaineTexte = sousTexte.substring( 8 , fin );
 			var tabInfo = chaineTexte.split(",");
-			
 			var nomCurseur = "{"+tabInfo[0].replace( new RegExp( '\"', 'g' )  ,'' )+"}";
-			
 			Texte = Texte.replace( new RegExp(  nomCurseur , 'g' )  , curseurChange(nNn) );
-			
-			//console.log(Texte);
-		
-			// Modification du textarea
-			
-			var debT = document.getElementById("textareaCodeGrapheInv"+nNn).value.match("curseur[(]").index;
-			var sousTexteT =  document.getElementById("textareaCodeGrapheInv"+nNn).value.substring( debT ,  document.getElementById("textareaCodeGrapheInv"+nNn).value.length );
+			var debT = document.getElementById(textarea+nNn).value.match("curseur[(]").index;
+			var sousTexteT =  document.getElementById(textarea+nNn).value.substring( debT ,  document.getElementById(textarea+nNn).value.length );
 			var finT =  sousTexteT.match("[)]").index;
 			var chaineT = sousTexteT.substring( 8 , fin );
 			var tabInfoT = chaineT.split(",");
 			tabInfoT[1] = curseurChange(nNn);
 			chaineT = tabInfoT.join();
 			var numT = debT+8;
-					
-			var ancienT = document.getElementById("textareaCodeGrapheInv"+nNn).value;
-			document.getElementById("textareaCodeGrapheInv"+nNn).value = ancienT.substring(0,numT)+chaineT+ancienT.substring(debT+finT, ancienT.length);
-				
-		}
-		/*
-		if ( Texte.match( new RegExp( 'Grille = true' , 'g' ) ) || 
-	   	  Texte.match( new RegExp( 'Grille= true' , 'g' ) )  ||
-	     	Texte.match( new RegExp( 'Grille=true' , 'g' ) )   ||
-	     	Texte.match( new RegExp( 'Grille =true' , 'g' ) )     ) { Texte += "traceG();" }
+			var ancienT = document.getElementById(textarea+nNn).value;
+			document.getElementById(textarea+nNn).value = ancienT.substring(0,numT)+chaineT+ancienT.substring(debT+finT, ancienT.length);
+			}
 		
-		if ( Texte.match( new RegExp( 'AxeX = true' , 'g' ) ) || 
-	     Texte.match( new RegExp( 'AxeX= true' , 'g' ) )  ||
-	     Texte.match( new RegExp( 'AxeX=true' , 'g' ) )   ||
-	     Texte.match( new RegExp( 'AxeX =true' , 'g' ) )      ) { Texte += "traceX();" }
-	
-		if ( Texte.match( new RegExp( 'AxeY = true' , 'g' ) ) || 
-	     Texte.match( new RegExp( 'AxeY= true' , 'g' ) )  ||
-	     Texte.match( new RegExp( 'AxeY=true' , 'g' ) )   ||
-	     Texte.match( new RegExp( 'AxeY =true' , 'g' ) )      ) { Texte += "traceY();" }
-	 	*/    
-		
-		
-		
-		effaceEcran();
-		
-		//Texte += "\n context.beginPath();	context.moveTo(0,0);	context.lineTo(100*Math.random(),100);	context.stroke();	context.closePath();"	
-		
-		//console.log("--------");
-		//console.log(Texte);
-		
-		eval(Texte);
-		
-		
-	}
+	return Texte;
+}
 
-	
+
+
+// Algorithmes graphiques
+
+function algoGraphe(nNn,dimensionL,dimensionH) {
+	var canvasGraphe = document.getElementById("resultatsGraphe"+nNn);
+	var context = canvasGraphe.getContext('2d');
+	let sarmateGraphe = new SarmateGraphe(nNn, dimensionL, dimensionH, context);
+	let Texte = convertSarmateGraphe("textareaCodeGraphe", nNn);
+	sarmateGraphe.effaceEcran();
+	eval(Texte);	
+}
+
+// algorithmes graphiques sans code
+
+function algoGrapheInv(nNn,dimensionLInv,dimensionHInv) {
+	var canvasGraphe = document.getElementById("resultatsGrapheInv"+nNn);
+	var context = canvasGraphe.getContext('2d');
+	let sarmateGraphe = new SarmateGraphe(nNn, dimensionLInv, dimensionHInv, context);
+	let Texte = convertSarmateGraphe("textareaCodeGrapheInv", nNn);
+	sarmateGraphe.effaceEcran();
+	eval(Texte);	
 }
 
 
 
 // algorithmes Python
-
 
 function builtinRead(x) {
     if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
@@ -1643,12 +1602,10 @@ function runit(n) {
         div3.appendChild(div4);
         div3.appendChild(div5);
         div3.appendChild(div6);
-
         div4.appendChild(header);
         div4.appendChild(btn1);
         // div7.appendChild(header);
         // div8.appendChild(btn1);
-
         div5.appendChild(Sk.main_canvas);
 
         createArrows(div6);
@@ -1680,7 +1637,6 @@ function runit(n) {
             $(ic).addClass("fas fa-arrow-" + direction[i]);
             arrows[i].appendChild(ic);
         }
-
 
         var swapIcon = function (id) {
             $(arrows[id].firstChild).removeClass("fa-arrow-" + direction[id]).addClass("fa-arrow-circle-" + direction[id]);
@@ -1788,7 +1744,7 @@ function runit(n) {
             }
         });
    }
-} 
+}
 
 
 
@@ -1806,676 +1762,553 @@ function runHTML(n){
 
 
 function mathpad(){
-
-// Checked box
-//localStorage.removeItem("checked"+document.URL);
-
-if (!localStorage.getItem("checked"+document.URL) ){
+	
+	// Checked box
+	//localStorage.removeItem("checked"+document.URL);
+	
+	if (!localStorage.getItem("checked"+document.URL) ){
 		localStorage.setItem("checked"+document.URL, ["00000000000000000000000000000000000000000000000000000000000000000000000000000000000"]);
-	}
-
-
-
-$('.check-box').each(function(i){
-	$(this).attr('id',"check_"+i);
-    $(this).on('click', function (){changeChecked(i)});
-    console.log(i);
-});
-
-let n = $('.check-box').length;
-
-for(var i = 0; i < n ; i++){
-	let nom = "check_"+i;
-    let elt = document.getElementById(nom);
-    console.log(localStorage.getItem("checked"+document.URL)[i]);
-    if(localStorage.getItem("checked"+document.URL)[i] == 1){
-    	elt.checked = true;
-        console.log(i+" checked");
-    }
-    else{
-    	elt.checked = false;
-    }
-}
-
-
-function changeChecked(n){
-	let nom = "check_"+n;
-	let elt = document.getElementById(nom);
-    listChecked = localStorage.getItem("checked"+document.URL);
-    val = (parseInt(listChecked[n])+1)%2;
-    listChecked = listChecked.substring(0,n)+val+listChecked.substring(n+1);
-	localStorage.setItem("checked"+document.URL, listChecked);
-}
-
-
-// Fin checked box
-
-
-
-
-
-// Les couleurs à modifier
-
-
-if ( themesGraphique[theme] == undefined ) { theme = 'classique';}
-
-$bgBody = themesGraphique[theme]['fondPage'];
-$couleurFondPara = themesGraphique[theme]['fondPara'];
-$couleurTextePara = themesGraphique[theme]['textePara'];
-$couleurNumPara = themesGraphique[theme]['numPara'];
-$texteProp = themesGraphique[theme]['texteProp'];
-$couleurTitrePartie = themesGraphique[theme]['titrePartie'];
-$couleurTexteTitrePartie = themesGraphique[theme]['texteTitrePartie'];
-$couleurCorrection = themesGraphique[theme]['fondCorrection'];
-$barreCorrection = themesGraphique[theme]['barreBtnCorr'];
-$fondCorrection = themesGraphique[theme]['fondBtnCorr'];
-$fondCode = themesGraphique[theme]['fondCode'];
-$texteCode = themesGraphique[theme]['texteCode'];
-
-// Pour faire apparaître les zones de clic pour compléter ou effacer les "trous" dans le texte
-
-
-
-// Pour faire apparaître les zones de clic pour compléter ou effacer les "trous" dans le texte
-
-
-$("body").after("<div class='clicGauche' onclick='retourne()'></div>");
-$("body").after("<div class='clicDroit' onclick='avance()'></div>");
-
-
-$("body").css("background-color", $bgBody);
-
-$("al").css("list-style-type", "lower-latin;");
-
-
-
-$("titre").css("border-radius","0px");
-$("titre").css("color",$couleurTextePara);
-$("titre").css("width", "100%");
-$("titre").css("font-size", "180%");
-$("titre").css("font-weight", "bold");
-$("titre").css("text-align", "center");
-$("titre").css("padding-bottom", "10px");
-$("titre").css("padding-top", "10px");
-$("titre").css("background-color", $couleurFondPara);
-$("titre").css("margin-bottom", "20px");
-$("titre").css("box-shadow", "0px 1px 2px rgba(0, 0, 0, 0.29)");
-$("titre").css("width", "100%");
-
-
-$("cadre").css("border-radius","0px");
-$("cadre").css("color",$couleurTextePara);
-$("cadre").css("width", "100%");
-$("cadre").css("background-color", $couleurFondPara);
-$("cadre").css("box-shadow", "0px 1px 2px rgba(0, 0, 0, 0.29)");
-$("cadre").css("padding","2px");
-
-
-$("gris").css("border-radius","3px");
-$("gris").css("color","black");
-$("gris").css("width", "100%");
-$("gris").css("background-color", "#f0f0f0");
-$("gris").css("padding","4px");
-$("gris").css("margin-bottom","10px");
-$("gris").css("margin-top","10px");
-
-
-$("exercice").each(function(i){
-j=i+1;
-$(this).css("padding","2px");
-$(this).css("padding-left","7px");
-$(this).css("background-color",$couleurFondPara);
-$(this).css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
-$(this).css("border-radius","0px");
-$(this).css("color",$texteProp);
-$(this).prepend("<span style='font-weight:bold;'>Exercice " + j+"</span>");});
-
-$("exemple").each(function(i){
-j=i+1;
-$(this).css("padding","2px");
-$(this).css("padding-left","7px");
-$(this).css("background-color",$couleurFondPara);
-$(this).css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
-$(this).css("border-radius","0px");
-$(this).css("color",$texteProp);
-$(this).prepend("<span style='font-weight:bold;'>Exemple " + j+"</span>");});
-
-$("def").each(function(i){
-j=i+1;           
-$(this).css("border","solid 1px "+$couleurFondPara);
-$(this).css("background-color",$couleurFondPara);
-$(this).css("padding","5px");
-$(this).css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
-$(this).css("border-radius","0px");
-$(this).css("color",$texteProp);
-if( navigator.languages[0] == "fr" || navigator.languages[0] == "fr-FR" || navigator.languages[0] == "fr-fr" ){
-	$(this).prepend("<span class='prop' >Définition " + j+"</span>");
-}
-else {
-	$(this).prepend("<span class='prop' >Definition " + j+"</span>");}
-}
-);
-
-$("prop").each(function(i){
-j=i+1;
-$(this).css("background-color",$couleurFondPara);           
-$(this).css("border","solid 1px "+$couleurFondPara);
-$(this).css("padding","5px");
-$(this).css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
-$(this).css("color","#000000");
-$(this).css("border-radius","0px");
-$(this).css("color",$texteProp);
-if( navigator.languages[0] == "fr" || navigator.languages[0] == "fr-FR" || navigator.languages[0] == "fr-fr" ){
-	$(this).prepend("<span class='prop'>Propriété " + j+"</span>");
-	}
-else {
-	$(this).prepend("<span class='prop'>Property " + j+"</span>");
-	}
-}
-);
-
-$("propN").each(function(i){
-j=i+1;
-$(this).css("background-color",$couleurFondPara);           
-$(this).css("border","solid 1px "+$couleurFondPara);
-$(this).css("padding","2px");
-$(this).css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
-$(this).css("color","#000000");
-$(this).css("border-radius","0px");
-$(this).css("color",$texteProp);
-if( navigator.languages[0] == "fr" || navigator.languages[0] == "fr-FR" || navigator.languages[0] == "fr-fr" ){
-	$(this).prepend("<span class='prop'>Propriété " + j+"</span>");
-	}
-else {
-	$(this).prepend("<span class='prop'>Property " + j+"</span>");
-	}
-}
-);
-
-
-$("propo").each(function(i){
-j=i+1;
-$(this).css("background-color",$couleurFondPara);           
-$(this).css("border","solid 1px "+$couleurFondPara);
-$(this).css("padding","5px");
-$(this).css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
-$(this).css("color","#000000");
-$(this).css("border-radius","0px");
-$(this).css("color",$texteProp);
-$(this).prepend("<span class='prop'>Proposition </span><br />");
-if( navigator.languages[0] == "fr" || navigator.languages[0] == "fr-FR"  || navigator.languages[0] == "fr-fr"){
-	$(this).prepend("<span class='prop'>Proposition </span><br />");
-	}
-else {
-	$(this).prepend("<span class='prop'>Proposition </span><br />");
-	}
-}
-);
-
-
-
-$("theo").each(function(i){
-j=i+1;
-$(this).css("background-color",$couleurFondPara);           
-$(this).css("border","solid 1px "+$couleurFondPara);
-$(this).css("padding","5px");
-$(this).css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
-$(this).css("border-radius","0px");
-$(this).css("color",$texteProp);
-
-if( navigator.languages[0] == "fr" || navigator.languages[0] == "fr-FR" || navigator.languages[0] == "fr-fr" ){
-	$(this).prepend("<span class='prop'>Théorème " + j+"</span>");
-	}
-else {
-	$(this).prepend("<span class='prop'>Theorem " + j+"</span>");
-	}
-}
-);
-
-$("lemme").each(function(i){
-j=i+1;
-$(this).css("background-color",$couleurFondPara);           
-$(this).css("border","solid 1px "+$couleurFondPara);
-$(this).css("padding","5px");
-$(this).css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
-$(this).css("border-radius","0px");
-$(this).css("color",$texteProp);
-
-if( navigator.languages[0] == "fr" || navigator.languages[0] == "fr-FR" || navigator.languages[0] == "fr-fr" ){
-	$(this).prepend("<span class='prop'>Lemme " + j+"</span>");
-	}
-else {
-	$(this).prepend("<span class='prop'>Lemma " + j+"</span>");
-	}
-}
-);
-
-
-$("rem").each(function(i){
-j=i+1;
-$(this).css("background-color",$couleurFondPara);
-$(this).css("padding","2px");
-$(this).css("padding-left","7px");
-$(this).css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
-$(this).css("border-radius","0px");
-$(this).css("color",$texteProp);
-
-if( navigator.languages[0] == "fr" || navigator.languages[0] == "fr-FR" || navigator.languages[0] == "fr-fr" ){
-	$(this).prepend("<span style='font-weight:bold;'>Remarque " + j+"</span>");
-	}
-else {
-	$(this).prepend("<span style='font-weight:bold;'>Remark " + j+"</span>");
-	}
-}
-);
-
-
-
-$("roc").each(function(i){
-	$(this).css("display","inline-table");
-	$(this).css("width","45px");
-	$(this).css("height","45px");
-	$(this).css("line-height","45px");
-	$(this).css("position","absolute");
-	$(this).css("right","10px");
-	$(this).css("background-color","rgba(255,0,0,0.5)");
-	$(this).css("text-align","center");
-	$(this).css("box-shadow","4px 4px 5px #c0c0c0");
-	$(this).css("border-radius","45px");
-	$(this).html("ROC");
-	$(this).css("font-weight","bold");
-	$(this).css("color","white");
-});
-
-
-$('.prop').css("background-color", $couleurTitrePartie);
-$('.prop').css("color", $couleurTexteTitrePartie);
-$('.prop').css("border-left","solid 6px "+$couleurTitrePartie);
-$('.prop').css("border-right","solid 6px "+$couleurTitrePartie);
-$('.prop').css("border-top","solid 6px "+$couleurTitrePartie);
-
-
-
-// Pour créer des slides à la manière d'un beamer LaTeX : on passe les slides en cliquant en haut à gauche ou à droite
-
-$("slide").each(function(i){
-	maxSlide = i;
-	}
-);
-
-$("slide").each(function(i){
+		}
+		
+	$('.check-box').each(function(i){
+		$(this).attr('id',"check_"+i);
+    	$(this).on('click', function (){changeChecked(i)});
+    	//console.log(i);
+	});
 	
-	var k=i+1;           
-	$(this).attr('id', 'slide_'+k);
-	var lienD = 1;
-	var lienG = -1;
-	if ( i==maxSlide ) { lienD = 0; }
-	if ( i==0 ) { lienG = 0; }
+	let n = $('.check-box').length;
 	
-	$(this).prepend("<div style='position:fixed;top:0px;height:80px;right:0px;width:50px;cursor:pointer;z-index:2000;' onclick='slide("+k+","+lienD+")'></div>");
-	$(this).prepend("<div style='position:fixed;top:0px;height:80px;leftt:0px;width:50px;cursor:pointer;z-index:2000;' onclick='slide("+k+","+lienG+")'></div>");
-	if ( i == 0 ){ $(this).css("display","block"); }
-	
+	for(var i = 0; i < n ; i++){
+		let nom = "check_"+i;
+    	let elt = document.getElementById(nom);
+    	console.log(localStorage.getItem("checked"+document.URL)[i]);
+    	if(localStorage.getItem("checked"+document.URL)[i] == 1){
+    		elt.checked = true;
+        	//console.log(i+" checked");
+    	}
+    	else{
+    		elt.checked = false;
+    	}
 	}
-);
+	
+	
+	function changeChecked(n){
+		let nom = "check_"+n;
+		let elt = document.getElementById(nom);
+    	listChecked = localStorage.getItem("checked"+document.URL);
+    	val = (parseInt(listChecked[n])+1)%2;
+    	listChecked = listChecked.substring(0,n)+val+listChecked.substring(n+1);
+		localStorage.setItem("checked"+document.URL, listChecked);
+	}
+	
+	
+	// Fin checked box
+			
+	
+	// Les couleurs à modifier en fonction du thème	
+	
+	if ( themesGraphique[theme] == undefined ) { theme = 'classique';}	
+	$bgBody = themesGraphique[theme]['fondPage'];
+	$couleurFondPara = themesGraphique[theme]['fondPara'];
+	$couleurTextePara = themesGraphique[theme]['textePara'];
+	$couleurNumPara = themesGraphique[theme]['numPara'];
+	$texteProp = themesGraphique[theme]['texteProp'];
+	$couleurTitrePartie = themesGraphique[theme]['titrePartie'];
+	$couleurTexteTitrePartie = themesGraphique[theme]['texteTitrePartie'];
+	$couleurCorrection = themesGraphique[theme]['fondCorrection'];
+	$barreCorrection = themesGraphique[theme]['barreBtnCorr'];
+	$fondCorrection = themesGraphique[theme]['fondBtnCorr'];
+	$fondCode = themesGraphique[theme]['fondCode'];
+	$texteCode = themesGraphique[theme]['texteCode'];
+	
+	
+	
+	// Pour faire apparaître les zones de clic pour compléter ou effacer les "trous" dans le texte
+		
+	$("body").after("<div class='clicGauche' onclick='retourne()'></div>");
+	$("body").after("<div class='clicDroit' onclick='avance()'></div>");
+	$("body").css("background-color", $bgBody);
+	
+	$("al").css("list-style-type", "lower-latin;");
+
+	$("titre").css("border-radius","0px");
+	$("titre").css("color",$couleurTextePara);
+	$("titre").css("width", "100%");
+	$("titre").css("font-size", "180%");
+	$("titre").css("font-weight", "bold");
+	$("titre").css("text-align", "center");
+	$("titre").css("padding-bottom", "10px");
+	$("titre").css("padding-top", "10px");
+	$("titre").css("background-color", $couleurFondPara);
+	$("titre").css("margin-bottom", "20px");
+	$("titre").css("box-shadow", "0px 1px 2px rgba(0, 0, 0, 0.29)");
+	$("titre").css("width", "100%");
+
+	$("cadre").css("border-radius","0px");
+	$("cadre").css("color",$couleurTextePara);
+	$("cadre").css("width", "100%");
+	$("cadre").css("background-color", $couleurFondPara);
+	$("cadre").css("box-shadow", "0px 1px 2px rgba(0, 0, 0, 0.29)");
+	$("cadre").css("padding","2px");
+
+	$("gris").css("border-radius","3px");
+	$("gris").css("color","black");
+	$("gris").css("width", "100%");
+	$("gris").css("background-color", "#f0f0f0");
+	$("gris").css("padding","4px");
+	$("gris").css("margin-bottom","10px");
+	$("gris").css("margin-top","10px");
+
+	$("exercice").each(function(i){
+		j=i+1;
+		$(this).css("padding","2px");
+		$(this).css("padding-left","7px");
+		$(this).css("background-color",$couleurFondPara);
+		$(this).css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
+		$(this).css("border-radius","0px");
+		$(this).css("color",$texteProp);
+		$(this).prepend("<span style='font-weight:bold;'>Exercice " + j+"</span>");
+		});
+
+	$("exemple").each(function(i){
+		j=i+1;
+		$(this).css("padding","2px");
+		$(this).css("padding-left","7px");
+		$(this).css("background-color",$couleurFondPara);
+		$(this).css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
+		$(this).css("border-radius","0px");
+		$(this).css("color",$texteProp);
+		$(this).prepend("<span style='font-weight:bold;'>Exemple " + j+"</span>");});
+
+	$("def").each(function(i){
+		j=i+1;           
+		$(this).css("border","solid 1px "+$couleurFondPara);
+		$(this).css("background-color",$couleurFondPara);
+		$(this).css("padding","5px");
+		$(this).css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
+		$(this).css("border-radius","0px");
+		$(this).css("color",$texteProp);
+		if( navigator.languages[0] == "fr" || navigator.languages[0] == "fr-FR" || navigator.languages[0] == "fr-fr" ){
+			$(this).prepend("<span class='prop' >Définition " + j+"</span>");
+		}
+		else {
+			$(this).prepend("<span class='prop' >Definition " + j+"</span>");}
+		}
+	);
+
+	$("prop").each(function(i){
+		j=i+1;
+		$(this).css("background-color",$couleurFondPara);           
+		$(this).css("border","solid 1px "+$couleurFondPara);
+		$(this).css("padding","5px");
+		$(this).css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
+		$(this).css("color","#000000");
+		$(this).css("border-radius","0px");
+		$(this).css("color",$texteProp);
+		if( navigator.languages[0] == "fr" || navigator.languages[0] == "fr-FR" || navigator.languages[0] == "fr-fr" ){
+			$(this).prepend("<span class='prop'>Propriété " + j+"</span>");
+		}
+		else {
+			$(this).prepend("<span class='prop'>Property " + j+"</span>");
+		}
+	}
+	);
+
+	$("propN").each(function(i){
+		j=i+1;
+		$(this).css("background-color",$couleurFondPara);           
+		$(this).css("border","solid 1px "+$couleurFondPara);
+		$(this).css("padding","2px");
+		$(this).css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
+		$(this).css("color","#000000");
+		$(this).css("border-radius","0px");
+		$(this).css("color",$texteProp);
+		if( navigator.languages[0] == "fr" || navigator.languages[0] == "fr-FR" || navigator.languages[0] == "fr-fr" ){
+			$(this).prepend("<span class='prop'>Propriété " + j+"</span>");
+		}
+		else {
+			$(this).prepend("<span class='prop'>Property " + j+"</span>");
+		}
+	}
+	);
 
 
+	$("propo").each(function(i){
+		j=i+1;
+		$(this).css("background-color",$couleurFondPara);           
+		$(this).css("border","solid 1px "+$couleurFondPara);
+		$(this).css("padding","5px");
+		$(this).css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
+		$(this).css("color","#000000");
+		$(this).css("border-radius","0px");
+		$(this).css("color",$texteProp);
+		$(this).prepend("<span class='prop'>Proposition </span><br />");
+		if( navigator.languages[0] == "fr" || navigator.languages[0] == "fr-FR"  || navigator.languages[0] == "fr-fr"){
+			$(this).prepend("<span class='prop'>Proposition </span><br />");
+		}
+		else {
+			$(this).prepend("<span class='prop'>Proposition </span><br />");
+		}
+	}
+	);
 
-// Une zone d'algorithme, basé sur du Javascript compléter par des instructions en "français", cf https://www.sarmate.free.fr/sarmateScript/sarmate_script.html
+	$("theo").each(function(i){
+		j=i+1;
+		$(this).css("background-color",$couleurFondPara);           
+		$(this).css("border","solid 1px "+$couleurFondPara);
+		$(this).css("padding","5px");
+		$(this).css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
+		$(this).css("border-radius","0px");
+		$(this).css("color",$texteProp);		
+		if( navigator.languages[0] == "fr" || navigator.languages[0] == "fr-FR" || navigator.languages[0] == "fr-fr" ){
+			$(this).prepend("<span class='prop'>Théorème " + j+"</span>");
+			}
+		else {
+			$(this).prepend("<span class='prop'>Theorem " + j+"</span>");
+			}
+		}
+	);
 
-$("algo").each(function(i) {
-	var dimensionL = 350;
-	if( $(this).attr('largeur') ){ dimensionL = $(this).attr('largeur'); }
-	if( $(this).attr('width') ){ dimensionL = $(this).attr('width'); }
-	var dimensionH = dimensionL;
-	if( $(this).attr('hauteur') ){ dimensionH = $(this).attr('hauteur'); }
-	if( $(this).attr('height') ){ dimensionH = $(this).attr('height'); }
+	$("lemme").each(function(i){
+		j=i+1;
+		$(this).css("background-color",$couleurFondPara);           
+		$(this).css("border","solid 1px "+$couleurFondPara);
+		$(this).css("padding","5px");
+		$(this).css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
+		$(this).css("border-radius","0px");
+		$(this).css("color",$texteProp);		
+		if( navigator.languages[0] == "fr" || navigator.languages[0] == "fr-FR" || navigator.languages[0] == "fr-fr" ){
+			$(this).prepend("<span class='prop'>Lemme " + j+"</span>");
+			}
+		else {
+			$(this).prepend("<span class='prop'>Lemma " + j+"</span>");
+			}
+		}
+	);
 	
-	var contenu = $(this).html();
-	$(this).empty();
 	
-	contenu = "<div class=\"containHTML\"><textarea id='textareaCode"+i+"' style='display:block;width:350px;height:350px;border:solid 1px black;padding:5px;text-align:left;margin:auto;margin-bottom:10px;resize: none;'>"+contenu+"</textarea></div>";	
+	$("rem").each(function(i){
+		j=i+1;
+		$(this).css("background-color",$couleurFondPara);
+		$(this).css("padding","2px");
+		$(this).css("padding-left","7px");
+		$(this).css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
+		$(this).css("border-radius","0px");
+		$(this).css("color",$texteProp);		
+		if( navigator.languages[0] == "fr" || navigator.languages[0] == "fr-FR" || navigator.languages[0] == "fr-fr" ){
+			$(this).prepend("<span style='font-weight:bold;'>Remarque " + j+"</span>");
+			}
+		else {
+			$(this).prepend("<span style='font-weight:bold;'>Remark " + j+"</span>");
+			}
+		}
+	);
 	
-	contenu +=  "<div class=\"containHTML\"><a class='btnPython' type='button' onclick='algo("+i+")'>Exécuter</a></div>";	
 	
-	 
-	//contenu += "<div id='resultats"+i+"' class='sortieHtml'></div>";
-	contenu += "<div id='resultats"+i+"' style='width:350px;height:auto;background-color:#f8f8f8;border:solid 1px black;text-align:left;padding:5px;margin:auto;margin-top:10px;'></div>";
+	$("roc").each(function(i){
+		$(this).css("display","inline-table");
+		$(this).css("width","45px");
+		$(this).css("height","45px");
+		$(this).css("line-height","45px");
+		$(this).css("position","absolute");
+		$(this).css("right","10px");
+		$(this).css("background-color","rgba(255,0,0,0.5)");
+		$(this).css("text-align","center");
+		$(this).css("box-shadow","4px 4px 5px #c0c0c0");
+		$(this).css("border-radius","45px");
+		$(this).html("ROC");
+		$(this).css("font-weight","bold");
+		$(this).css("color","white");
+		});
+		
+	$('.prop').css("background-color", $couleurTitrePartie);
+	$('.prop').css("color", $couleurTexteTitrePartie);
+	$('.prop').css("border-left","solid 6px "+$couleurTitrePartie);
+	$('.prop').css("border-right","solid 6px "+$couleurTitrePartie);
+	$('.prop').css("border-top","solid 6px "+$couleurTitrePartie);
 
-	$(this).prepend( contenu );
+
+	// Pour créer des slides à la manière d'un beamer LaTeX : on passe les slides en cliquant en haut à gauche ou à droite
+
+	$("slide").each(function(i){
+		maxSlide = i;
+		}
+	);
+
+	$("slide").each(function(i){		
+		var k=i+1;           
+		$(this).attr('id', 'slide_'+k);
+		var lienD = 1;
+		var lienG = -1;
+		if ( i==maxSlide ) { lienD = 0; }
+		if ( i==0 ) { lienG = 0; }		
+		$(this).prepend("<div style='position:fixed;top:0px;height:80px;right:0px;width:50px;cursor:pointer;z-index:2000;' onclick='slide("+k+","+lienD+")'></div>");
+		$(this).prepend("<div style='position:fixed;top:0px;height:80px;leftt:0px;width:50px;cursor:pointer;z-index:2000;' onclick='slide("+k+","+lienG+")'></div>");
+		if ( i == 0 ){ $(this).css("display","block"); }		
+		}
+	);
 	
-	var code = $("#textareaCode"+i)[0];
+		
+	// Une zone d'algorithme, basé sur du Javascript compléter par des instructions en "français", cf https://www.sarmate.free.fr/sarmateScript/sarmate_script.html
 	
-	editorCode.push( CodeMirror.fromTextArea(code, {
+	$("algo").each(function(i) {
+		var dimensionL = 350;
+		if( $(this).attr('largeur') ){ dimensionL = $(this).attr('largeur'); }
+		if( $(this).attr('width') ){ dimensionL = $(this).attr('width'); }
+		var dimensionH = dimensionL;
+		if( $(this).attr('hauteur') ){ dimensionH = $(this).attr('hauteur'); }
+		if( $(this).attr('height') ){ dimensionH = $(this).attr('height'); }		
+		var contenu = $(this).html();
+		$(this).empty();		
+		contenu = "<div class=\"containHTML\"><textarea id='textareaCode"+i+"' style='display:block;width:350px;height:350px;border:solid 1px black;padding:5px;text-align:left;margin:auto;margin-bottom:10px;resize: none;'>"+contenu+"</textarea></div>";	
+		contenu +=  "<div class=\"containHTML\"><a class='btnPython' type='button' onclick='algo("+i+")'>Exécuter</a></div>";	
+		//contenu += "<div id='resultats"+i+"' class='sortieHtml'></div>";
+		contenu += "<div id='resultats"+i+"' style='width:350px;height:auto;background-color:#f8f8f8;border:solid 1px black;text-align:left;padding:5px;margin:auto;margin-top:10px;'></div>";
+		$(this).prepend( contenu );
+		var code = $("#textareaCode"+i)[0];
+		
+		editorCode.push( CodeMirror.fromTextArea(code, {
         //mode: {name: "js"},
         			lineNumbers: true,
         			indentUnit: 4,
         			matchBrackets: true,
         			theme: 'abcdef'
-}));
-	
-	
-	editorCode[i].setSize(dimensionL,dimensionH);
-	
-	}
-);
+			}));			
+		editorCode[i].setSize(dimensionL,dimensionH);		
+		}
+	);
 
 
-
-
-// Une zone d'algorithme "graphique", cf https://www.sarmate.xyz/sarmateGraph/sarmate_graph.html
-
-$("algoGraphe").each(function(i) {
+	// Une zone d'algorithme "graphique", cf https://www.sarmate.xyz/sarmateGraph/sarmate_graph.html
 	
-	var dimensionL = 350;
-	var dimensionLS = 350;
-	var vis = "block";
-	
-	if ( $(this).attr('visible') ) { if ($(this).attr('visible')=="non" ) { vis ="none"; } }
-	
-	if( $(this).attr('largeur') ){ dimensionL = $(this).attr('largeur'); }
-	if( $(this).attr('width') ){ dimensionL = $(this).attr('width'); }
-	if( $(this).attr('largeurSortie') ){ dimensionLS = $(this).attr('largeurSortie'); }
-	
-	var dimensionH = dimensionL;
-	var dimensionHS = dimensionLS;
-	
-	if( $(this).attr('hauteur') ){ dimensionH = $(this).attr('hauteur'); }
-	if( $(this).attr('height') ){ dimensionH = $(this).attr('height'); }
-	if( $(this).attr('hauteurSortie') ){ dimensionHS = $(this).attr('hauteurSortie'); }
-	
-	var contenu = $(this).html();
-	$(this).empty();
-	
-	contenu = "<div  class=\"containHTML\"><textarea id='textareaCodeGraphe"+i+"' style='display:"+vis+";width:350px;height:350px;border:solid 1px black;padding:5px;text-align:left;margin:auto;margin-bottom:10px;resize: none;'>"+contenu+"</textarea></div>";	
-	
-	contenu +=  "<div class=\"containHTML\"><a class='btnPython' type='button' onclick='algoGraphe("+i+","+dimensionLS+","+dimensionHS+")'>Exécuter</a></div>";	
-	
-	var newCanvas = $('<canvas/>',{
+	$("algoGraphe").each(function(i) {
+		var dimensionL = 350;
+		var dimensionLS = 350;
+		var vis = "block";		
+		if ( $(this).attr('visible') ) { if ($(this).attr('visible')=="non" ) { vis ="none"; } }		
+		if( $(this).attr('largeur') ){ dimensionL = $(this).attr('largeur'); }
+		if( $(this).attr('width') ){ dimensionL = $(this).attr('width'); }
+		if( $(this).attr('largeurSortie') ){ dimensionLS = $(this).attr('largeurSortie'); }		
+		var dimensionH = dimensionL;
+		var dimensionHS = dimensionLS;		
+		if( $(this).attr('hauteur') ){ dimensionH = $(this).attr('hauteur'); }
+		if( $(this).attr('height') ){ dimensionH = $(this).attr('height'); }
+		if( $(this).attr('hauteurSortie') ){ dimensionHS = $(this).attr('hauteurSortie'); }		
+		var contenu = $(this).html();
+		$(this).empty();		
+		contenu = "<div  class=\"containHTML\"><textarea id='textareaCodeGraphe"+i+"' style='display:"+vis+";width:350px;height:350px;border:solid 1px black;padding:5px;text-align:left;margin:auto;margin-bottom:10px;resize: none;'>"+contenu+"</textarea></div>";	
+		contenu +=  "<div class=\"containHTML\"><a class='btnPython' type='button' onclick='algoGraphe("+i+","+dimensionLS+","+dimensionHS+")'>Exécuter</a></div>";	
+		
+		var newCanvas = $('<canvas/>',{
                     id: 'resultatsGraphe'+i                   
                 }).prop({
                     width: dimensionLS,
                     height: dimensionHS,
                 });
-	newCanvas.css('border','solid 1px black');
-	newCanvas.css('margin-left','auto');
-	newCanvas.css('margin-right','auto');
-	newCanvas.css('margin-top','10px');
-	newCanvas.css('display','block');
-	
-	$(this).prepend( contenu );
-	
-	var code = $("#textareaCodeGraphe"+i)[0];
-	
-	editorCodeGraphe.push( CodeMirror.fromTextArea(code, {
+		newCanvas.css('border','solid 1px black');
+		newCanvas.css('margin-left','auto');
+		newCanvas.css('margin-right','auto');
+		newCanvas.css('margin-top','10px');
+		newCanvas.css('display','block');		
+		$(this).prepend( contenu );		
+		var code = $("#textareaCodeGraphe"+i)[0];		
+		editorCodeGraphe.push( CodeMirror.fromTextArea(code, {
         //mode: {name: "js"},
         			lineNumbers: true,
         			indentUnit: 4,
         			matchBrackets: true,
         			theme: 'abcdef'
-}));
-	
-	editorCodeGraphe[i].setSize(dimensionL,dimensionH);
-	$(this).append( newCanvas );
-	}
-);
+			}));		
+		editorCodeGraphe[i].setSize(dimensionL,dimensionH);
+		$(this).append( newCanvas );
+		}
+	);
 
-var nbAlgoGrapheInv = 0;
-var dimensionLInv = [];
-var dimensionHInv = [];
-
-// Une zone d'algorithme graphique dans laquelle juste la fenêtre graphique apparaît.
-
-$("algoGrapheInv").each(function(i) {
+	var nbAlgoGrapheInv = 0;
+	var dimensionLInv = [];
+	var dimensionHInv = [];
 	
-	nbAlgoGrapheInv = i;
+	// Une zone d'algorithme graphique dans laquelle juste la fenêtre graphique apparaît.
 	
-	var dimensionL = 350;
-	
-	if( $(this).attr('largeur') ){ 
+	$("algoGrapheInv").each(function(i) {
+		nbAlgoGrapheInv = i;
+		var dimensionL = 350;
+		if( $(this).attr('largeur') ){ 
 				dimensionLInv.push( $(this).attr('largeur'));
 				dimensionL = $(this).attr('largeur');
 			 } 
-	else { dimensionLInv.push(350); }
-	if( $(this).attr('width') ){ 
+		else { dimensionLInv.push(350); }
+		if( $(this).attr('width') ){ 
 				dimensionLInv.push( $(this).attr('width'));
 				dimensionL = $(this).attr('width');
-			 } 
-	else { dimensionLInv.push(350); }
-	
-	dimensionH = dimensionL;
-	
-	if( $(this).attr('hauteur') ){ 
+		} 
+		else { dimensionLInv.push(350); }		
+		dimensionH = dimensionL;
+		if( $(this).attr('hauteur') ){ 
 				dimensionHInv.push( $(this).attr('hauteur'));
 				dimensionH = $(this).attr('hauteur');
-			 } 
-	else { dimensionHInv.push( dimensionL ); }
-	if( $(this).attr('height') ){ 
+		 } 
+		else { dimensionHInv.push( dimensionL ); }
+		if( $(this).attr('height') ){ 
 				dimensionHInv.push( $(this).attr('height'));
 				dimensionH = $(this).attr('height');
-			 } 
-	else { dimensionHInv.push( dimensionL ); }
-	
-	var contenu = $(this).html();
-	$(this).empty();
-	
-	
-	
-	contenu = "<textarea id='textareaCodeGrapheInv"+i+"' style='display:none;width:350px;height:350px;border:solid 1px black;padding:5px;text-align:left;margin:auto;margin-bottom:10px;resize: none;'>"+contenu+"</textarea>";	
-	
-	
-	var newCanvas = $('<canvas/>',{
+		} 
+		else { dimensionHInv.push( dimensionL ); }
+		var contenu = $(this).html();
+		$(this).empty();		
+		contenu = "<textarea id='textareaCodeGrapheInv"+i+"' style='display:none;width:350px;height:350px;border:solid 1px black;padding:5px;text-align:left;margin:auto;margin-bottom:10px;resize: none;'>"+contenu+"</textarea>";	
+			
+		var newCanvas = $('<canvas/>',{
                     id: 'resultatsGrapheInv'+i                   
-                }).prop({
-                    width: dimensionL,
-                    height: dimensionH,
-                });
-	newCanvas.css('border','solid 0px black');
-	newCanvas.css('margin-left','auto');
-	newCanvas.css('margin-right','auto');
-	newCanvas.css('margin-top','10px');
-	newCanvas.css('display','block');
-	
-	
-	
-	$(this).prepend( contenu );
-	$(this).append( newCanvas );
-	
-	var tabCurseur = [];
-	var posCurseur = 0;
-	var iCurseur = -1;
-	
-	while ( posCurseur !=-1 ){
-		posCurseur = contenu.indexOf( "curseur(",iCurseur+1 );
-		iCurseur = posCurseur
-		if ( posCurseur !=-1 ) { tabCurseur.push( posCurseur ) }
-	}
-	
-	
-	//console.log( tabCurseur );
-	
-	
+                		}).prop({
+                    		width: dimensionL,
+                    		height: dimensionH,
+                		});
+		newCanvas.css('border','solid 0px black');
+		newCanvas.css('margin-left','auto');
+		newCanvas.css('margin-right','auto');
+		newCanvas.css('margin-top','10px');
+		newCanvas.css('display','block');
+		
+		$(this).prepend( contenu );
+		$(this).append( newCanvas );
+		var tabCurseur = [];
+		var posCurseur = 0;
+		var iCurseur = -1;
+		while ( posCurseur !=-1 ){
+			posCurseur = contenu.indexOf( "curseur(",iCurseur+1 );
+			iCurseur = posCurseur
+			if ( posCurseur !=-1 ) { tabCurseur.push( posCurseur ) }
+		}
+			
 	// Curseur : syntaxe --> curseur("n",2,0,5,0.1) --> nom, valeur, min, max, pas
 	// pour réutiliser le curseur dans le code {n}
 	
-	if ( contenu.match("curseur[(]") ) {
-		//console.log("Curseur 0 ! ");
-		//for (var j = 0; j < tabCurseur.length; j++) {
+		if ( contenu.match("curseur[(]") ) {
+			//console.log("Curseur 0 ! ");
+			//for (var j = 0; j < tabCurseur.length; j++) {
+			var deb = contenu.match("curseur[(]").index;
+			var sousContenu = contenu.substring( deb , contenu.length );
+			var fin =  sousContenu.match("[)]").index;
+			var chaine = sousContenu.substring( 8 , fin );
+			var tabInfo = chaine.split(",");
+			var newLegende = document.createElement("div");
+			newLegende.id = "legende"+i;
+			newLegende.style.textAlign = "center";
+			newLegende.style.width = dimensionLInv+"px";
+			newLegende.style.marginLeft = 'auto';
+			newLegende.style.marginRight = 'auto';
+			$(this).append( newLegende );
+			
+			var newInput = document.createElement("input");
+			newInput.id = "curseur"+i;
+ 			newInput.type = "range";
+  			newInput.name = tabInfo[0].replace( new RegExp( '\"', 'g' )  ,'' );
+  			newInput.value = tabInfo[1];
+  			newInput.min = tabInfo[2];
+  			newInput.max = tabInfo[3];
+  			newInput.step = tabInfo[4];
+  			newInput.addEventListener('input', function (){ algoGrapheInv(i,dimensionL,dimensionH); },false );
+  			newInput.style.border = "solid 0px black";
+			newInput.style.marginLeft = 'auto';
+			newInput.style.marginRight = 'auto';
+			newInput.style.marginTop = '10px';
+			
+			var newMessage = document.createElement("span");
+			newMessage.innerHTML = newInput.name;
+			newMessage.style.padding = "10px";
+			
+			$("#legende"+i).append( newMessage );
+			$("#legende"+i).append( newInput );
+			}
+	
+		}
+	);
+
+
+	// Pour lancer l'éxécution de l'algorithme graphique
+	var chargement = "";
+	if ( nbAlgoGrapheInv >0 ) {
+		for (var i = 0;i <= nbAlgoGrapheInv;i++ ) {
+			chargement += "algoGrapheInv("+i+"," + dimensionLInv[i] + ","+dimensionHInv[i]+");";
+			}
+		}
+	$('body').attr('onload',chargement);
+
+	// Pour faire apparaître une fenêtre avec du code html et le résultat d'affichage
+	
+	$("codeHTML").each(function(i) {
+		var dimensionL = 350;
+		if( $(this).attr('largeur') ){ dimensionL = $(this).attr('largeur'); }
+		if( $(this).attr('width') ){ dimensionL = $(this).attr('width'); }
+		var dimensionH = dimensionL;
+		if( $(this).attr('hauteur') ){ dimensionH = $(this).attr('hauteur'); }
+		if( $(this).attr('height') ){ dimensionH = $(this).attr('height'); }
 		
-		var deb = contenu.match("curseur[(]").index;
-		var sousContenu = contenu.substring( deb , contenu.length );
-		var fin =  sousContenu.match("[)]").index;
-		var chaine = sousContenu.substring( 8 , fin );
-		var tabInfo = chaine.split(",");
-		
-		var newLegende = document.createElement("div");
-		newLegende.id = "legende"+i;
-		newLegende.style.textAlign = "center";
-		newLegende.style.width = dimensionLInv+"px";
-		newLegende.style.marginLeft = 'auto';
-		newLegende.style.marginRight = 'auto';
-		$(this).append( newLegende );
-		
-		var newInput = document.createElement("input");
-		newInput.id = "curseur"+i;
- 		newInput.type = "range";
-  		newInput.name = tabInfo[0].replace( new RegExp( '\"', 'g' )  ,'' );
-  		newInput.value = tabInfo[1];
-  		newInput.min = tabInfo[2];
-  		newInput.max = tabInfo[3];
-  		newInput.step = tabInfo[4];
-  		newInput.addEventListener('input', function (){ algoGrapheInv(i,dimensionL,dimensionH); },false );
-  		newInput.style.border = "solid 0px black";
-		newInput.style.marginLeft = 'auto';
-		newInput.style.marginRight = 'auto';
-		newInput.style.marginTop = '10px';
-		
-		var newMessage = document.createElement("span");
-		newMessage.innerHTML = newInput.name;
-		newMessage.style.padding = "10px";
-		
-		$("#legende"+i).append( newMessage );
-		$("#legende"+i).append( newInput );
-	}
+		var css = $(this).find("css").html();
+		if ( css == undefined ) { css = ""}		
+		var st = "\n<style>\n"+css+"\n</style>\n";		
+		var contenu = $(this).find("page").html();
+		if ( contenu == undefined ) { contenu = ""}		
+		$(this).empty();		
+		var codehtml = "<!DOCTYPE html>\n<html>\n<head>\n<meta charset=\"utf-8\" />\n"+st+"\n</head>\n<body>\n"+contenu+"\n</body>\n</html>";
+		contenu = "<div class='containHTML'><textarea id='textareaHtml"+i+"' class='inputHTML'>"+codehtml+"</textarea></div>";	
+		contenu +=  "<div class=\"containHTML\"><a class='btnPython' type='button' onclick='runHTML("+i+")'>Exécuter</a></div>";
+		contenu += "<div class='sortieHtml'><iframe id='sortieHtml"+i+"' class='outputHTML'></iframe></div>";
+		contenu += "<script>$('#textareaHtml"+i+"').focus(function () { var $this = $(this);$this.keyup(function () {iframe = document.getElementById('sortieHtml"+i+"');iframe.contentWindow.document.open();iframe.html = \"\";iframe.contentWindow.document.write( editorHTML["+i+"].getValue() );iframe.contentWindow.document.close();});});</script>";
+		$(this).prepend( contenu );
+		var code = $("#textareaHtml"+i)[0];
 	
-	}
-);
-
-
-
-var chargement = "";
-for (var i = 0;i <= nbAlgoGrapheInv;i++ ) {
-	chargement += "algoGrapheInv("+i+"," + dimensionLInv[i] + ","+dimensionHInv[i]+");";
-}
-
-
-
-// Pour lancer l'éxécution de l'algorithme graphique
-
-$('body').attr('onload',chargement);
-
-
-
-// Pour faire apparaître une fenêtre avec du code html et le résultat d'affichage
-
-$("codeHTML").each(function(i) {
-	var dimensionL = 350;
-	if( $(this).attr('largeur') ){ dimensionL = $(this).attr('largeur'); }
-	if( $(this).attr('width') ){ dimensionL = $(this).attr('width'); }
-	var dimensionH = dimensionL;
-	if( $(this).attr('hauteur') ){ dimensionH = $(this).attr('hauteur'); }
-	if( $(this).attr('height') ){ dimensionH = $(this).attr('height'); }
-	
-	var css = $(this).find("css").html();
-	if ( css == undefined ) { css = ""}
-	
-	var st = "\n<style>\n"+css+"\n</style>\n";
-	
-	var contenu = $(this).find("page").html();
-	if ( contenu == undefined ) { contenu = ""}
-	
-	$(this).empty();
-	
-	var codehtml = "<!DOCTYPE html>\n<html>\n<head>\n<meta charset=\"utf-8\" />\n"+st+"\n</head>\n<body>\n"+contenu+"\n</body>\n</html>";
-	
-	contenu = "<div class='containHTML'><textarea id='textareaHtml"+i+"' class='inputHTML'>"+codehtml+"</textarea></div>";	
-	
-	contenu +=  "<div class=\"containHTML\"><a class='btnPython' type='button' onclick='runHTML("+i+")'>Exécuter</a></div>";
-	
-	contenu += "<div class='sortieHtml'><iframe id='sortieHtml"+i+"' class='outputHTML'></iframe></div>";
-	
-	contenu += "<script>$('#textareaHtml"+i+"').focus(function () { var $this = $(this);$this.keyup(function () {iframe = document.getElementById('sortieHtml"+i+"');iframe.contentWindow.document.open();iframe.html = \"\";iframe.contentWindow.document.write( editorHTML["+i+"].getValue() );iframe.contentWindow.document.close();});});</script>";
-	
-	$(this).prepend( contenu );
-	
-	var code = $("#textareaHtml"+i)[0];
-	
-	editorHTML.push( CodeMirror.fromTextArea(code, {
+		editorHTML.push( CodeMirror.fromTextArea(code, {
         mode: {name: "text/html"},
         			lineNumbers: true,
         			indentUnit: 4,
         			matchBrackets: true,
         			theme: 'abcdef'
-}));
-	
-	/*
-	editorHTML.push( CodeMirror.fromTextArea(code, {
-		lineNumbers : true,
-		lineWrapping: true,
-   	mode : "text/html",
-    	htmlMode: true,
-		smartIndent: false,
-		extraKeys: {"Alt-F": "findPersistent"},
-      theme: 'abcdef'
-	}));*/
-	editorHTML[i].setSize(dimensionL,dimensionH);
-	
-	}
-);
+			}));
+		editorHTML[i].setSize(dimensionL,dimensionH);
+		}
+	);
 
 
-
-
-
-// Les zones de réponses des élèves pour les devoirs maison en ligne
-
-$("repel").each(function(i) {
+	// Les zones de réponses des élèves pour les devoirs maison en ligne
 	
-	var css = $(this).find("css").html();
-	if ( css == undefined ) { css = ""}
+	$("repel").each(function(i) {
+		var css = $(this).find("css").html();
+		if ( css == undefined ) { css = ""}
+		var st = "\n<style>\n"+css+"\n</style>\n";
+		var contenu = $(this).find("page").html();
+		if ( contenu == undefined ) { contenu = ""}
+		$(this).empty();
+		contenu = "<div style='width:100%;text-align:center;'><textarea name='q'"+i+" rows='10' cols='50' ></textarea></div>";	
+		contenu += "<div style='width:100%;text-align:center;margin-top:10px;'><div id='sortieEl"+i+"' style='margin: auto;padding:3px;text-align: left;width:350px;height:350px;border: solid 1px black;'></div></div>";
+		contenu += "<script>$('#q"+i+"').focus(function () { var $this = $(this);$this.keyup(function () {iframe = document.getElementById('sortieEl"+i+"');iframe.innerHTML = $this.val();MathJax.Hub.Queue([\"Typeset\",MathJax.Hub]); } ); });</script>";
+		$(this).prepend( contenu );
+		}
+	);
 	
-	var st = "\n<style>\n"+css+"\n</style>\n";
+	// Une zone de code Python, cf https://www.sarmate.free.fr/sarmatePython/sarmate_python.html
 	
-	var contenu = $(this).find("page").html();
-	if ( contenu == undefined ) { contenu = ""}
-	
-	$(this).empty();
-	
-	
-	
-	contenu = "<div style='width:100%;text-align:center;'><textarea name='q'"+i+" rows='10' cols='50' ></textarea></div>";	
-	
-	contenu += "<div style='width:100%;text-align:center;margin-top:10px;'><div id='sortieEl"+i+"' style='margin: auto;padding:3px;text-align: left;width:350px;height:350px;border: solid 1px black;'></div></div>";
-	
-	contenu += "<script>$('#q"+i+"').focus(function () { var $this = $(this);$this.keyup(function () {iframe = document.getElementById('sortieEl"+i+"');iframe.innerHTML = $this.val();MathJax.Hub.Queue([\"Typeset\",MathJax.Hub]); } ); });</script>";
-	
-	$(this).prepend( contenu );
-	
-	
-	}
-);
-
-// Une zone de code Python, cf https://www.sarmate.free.fr/sarmatePython/sarmate_python.html
-
-$("python").each(function(i) {
-	
-	console.log("Python n° "+i);
-	
-	var dimensionL = 350;
-	if( $(this).attr('largeur') ){ dimensionL = $(this).attr('largeur'); }
-	if( $(this).attr('width') ){ dimensionL = $(this).attr('width'); }
-	var dimensionH = dimensionL;
-	if( $(this).attr('hauteur') ){ dimensionH = $(this).attr('hauteur'); }
-	if( $(this).attr('height') ){ dimensionH = $(this).attr('height'); }
-	var th = 'abcdef';
-	if( $(this).attr('theme') ){ th = $(this).attr('theme'); }
-	
-	var codePython = $(this).html();
-	$(this).empty();
-	
-	var contenu = "<div class=\"containPython\"><textarea id='yourcode"+i+"' class='inputPython'>"+codePython+"</textarea></div>";
-	contenu +=  "<div class=\"containPython\"><a class='btnPython' style=\"width:"+dimensionL+"px\" type='button' onclick='runit("+i+")'>Exécuter</a></div>";
-	contenu += "<div id='mycanvas"+i+"' class='tortue'></div><pre id='output"+i+"' class='outputPython' style=\"width:"+(dimensionL-20)+"px\"></pre>";
-	contenu += "<div id='mypgcanvas"+i+"'</div>"; 
-	contenu += "<script>function outf"+i+"(text) {var mypre = document.getElementById(\"output"+i+"\");mypre.innerHTML = mypre.innerHTML + text;}</script>";
-	
-	
-	$(this).prepend( contenu );
-	
-	var code = $("#yourcode"+i)[0];
-	
-	
-	editorPython.push( CodeMirror.fromTextArea(code, {
+	$("python").each(function(i) {
+		console.log("Python n° "+i);
+		var dimensionL = 350;
+		if( $(this).attr('largeur') ){ dimensionL = $(this).attr('largeur'); }
+		if( $(this).attr('width') ){ dimensionL = $(this).attr('width'); }
+		var dimensionH = dimensionL;
+		if( $(this).attr('hauteur') ){ dimensionH = $(this).attr('hauteur'); }
+		if( $(this).attr('height') ){ dimensionH = $(this).attr('height'); }
+		var th = 'abcdef';
+		if( $(this).attr('theme') ){ th = $(this).attr('theme'); }
+		var codePython = $(this).html();
+		$(this).empty();
+		var contenu = "<div class=\"containPython\"><textarea id='yourcode"+i+"' class='inputPython'>"+codePython+"</textarea></div>";
+		contenu +=  "<div class=\"containPython\"><a class='btnPython' style=\"width:"+dimensionL+"px\" type='button' onclick='runit("+i+")'>Exécuter</a></div>";
+		contenu += "<div id='mycanvas"+i+"' class='tortue'></div><pre id='output"+i+"' class='outputPython' style=\"width:"+(dimensionL-20)+"px\"></pre>";
+		contenu += "<div id='mypgcanvas"+i+"'</div>"; 
+		contenu += "<script>function outf"+i+"(text) {var mypre = document.getElementById(\"output"+i+"\");mypre.innerHTML = mypre.innerHTML + text;}</script>";
+		$(this).prepend( contenu );
+		var code = $("#yourcode"+i)[0];
+		editorPython.push( CodeMirror.fromTextArea(code, {
         mode: {name: "text/x-cython",
                version: 3,
                singleLineStringErrors: false},
@@ -2483,39 +2316,30 @@ $("python").each(function(i) {
         			indentUnit: 4,
         			matchBrackets: true,
         			theme: th
-}));
-	editorPython[i].setSize(dimensionL,dimensionH);
+			}));
+		editorPython[i].setSize(dimensionL,dimensionH);
+		}
+	);
 	
 	
-	}
-);
-
-
-$(".btnPython").css("background-color", $fondCorrection);
-$(".btnPython").css("color", $barreCorrection);
-$(".outputPython").css("background-color", $fondCode);
-$(".outputPython").css("color", $texteCode);
-
-
-$("pythonImpr").each(function(i) {
+	$(".btnPython").css("background-color", $fondCorrection);
+	$(".btnPython").css("color", $barreCorrection);
+	$(".outputPython").css("background-color", $fondCode);
+	$(".outputPython").css("color", $texteCode);
 	
-	var dimensionL = 350;
-	if( $(this).attr('largeur') ){ dimensionL = $(this).attr('largeur'); }
-	if( $(this).attr('width') ){ dimensionL = $(this).attr('width'); }
-	var dimensionH = dimensionL;
-	if( $(this).attr('hauteur') ){ dimensionH = $(this).attr('hauteur'); }
-	if( $(this).attr('height') ){ dimensionH = $(this).attr('height'); }
-	
-	var codePython = $(this).html();
-	$(this).empty();
-	
-	var contenu = "<div class=\"containPython\"><textarea id='yourcode2"+i+"' class='inputPython'>"+codePython+"</textarea></div>";
-		
-	$(this).prepend( contenu );
-	
-	var code = $("#yourcode2"+i)[0];
-	
-	editorPythonImpr.push( CodeMirror.fromTextArea(code, {
+	$("pythonImpr").each(function(i) {
+		var dimensionL = 350;
+		if( $(this).attr('largeur') ){ dimensionL = $(this).attr('largeur'); }
+		if( $(this).attr('width') ){ dimensionL = $(this).attr('width'); }
+		var dimensionH = dimensionL;
+		if( $(this).attr('hauteur') ){ dimensionH = $(this).attr('hauteur'); }
+		if( $(this).attr('height') ){ dimensionH = $(this).attr('height'); }
+		var codePython = $(this).html();
+		$(this).empty();
+		var contenu = "<div class=\"containPython\"><textarea id='yourcode2"+i+"' class='inputPython'>"+codePython+"</textarea></div>";
+		$(this).prepend( contenu );
+		var code = $("#yourcode2"+i)[0];
+		editorPythonImpr.push( CodeMirror.fromTextArea(code, {
         mode: {name: "text/x-cython",
                version: 3,
                singleLineStringErrors: false},
@@ -2523,311 +2347,271 @@ $("pythonImpr").each(function(i) {
         			indentUnit: 4,
         			matchBrackets: true,
         			theme: 'default'
-}));
-	editorPythonImpr[i].setSize(dimensionL,dimensionH);
+			}));
+		editorPythonImpr[i].setSize(dimensionL,dimensionH);
+		}
+	);
+
+
+	$("paragraphe").each(function(i){
+		j=i+1;
+		$(this).nextUntil("paragraphe","subparagraphe").each(function(k){
+			var l = k+1;
+			$(this).prepend("<span class='numSubPara'>"+j+"."+ l +"</span>");
+			});
+		$(this).nextUntil("paragraphe","subparagraphe").css("background-color",$couleurFondPara);
+		$(this).nextUntil("paragraphe","subparagraphe").css("color",$couleurTextePara);
+		$(this).nextUntil("paragraphe","subparagraphe").css("padding","0px");
+		$(this).nextUntil("paragraphe","subparagraphe").css("border-radius","0px");
+		$(this).nextUntil("paragraphe","subparagraphe").css("font-weight","bold");
+		$(this).nextUntil("paragraphe","subparagraphe").css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
+		//$(this).css("border-left","solid 15px #d3ddf5");
+		$(this).css("background-color",$couleurFondPara);
+		$(this).css("color",$couleurTextePara);
+		$(this).css("padding","0px");
+		$(this).css("border-radius","0px");
+		$(this).css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
+		$(this).css("font-weight","bold");
+		$(this).prepend("<span class=\"numPara\">"+j+"</span>");
+		});
+
+	$('.numPara').css("background-color", $couleurTitrePartie);
+	$('.numPara').css("color", $couleurNumPara);
+	$('.numSubPara').css("background-color", $couleurTitrePartie);
+	$('.numSubPara').css("color", $couleurNumPara);
 	
+	// Balise permettant de ne pas afficher son contenu, jusqu'au clic correspondant
 	
-	}
-);
+	$("pause").each(function(i){
+		var cont = $(this).html();
+		$(this).html('');
+		$(this).prepend("<div id='trou_"+i+"' class='trou'>"+ cont +"</div>");
+		maxTrou = i;
+		});
 
 
-
-
-
-$("paragraphe").each(function(i){
-	j=i+1;
+	// Une zone de correction déroulable
 	
-	$(this).nextUntil("paragraphe","subparagraphe").each(function(k){
-				var l = k+1;
-				$(this).prepend("<span class='numSubPara'>"+j+"."+ l +"</span>");
-				});
-	$(this).nextUntil("paragraphe","subparagraphe").css("background-color",$couleurFondPara);
-	$(this).nextUntil("paragraphe","subparagraphe").css("color",$couleurTextePara);
-	$(this).nextUntil("paragraphe","subparagraphe").css("padding","0px");
-	$(this).nextUntil("paragraphe","subparagraphe").css("border-radius","0px");
-	$(this).nextUntil("paragraphe","subparagraphe").css("font-weight","bold");
-	$(this).nextUntil("paragraphe","subparagraphe").css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
+	$("correction").each(function(i){
+		var cont = $(this).html();
+		$(this).html('');
+		$(this).prepend("<a class=\"btnCorr\" onclick='corrige("+i+")'>Correction</a><div id='correction_"+i+"' class='correction'><div class='intCorr'>"+ cont +"</div><a class='clos' style='display:block;' onclick='decorrige("+i+")'>✕</a></div>");
+		});
 	
+	$(".intCorr").css("background-color",$couleurCorrection);
+	$(".btnCorr").css("background-color", $fondCorrection);
+	$(".btnCorr").css("border-left", "solid 6px "+$barreCorrection);
+	$(".btnCorr").css("color", $barreCorrection );
+	$(".clos").css("border-right", "solid 6px "+$barreCorrection);
+	$(".clos").css("color", $barreCorrection);
+	$(".clos").css("background-color", $fondCorrection);
 	
-	//$(this).css("border-left","solid 15px #d3ddf5");
+	$("rouge").css("color","#ff0000");
+	$("bleu").css("color","#2e2efe");
+	$("vert").css("color","#31b404");
 	
-	$(this).css("background-color",$couleurFondPara);
-	$(this).css("color",$couleurTextePara);
-	$(this).css("padding","0px");
-	$(this).css("border-radius","0px");
-	$(this).css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
-	$(this).css("font-weight","bold");
-	$(this).prepend("<span class=\"numPara\">"+j+"</span>");
-	});
-
-$('.numPara').css("background-color", $couleurTitrePartie);
-$('.numPara').css("color", $couleurNumPara);
-$('.numSubPara').css("background-color", $couleurTitrePartie);
-$('.numSubPara').css("color", $couleurNumPara);
-
-// Balise permettant de ne pas afficher son contenu, jusqu'au clic correspondant
-
-$("pause").each(function(i){
-	var cont = $(this).html();
-	$(this).html('');
-	$(this).prepend("<div id='trou_"+i+"' class='trou'>"+ cont +"</div>");
-	maxTrou = i;
-	});
-
-
-// Une zone de correction déroulable
-
-$("correction").each(function(i){
-	var cont = $(this).html();
-	$(this).html('');
-	$(this).prepend("<a class=\"btnCorr\" onclick='corrige("+i+")'>Correction</a><div id='correction_"+i+"' class='correction'><div class='intCorr'>"+ cont +"</div><a class='clos' style='display:block;' onclick='decorrige("+i+")'>✕</a></div>");
+	$("centre").css("text-align","center");
+	$("centre").css("display","block");
 	
-	});
-
-$(".intCorr").css("background-color",$couleurCorrection);
-$(".btnCorr").css("background-color", $fondCorrection);
-$(".btnCorr").css("border-left", "solid 6px "+$barreCorrection);
-$(".btnCorr").css("color", $barreCorrection );
-$(".clos").css("border-right", "solid 6px "+$barreCorrection);
-$(".clos").css("color", $barreCorrection);
-$(".clos").css("background-color", $fondCorrection);
-
-$("rouge").css("color","#ff0000");
-$("bleu").css("color","#2e2efe");
-$("vert").css("color","#31b404");
-
-$("centre").css("text-align","center");
-$("centre").css("display","block");
-
-$("gras").css("font-weight","bold");
-$("italic").css("font-style","italic");
-$("souligne").css("text-decoration","underline");
-
-
-
-// Affiche le nombre d'espace horizontaux entré
-
-$("esp").each(function (i) {
-	var longueur = parseInt( $(this).html() );
-	$(this).html("");
-	if ( !longueur ) { longueur = 1; }
+	$("gras").css("font-weight","bold");
+	$("italic").css("font-style","italic");
+	$("souligne").css("text-decoration","underline");
 	
-	for ( var j=1; j<=longueur;j++) {
-		$(this).prepend("&nbsp;");
-	}
-}
-);
 
-
-$( "depasse" ).addClass( "depasse" );
-$( "legende" ).addClass( "legende" );
-
-// Les tableaux de variations !
-
-$("tabvar").each(function (i) {
-	var nb = i+1;
-	var nomTab = 'tabVar'+i;
+	// Affiche le nombre d'espace horizontaux entré
 	
-	var nomTabJQ = "#"+nomTab;
-	var contenuTab = "<table class='var' id='"+nomTab+"'>";
-	
-	
-	var abs = $(this).children("abs");
-	var classe,contenu;
-	var casier = abs.children("casier");
-	var nbCases = casier.length;
-	
-	contenuTab += "<tr>";
-	
-	for (var j=1;j<=nbCases;j++) {
-		if ( j == 1) { classe = "droite"; } else { classe = "bas"; }
-		contenu = $(this).children("abs").children("casier:nth-child("+j+")").html();
+	$("esp").each(function (i) {
+		var longueur = parseInt( $(this).html() );
+		$(this).html("");
+		if ( !longueur ) { longueur = 1; }
 		
-		contenuTab += "<td class='"+classe+"'>"+contenu+"</td>";
+		for ( var j=1; j<=longueur;j++) {
+			$(this).prepend("&nbsp;");
+		}
 	}
-	contenuTab += "</tr>";
-	
-	var signe = $(this).children("signe");
+	);
 	
 	
+	$( "depasse" ).addClass( "depasse" );
+	$( "legende" ).addClass( "legende" );
 	
-	if (signe.length>0) {
-		for (var nbSigne=2;nbSigne<=signe.length+1;nbSigne++) {
+	// Les tableaux de variations !
+	
+	$("tabvar").each(function (i) {
+		var nb = i+1;
+		var nomTab = 'tabVar'+i;
+		
+		var nomTabJQ = "#"+nomTab;
+		var contenuTab = "<table class='var' id='"+nomTab+"'>";
+		var abs = $(this).children("abs");
+		var classe,contenu;
+		var casier = abs.children("casier");
+		var nbCases = casier.length;
+		contenuTab += "<tr>";
+		for (var j=1;j<=nbCases;j++) {
+			if ( j == 1) { classe = "droite"; } else { classe = "bas"; }
+			contenu = $(this).children("abs").children("casier:nth-child("+j+")").html();
+			contenuTab += "<td class='"+classe+"'>"+contenu+"</td>";
+		}
+		contenuTab += "</tr>";
+		var signe = $(this).children("signe");
+		
+		if (signe.length>0) {
+			for (var nbSigne=2;nbSigne<=signe.length+1;nbSigne++) {
+				contenuTab += "<tr>";
+				for (var j=1;j<=nbCases;j++) {
+					if ( j == 1) { classe = "droite"; } else { classe = "bas"; }
+					contenu = $(this).children("signe:nth-child("+nbSigne+")").children("casier:nth-child("+j+")").html();
+					if ( contenu == "0") { classe="verticale";contenu = "0"; }
+					if ( contenu == "interdit") { classe="interdit";contenu = ""; }
+					if ( contenu == "barre") { classe="verticale";contenu = ""; }
+						contenuTab += "<td class='"+classe+"'>"+contenu+"</td>";
+					}
+				contenuTab += "</tr>";
+			}
+		}
+		var varHaut = $(this).children("varHaut");
+	
+	if (varHaut.length>0) {
 			contenuTab += "<tr>";
-			
 			for (var j=1;j<=nbCases;j++) {
-				if ( j == 1) { classe = "droite"; } else { classe = "bas"; }
-				contenu = $(this).children("signe:nth-child("+nbSigne+")").children("casier:nth-child("+j+")").html();
-				if ( contenu == "0") { classe="verticale";contenu = "0"; }
-				if ( contenu == "interdit") { classe="interdit";contenu = ""; }
-				if ( contenu == "barre") { classe="verticale";contenu = ""; }
-		
+				if ( j == 1) { classe = "droite_seule"; } else { classe = "vh"; }
+				contenu = $(this).children("varHaut").children("casier:nth-child("+j+")").html();
+				if ( contenu == "interdit") { classe="interdit_sf";contenu = ""; }
 				contenuTab += "<td class='"+classe+"'>"+contenu+"</td>";
 			}
 			contenuTab += "</tr>";
 		}
-	}
-	
-	var varHaut = $(this).children("varHaut");
-	
-	if (varHaut.length>0) {
-	
-		contenuTab += "<tr>";
-	
-		for (var j=1;j<=nbCases;j++) {
-			if ( j == 1) { classe = "droite_seule"; } else { classe = "vh"; }
-			contenu = $(this).children("varHaut").children("casier:nth-child("+j+")").html();
 		
-			if ( contenu == "interdit") { classe="interdit_sf";contenu = ""; }
-		
-			contenuTab += "<td class='"+classe+"'>"+contenu+"</td>";
-		}
-		contenuTab += "</tr>";
-	}
-	
-	
-	
 	var varCentre = $(this).children("varCentre");
-	
-	if (varCentre.length>0) {
-		contenuTab += "<tr>";
-	
-		for (var j=1;j<=nbCases;j++) {
-			if ( j == 1) { classe = "droite_seule"; } else { classe = ""; }
-			contenu = $(this).children("varCentre").children("casier:nth-child("+j+")").html();
-		
-			if ( contenu == "interdit") { classe="interdit_sf";contenu = ""; }
-			if ( contenu == "croissante") { classe="croissante";contenu = "";}
-			if ( contenu == "décroissante") { classe="decroissante";contenu = "";}
-		
-			contenuTab += "<td class='"+classe+"'>"+contenu+"</td>";
+		if (varCentre.length>0) {
+			contenuTab += "<tr>";
+			for (var j=1;j<=nbCases;j++) {
+				if ( j == 1) { classe = "droite_seule"; } else { classe = ""; }
+				contenu = $(this).children("varCentre").children("casier:nth-child("+j+")").html();
+				
+				if ( contenu == "interdit") { classe="interdit_sf";contenu = ""; }
+				if ( contenu == "croissante") { classe="croissante";contenu = "";}
+				if ( contenu == "décroissante") { classe="decroissante";contenu = "";}
+				contenuTab += "<td class='"+classe+"'>"+contenu+"</td>";
+				}
+			contenuTab += "</tr>";
 		}
-		contenuTab += "</tr>";
-	}
-	
-	
-	var varBas = $(this).children("varBas");
-	
-	if (varBas.length>0) {	
-		contenuTab += "<tr>";
+			
+		var varBas = $(this).children("varBas");
 		
-		for (var j=1;j<=nbCases;j++) {
-			if ( j == 1) { classe = "droite_seule"; } else { classe = ""; }
-			contenu = $(this).children("varBas").children("casier:nth-child("+j+")").html();
+		if (varBas.length>0) {
+			contenuTab += "<tr>";
 			
-			if ( contenu == "interdit") { classe="interdit";contenu = ""; }
+			for (var j=1;j<=nbCases;j++) {
+				if ( j == 1) { classe = "droite_seule"; } else { classe = ""; }
+				contenu = $(this).children("varBas").children("casier:nth-child("+j+")").html();
 			
-			
-			contenuTab += "<td class='"+classe+"'>"+contenu+"</td>";
+				if ( contenu == "interdit") { classe="interdit";contenu = ""; }
+				contenuTab += "<td class='"+classe+"'>"+contenu+"</td>";
+			}
+			contenuTab += "</tr>";
 		}
-		contenuTab += "</tr>";
-	}
 	
-	contenuTab += "</table>";
+		contenuTab += "</table>";
+		
+		$(this).after(contenuTab);
+		contenuTab = "";
+	});
 	
-	$(this).after(contenuTab);
-	contenuTab = "";
-});
+	
+	// Balises en anglais
+	
+	$("title").css("border-radius","0px");
+	$("title").css("color",$couleurTextePara);
+	$("title").css("width", "100%");
+	$("title").css("font-size", "180%");
+	$("title").css("font-weight", "bold");
+	$("title").css("text-align", "center");
+	$("title").css("padding-bottom", "10px");
+	$("title").css("padding-top", "10px");
+	$("title").css("background-color", $couleurFondPara);
+	$("title").css("margin-bottom", "20px");
+	$("title").css("box-shadow", "0px 1px 2px rgba(0, 0, 0, 0.29)");
+	$("title").css("width", "100%");
 
+	$("framed").css("border-radius","0px");
+	$("framed").css("color",$couleurTextePara);
+	$("framed").css("width", "100%");
+	$("framed").css("background-color", $couleurFondPara);
+	$("framed").css("box-shadow", "0px 1px 2px rgba(0, 0, 0, 0.29)");
+	$("framed").css("padding","2px");
 
-
-// Balises en anglais
-
-$("title").css("border-radius","0px");
-$("title").css("color",$couleurTextePara);
-$("title").css("width", "100%");
-$("title").css("font-size", "180%");
-$("title").css("font-weight", "bold");
-$("title").css("text-align", "center");
-$("title").css("padding-bottom", "10px");
-$("title").css("padding-top", "10px");
-$("title").css("background-color", $couleurFondPara);
-$("title").css("margin-bottom", "20px");
-$("title").css("box-shadow", "0px 1px 2px rgba(0, 0, 0, 0.29)");
-$("title").css("width", "100%");
-
-
-$("framed").css("border-radius","0px");
-$("framed").css("color",$couleurTextePara);
-$("framed").css("width", "100%");
-$("framed").css("background-color", $couleurFondPara);
-$("framed").css("box-shadow", "0px 1px 2px rgba(0, 0, 0, 0.29)");
-$("framed").css("padding","2px");
-
-
-$("grey").css("border-radius","3px");
-$("grey").css("color","black");
-$("grey").css("width", "100%");
-$("grey").css("background-color", "#f0f0f0");
-$("grey").css("padding","4px");
-$("grey").css("margin-bottom","10px");
-$("grey").css("margin-top","10px");
-
-$("red").css("color","#ff0000");
-$("blue").css("color","#2e2efe");
-$("green").css("color","#31b404");
-
-$("center").css("text-align","center");
-$("center").css("display","block");
-
-$("bold").css("font-weight","bold");
-$("underline").css("text-decoration","underline");
-
-$( "credits" ).addClass( "legende" );
-
-
-$("example").each(function(i){
-j=i+1;
-$(this).css("padding","2px");
-$(this).css("padding-left","7px");
-$(this).css("background-color",$couleurFondPara);
-$(this).css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
-$(this).css("border-radius","0px");
-$(this).css("color",$texteProp);
-$(this).prepend("<span style='font-weight:bold;'>Example " + j+"</span>");});
-
-
-
-$("paragraph").each(function(i){
+	$("grey").css("border-radius","3px");
+	$("grey").css("color","black");
+	$("grey").css("width", "100%");
+	$("grey").css("background-color", "#f0f0f0");
+	$("grey").css("padding","4px");
+	$("grey").css("margin-bottom","10px");
+	$("grey").css("margin-top","10px");
+	
+	$("red").css("color","#ff0000");
+	$("blue").css("color","#2e2efe");
+	$("green").css("color","#31b404");
+	
+	$("center").css("text-align","center");
+	$("center").css("display","block");
+	
+	$("bold").css("font-weight","bold");
+	$("underline").css("text-decoration","underline");
+	
+	$("credits").addClass( "legende" );
+	
+	
+	$("example").each(function(i){
 	j=i+1;
-	
-	$(this).nextUntil("paragraph","subparagraph").each(function(k){
+	$(this).css("padding","2px");
+	$(this).css("padding-left","7px");
+	$(this).css("background-color",$couleurFondPara);
+	$(this).css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
+	$(this).css("border-radius","0px");
+	$(this).css("color",$texteProp);
+	$(this).prepend("<span style='font-weight:bold;'>Example " + j+"</span>");});
+
+	$("paragraph").each(function(i){
+		j=i+1;
+		
+		$(this).nextUntil("paragraph","subparagraph").each(function(k){
 				var l = k+1;
 				$(this).prepend("<span class='numSubPara'>"+j+"."+ l +"</span>");
-				});
-	$(this).nextUntil("paragraph","subparagraph").css("background-color",$couleurFondPara);
-	$(this).nextUntil("paragraph","subparagraph").css("color",$couleurTextePara);
-	$(this).nextUntil("paragraph","subparagraph").css("padding","0px");
-	$(this).nextUntil("paragraph","subparagraph").css("border-radius","0px");
-	$(this).nextUntil("paragraph","subparagraph").css("font-weight","bold");
-	$(this).nextUntil("paragraph","subparagraph").css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
+		});
+		$(this).nextUntil("paragraph","subparagraph").css("background-color",$couleurFondPara);
+		$(this).nextUntil("paragraph","subparagraph").css("color",$couleurTextePara);
+		$(this).nextUntil("paragraph","subparagraph").css("padding","0px");
+		$(this).nextUntil("paragraph","subparagraph").css("border-radius","0px");
+		$(this).nextUntil("paragraph","subparagraph").css("font-weight","bold");
+		$(this).nextUntil("paragraph","subparagraph").css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
+		
+		//$(this).css("border-left","solid 15px #d3ddf5");
+				
+		$(this).css("background-color",$couleurFondPara);
+		$(this).css("color",$couleurTextePara);
+		$(this).css("padding","0px");
+		$(this).css("border-radius","0px");
+		$(this).css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
+		$(this).css("font-weight","bold");
+		$(this).prepend("<span class=\"numPara\">"+j+"</span>");
+		});
+	
+	$('.numPara').css("background-color", $couleurTitrePartie);
+	$('.numPara').css("color", $couleurNumPara);
+	$('.numSubPara').css("background-color", $couleurTitrePartie);
+	$('.numSubPara').css("color", $couleurNumPara);
 	
 	
-	//$(this).css("border-left","solid 15px #d3ddf5");
+	
+	// Fin balises en anglais
 	
 	
-	$(this).css("background-color",$couleurFondPara);
-	$(this).css("color",$couleurTextePara);
-	$(this).css("padding","0px");
-	$(this).css("border-radius","0px");
-	$(this).css("box-shadow","0px 1px 2px rgba(0, 0, 0, 0.29)");
-	$(this).css("font-weight","bold");
-	$(this).prepend("<span class=\"numPara\">"+j+"</span>");
-	});
-
-$('.numPara').css("background-color", $couleurTitrePartie);
-$('.numPara').css("color", $couleurNumPara);
-$('.numSubPara').css("background-color", $couleurTitrePartie);
-$('.numSubPara').css("color", $couleurNumPara);
-
-
-
-// Fin balises en anglais
-
-
-$('.clicGauche').remove();
-$('.clicDroit').remove();
+	$('.clicGauche').remove();
+	$('.clicDroit').remove();
 }
+
 
 
 
