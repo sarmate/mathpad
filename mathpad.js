@@ -386,6 +386,427 @@ function algo(nNn) {
 
 
 class SarmateGraphe {
+	constructor(dimensionL, dimensionH, context){
+		this.dimensionL = dimensionL;
+		this.dimensionH = dimensionH;
+		this.context = context;
+		let couleur, peinture, transparence, trait, Xmin, Xmax, Ymin, Ymax, GradX, GradY, AxeX, AxeY, Grille;		
+		this.couleur = '#000000';
+		this.peinture = '#ffffff'; 
+		this.transparence = 0;
+		this.trait = 1;
+		this.Xmin = -10;
+		this.Xmax = 10;
+		this.Ymin = -10;
+		this.Ymax = 10;
+		this.GradX = 1;
+		this.GradY = 1;
+		this.AxeX = false;
+		this.AxeY = false;
+		this.Grille = false;
+		
+		this.convert3_2 = function (P) {
+			let T = [-2,-2];
+			T[0] = -2-0.3*P[0]+P[1];
+			T[1] = -2-0.3*P[0]+P[2];
+			return T;
+			}	
+		this.coordX = function (x) {
+			var a = this.dimensionL/(this.Xmax-this.Xmin);
+			var b = -this.Xmin*a;
+			return a*x+b;
+			}
+		this.coordY = function (y) {
+			var a = this.dimensionH/(this.Ymin-this.Ymax);
+			var b = -this.Ymax*a;
+			return a*y+b;
+			}
+		this.point = function (X) {
+			if (X.length == 3) { X = this.convert3_2(X) }	
+			context.strokeStyle = this.couleur;
+			context.fillStyle = this.couleur;
+			context.lineWidth = this.trait;
+			context.beginPath();
+			context.arc(this.coordX(X[0]),this.coordY(X[1]),3*this.trait,0,2*Math.PI);
+			context.fill();
+			context.closePath();		
+			}
+		this.effaceEcran = function () {
+			context.fillStyle = "#fff";
+			context.strokeStyle = this.couleur;
+			context.lineWidth = this.trait;
+			context.beginPath();
+			context.moveTo(0,0);
+			context.lineTo(this.dimensionL,0);
+			context.lineTo(this.dimensionL,this.dimensionH);
+			context.lineTo(0,this.dimensionH);
+			context.lineTo(0,0);
+			context.fill();
+			context.closePath();	
+			}	
+		this.traceG = function () {
+			var coul = this.couleur;
+			this.couleur = "#c0c0c0";
+			for (var i = 0; i < (this.Xmax)/this.GradX ; i++) {
+				this.segment([i*this.GradX,this.Ymin],[i*this.GradX,this.Ymax]);
+				}
+			for (var i = 0; i > (this.Xmin)/this.GradX ; i--) {
+				this.segment([i*this.GradX,this.Ymin],[i*this.GradX,this.Ymax]);
+			}
+			for (var i = 0;i < (this.Ymax)/this.GradY ; i++) {
+				this.segment([this.Xmin,i*this.GradY],[this.Xmax,i*this.GradY]);
+			}
+			for (var i = 0; i > (this.Ymin)/this.GradY ; i--) {
+				this.segment([this.Xmin,i*this.GradY],[this.Xmax,i*this.GradY]);
+			}
+			this.couleur = coul;
+			}	
+		this.peintTout = function (coulPeinture) {
+			context.fillStyle = coulPeinture;
+			context.strokeStyle = this.couleur;
+			context.lineWidth = this.trait;
+			context.beginPath();
+			context.moveTo(0,0);
+			context.lineTo(dimensionL,0);
+			context.lineTo(dimensionL,dimensionH);
+			context.lineTo(0,dimensionH);
+			context.lineTo(0,0);
+			context.fill();
+			context.closePath();
+			}
+		this.traceX = function () {
+			this.segment([this.Xmin,0],[this.Xmax,0]);
+			this.trait = 2*this.trait;
+			this.segment([this.Xmax-(this.Xmax-this.Xmin)/100,(this.Ymax-this.Ymin)/100],[this.Xmax,0]);
+			this.segment([this.Xmax-(this.Xmax-this.Xmin)/100,-(this.Ymax-this.Ymin)/100],[this.Xmax,0]);
+			this.trait = this.trait/2;
+			}
+		this.traceY = function () {
+			this.segment([0,this.Ymin],[0,this.Ymax]);
+			this.trait = 2*this.trait;
+			this.segment([(this.Xmax-this.Xmin)/100,this.Ymax-(this.Ymax-this.Ymin)/100],[0,this.Ymax]);
+			this.segment([-(this.Xmax-this.Xmin)/100,this.Ymax-(this.Ymax-this.Ymin)/100],[0,this.Ymax])
+			this.trait = this.trait/2;
+			}	
+		this.segment = function (A,B,P) {
+			if (A.length == 3) {
+				A = this.convert3_2(A);
+				B = this.convert3_2(B);
+				}
+			if ( !P ) { P = [] }
+			context.setLineDash(P);
+			context.strokeStyle = this.couleur;
+			context.fillStyle = this.peinture;
+			context.lineWidth = this.trait;
+			context.beginPath();	
+			context.moveTo(this.coordX(A[0]),this.coordY(A[1]));
+			context.lineTo(this.coordX(B[0]),this.coordY(B[1]));
+			context.stroke();
+			context.closePath();
+			}		
+		this.hachure = function (P) {
+			context.setLineDash(P);
+			}
+		this.droite = function (A,B,P) {
+			if ( !P ) { P = [] }
+			context.setLineDash(P);
+			if (A.length == 3) {
+				A = this.convert3_2(A);
+				B = this.convert3_2(B);
+				}
+			var varH = B[0]-A[0];
+			if ( varH == 0 ) { varH = 0.00000001; }
+			var a = (B[1]-A[1])/(varH);
+			var b = A[1]-a*A[0];
+			this.segment( [this.Xmin,a*this.Xmin+b], [this.Xmax,a*this.Xmax+b] );
+			}
+		this.texte = function (T,A,fs) {
+			if (A.length == 3) {
+				A = this.convert3_2(A);
+				}
+			if (!fs) { fs = 15 }
+			context.font = fs+"px Helvetica";
+			context.fillStyle = this.couleur;
+			context.fillText( T, this.coordX(A[0]), this.coordY(A[1]) );
+			}	
+		this.cercle = function (X,r,P) {
+			if ( !P ) { P = [] }
+			context.setLineDash(P);
+			context.globalAlpha = this.transparence;
+			context.strokeStyle = this.couleur;
+			context.fillStyle = this.peinture;
+			context.lineWidth = this.trait;
+			context.beginPath();	
+			var rayonX = r*this.dimensionL/(this.Xmax-this.Xmin);
+			var rayonY = r*this.dimensionH/(this.Ymax-this.Ymin);
+			context.ellipse(this.coordX(X[0]),this.coordY(X[1]),rayonX,rayonY,0,0,2*Math.PI);
+			context.fill();
+			context.closePath();
+			context.globalAlpha = 1
+			context.stroke();
+			}
+		this.arcCercle = function (X,r,ad,af,P) {
+			if ( !P ) { P = [] }
+			context.setLineDash(P);
+			context.globalAlpha = this.transparence;
+			context.strokeStyle = this.couleur;
+			context.fillStyle = this.peinture;
+			context.lineWidth = this.trait;
+			context.beginPath();	
+			var rayonX = this.dimensionL/(this.Xmax-this.Xmin)*r;
+			var rayonY = r*this.dimensionH/(this.Ymax-this.Ymin);
+			context.moveTo(this.coordX(X[0]),this.coordY(X[1]));
+			context.ellipse(this.coordX(X[0]),this.coordY(X[1]),rayonX,rayonY,0,-af,-ad);
+			context.fill();
+			context.closePath();
+			context.globalAlpha = 1;
+			context.stroke();
+			}
+		this.rectangle = function (A,L,l,P) {
+			if ( !P ) { P = [] }
+			context.setLineDash(P);
+			context.globalAlpha = this.transparence;
+			context.strokeStyle = this.couleur;
+			context.fillStyle = this.peinture;
+			context.lineWidth = this.trait;
+			context.beginPath();		
+			var Lx = L*	this.dimensionL/(this.Xmax-this.Xmin);
+			var ly = l*this.dimensionH/(this.Ymax-this.Ymin);		
+			context.rect(this.coordX(A[0]),this.coordY(A[1]),Lx,ly);	
+			context.fill();
+			context.closePath();
+			context.globalAlpha = 1;
+			context.stroke();
+			}
+		this.triangle = function (A,B,C,P) {
+			if ( !P ) { P = [] }
+			context.setLineDash(P);
+			if (A.length == 3) {
+				A = this.convert3_2(A);
+				B = this.convert3_2(B);
+				C = this.convert3_2(C);
+				}
+			context.globalAlpha = this.transparence;
+			context.strokeStyle = this.couleur;
+			context.fillStyle = this.peinture;
+			context.lineWidth = this.trait;
+			context.beginPath();
+			context.moveTo(this.coordX(A[0]),this.coordY(A[1]));
+			context.lineTo(this.coordX(B[0]),this.coordY(B[1]));
+			context.lineTo(this.coordX(C[0]),this.coordY(C[1]));
+			context.lineTo(this.coordX(A[0]),this.coordY(A[1]));			
+			context.fill();
+			context.closePath();
+			context.globalAlpha = 1;
+			context.stroke();
+			}
+		this.quadri = function (A,B,C,D,P) {
+			if ( !P ) { P = [] }
+			context.setLineDash(P);
+			if (A.length == 3) {
+				A = this.convert3_2(A);
+				B = this.convert3_2(B);
+				C = this.convert3_2(C);
+				D = this.convert3_2(D);
+				}
+			context.globalAlpha = this.transparence;
+			context.strokeStyle = this.couleur;
+			context.fillStyle = this.peinture;
+			context.lineWidth = this.trait;
+			context.beginPath();			
+			context.moveTo(this.coordX(A[0]),this.coordY(A[1]));
+			context.lineTo(this.coordX(B[0]),this.coordY(B[1]));
+			context.lineTo(this.coordX(C[0]),this.coordY(C[1]));
+			context.lineTo(this.coordX(D[0]),this.coordY(D[1]));
+			context.lineTo(this.coordX(A[0]),this.coordY(A[1]));			
+			context.fill();
+			context.closePath();
+			context.globalAlpha = 1;
+			context.stroke();
+			}	
+		this.poly = function (L,P) {
+			if ( !P ) { P = [] }
+			context.setLineDash(P);
+			var n = L.length;
+			if ( L[0].length == 3 ) {
+				for (var i = 0; i < n; i++) {
+					L[i] = this.convert3_2(L[i]);
+					}
+				}
+			context.globalAlpha = this.transparence;
+			context.strokeStyle = this.couleur;
+			context.fillStyle = this.peinture;
+			context.lineWidth = this.trait;
+			context.beginPath();
+			context.moveTo(this.coordX(L[0][0]),this.coordY(L[0][1]));
+			for (var i = 1; i < n; i++) {
+				context.lineTo(this.coordX(L[i][0]),this.coordY(L[i][1]));
+				}
+			context.fill();
+			context.closePath();
+			context.globalAlpha = 1;
+			context.stroke();
+			}		
+		this.chaine = function (L,P) {
+			if ( !P ) { P = [] }
+			context.setLineDash(P);
+			var n = L.length;
+			if ( L[0].length == 3 ) {
+				for (var i = 0; i < n; i++) {
+					L[i] = this.convert3_2(L[i]);
+					}
+				}
+			for (var i = 1; i < n; i++) {
+				this.segment(L[i-1],L[i],P);
+				}
+			}	
+		this.graphe = function (f,a,b) {
+			context.strokeStyle = this.couleur;
+			context.fillStyle = this.peinture;
+			context.lineWidth = this.trait;
+			var pas = (b-a)/1000;
+			for (var i = 1; i < 1000 ; i++) {
+				context.beginPath();
+				context.moveTo(this.coordX(a+(i-1)*pas),this.coordY(f(a+(i-1)*pas))  );
+				context.lineTo(this.coordX(a+i*pas),this.coordY(f(a+i*pas))  );
+				context.stroke();
+				context.closePath();
+				}
+			}
+		this.peintureCourbe = function (f,a,b) {
+			context.globalAlpha = this.transparence;
+			context.fillStyle = this.peinture;
+			context.beginPath();
+			context.moveTo(this.coordX(a),this.coordY(0)  );
+			var pas = (b-a)/1000;
+			for (var i = 0 ; i < 1000 ; i++) {
+				context.lineTo( this.coordX(a+i*pas), this.coordY(f(a+i*pas)) );		
+				}
+			context.lineTo(this.coordX(b),this.coordY(0)  );
+			context.fill();
+			context.closePath();
+			context.globalAlpha = 1;
+			}	
+		this.droiteParam = function (X,U,P) {
+			var Y = [];
+			for (var i = 0;i<X.length;i++) {
+				Y[i] = X[i]+U[i];
+				}	
+			if (U.length == 3) {
+				X = this.convert3_2(X);
+				Y = this.convert3_2(Y);
+				}
+			this.droite(X,Y,P);
+			}		
+		this.rotation2d = function (C,a,P) {
+			var Q = [0,0];
+			var c = Math.cos(a);
+			var s = Math.sin(a);
+			Q[0] = (P[0]-C[0])*c-(P[1]-C[1])*s+C[0];
+			Q[1] = (P[0]-C[0])*s+(P[1]-C[1])*c+C[1];
+			return Q;
+			}		
+		this.rotation3d = function (U,a,C,P) {
+			var Q = [0,0,0];
+			var D = [0,0,0];
+			var c = Math.cos(a);
+			var s = Math.sin(a);
+			var d = Math.sqrt( U[0]*U[0]+U[1]*U[1]+U[2]*U[2] )
+			U[0] = U[0]/d;
+			U[1] = U[1]/d;
+			U[2] = U[2]/d;			
+			var cst = -(U[0]*P[0]+U[1]*P[1]+U[2]*P[2]);
+			var t = -cst-U[0]*C[0]-U[1]*C[1]-U[2]*C[2];
+			D[0] = U[0]*t+C[0];
+			D[1] = U[1]*t+C[1];
+			D[2] = U[2]*t+C[2];			
+			Q[0] = (P[0]-D[0])*( U[0]*U[0]*(1-c)+c )+(P[1]-D[1])*( U[0]*U[1]*(1-c)-U[2]*s )+(P[2]-D[2])*( U[0]*U[2]*(1-c)+U[1]*s )+D[0];
+			Q[1] = (P[0]-D[0])*( U[0]*U[1]*(1-c)+U[2]*s )+(P[1]-D[1])*( U[1]*U[1]*(1-c)+c )+(P[2]-D[2])*( U[1]*U[2]*(1-c)-U[0]*s )+D[1];
+			Q[2] = (P[0]-D[0])*( U[0]*U[2]*(1-c)-U[1]*s )+(P[1]-D[1])*( U[1]*U[2]*(1-c)+U[0]*s )+(P[2]-D[2])*( U[2]*U[2]*(1-c)+c )+D[2];		
+			return Q
+			}	
+		this.proj = function (U,C,P) {
+			if ( U.length < 3) {
+				var D = [0,0];
+				var d = Math.sqrt( U[0]*U[0]+U[1]*U[1] )
+				U[0] = U[0]/d;
+				U[1] = U[1]/d;
+				var cst = -(U[0]*P[0]+U[1]*P[1]);
+				var t = -cst-U[0]*C[0]-U[1]*C[1];
+				D[0] = U[0]*t+C[0];
+				D[1] = U[1]*t+C[1];
+				}
+			else {
+				var D = [0,0,0];
+				var d = Math.sqrt( U[0]*U[0]+U[1]*U[1]+U[2]*U[2] )
+				U[0] = U[0]/d;
+				U[1] = U[1]/d;
+				U[2] = U[2]/d;
+				var cst = -(U[0]*P[0]+U[1]*P[1]+U[2]*P[2]);
+				var t = -cst-U[0]*C[0]-U[1]*C[1]-U[2]*C[2];
+				D[0] = U[0]*t+C[0];
+				D[1] = U[1]*t+C[1];
+				D[2] = U[2]*t+C[2];
+				}
+			return D;
+			}		
+		this.translation = function (U,P) {
+			var Q = [];
+			for (var i = 0; i < U.length; i++) {
+				Q.push( U[i]+P[i] );
+				}
+			return Q;
+			}	
+		this.symC = function (C,P){
+			var Q = [];
+			for (var i = 0; i < C.length; i++) {
+				Q.push( 2*C[i]-P[i] );
+				}
+			return Q;
+			}	
+		this.symA = function (U,C,P) {
+			var Q = this.proj(U,C,P);
+			var Q = this.symC(Q,P);
+			return Q;
+			}	
+		this.ht = function (C,k,P) {
+			var Q = [];
+			for (var i = 0; i < C.length; i++) {
+				Q.push( k*(P[i]-C[i])+C[i] );
+				}
+			return Q;
+			}	
+		this.vec = function (A,B) {
+			var Q = [];
+			for (var i = 0; i < A.length; i++) {
+				Q.push( B[i] - A[i] );
+				}
+			return Q;	
+			}		
+		this.entAlea = function (a,b){
+			return a+ Math.floor( (b-a+1)*Math.random() );	
+			}		
+		this.traceAxes3d = function () {
+			var O = [0,0,0];
+			var I = [this.Ymax/0.4-2,0,0];
+			var J = [0,this.Xmax+2,0];
+			var K = [0,0,this.Ymax+2];
+			this.segment(O,I);
+			this.segment(O,J);
+			this.segment(O,K);
+			}		
+		this.distance = function (A,B) {
+			var n = A.length;
+			var d = 0;
+			for (var i = 0;i < n; i++) {
+				d = d+(A[i]-B[i])*(A[i]-B[i]);
+				}
+			d = Math.sqrt(d);
+			return d;
+			}
+		}
+	}
+
 function convertSarmateGraphe(textarea, nNn) {
 		let eltName = textarea+nNn;
 		let Texte = "\n"+document.getElementById(eltName).value;
@@ -1613,7 +2034,3 @@ function mathpad(){
 	$('.clicGauche').remove();
 	$('.clicDroit').remove();
 }
-
-
-
-
