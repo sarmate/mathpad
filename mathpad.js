@@ -384,7 +384,6 @@ function algo(nNn) {
 
 // Algorithmes graphiques
 
-
 class SarmateGraphe {
 	constructor(dimensionL, dimensionH, context){
 		this.dimensionL = dimensionL;
@@ -406,9 +405,12 @@ class SarmateGraphe {
 		this.Grille = false;
 		
 		this.convert3_2 = function (P) {
+			
 			let T = [-2,-2];
-			T[0] = -2-0.3*P[0]+P[1];
-			T[1] = -2-0.3*P[0]+P[2];
+			T[0] = -2-0.2*P[0]+P[1];
+			T[1] = -2-0.15*P[0]+0.99*P[2];
+			
+			
 			return T;
 			}	
 		this.coordX = function (x) {
@@ -545,6 +547,27 @@ class SarmateGraphe {
 			context.globalAlpha = 1
 			context.stroke();
 			}
+		this.cercle3d = function (C,N,r,P) {
+			let base = this.baseOrtho(C,N);
+			let U = base[0];
+			let V = base[1];
+			if ( !P ) { P = [] }
+			let M = [0,0,0];
+			let M0 = [0,0,0];
+			M[0] = C[0]+r*U[0];
+			M[1] = C[0]+r*U[1];
+			M[2] = C[0]+r*U[2];
+			for (var t = 0; t <= 2*Math.PI+0.05 ; t = t+0.05) {
+				M0[0] = M[0];
+				M0[1] = M[1];
+				M0[2] = M[2];
+				M[0] = C[0]+r*U[0]*Math.cos(t)+r*V[0]*Math.sin(t);
+				M[1] = C[0]+r*U[1]*Math.cos(t)+r*V[1]*Math.sin(t);
+				M[2] = C[0]+r*U[2]*Math.cos(t)+r*V[2]*Math.sin(t);
+				this.segment(M,M0,P);
+				}
+			
+			}
 		this.arcCercle = function (X,r,ad,af,P) {
 			if ( !P ) { P = [] }
 			context.setLineDash(P);
@@ -561,6 +584,27 @@ class SarmateGraphe {
 			context.closePath();
 			context.globalAlpha = 1;
 			context.stroke();
+			}
+		this.arcCercle3d = function (C,N,r,a1,a2,P) {
+			let base = this.baseOrtho(C,N);
+			let U = base[0];
+			let V = base[1];
+			if ( !P ) { P = [] }
+			let M = [0,0,0];
+			let M0 = [0,0,0];
+			M[0] = C[0]+r*U[0]*Math.cos(a1)+r*V[0]*Math.sin(a1);
+			M[1] = C[0]+r*U[1]*Math.cos(a1)+r*V[1]*Math.sin(a1);
+			M[2] = C[0]+r*U[2]*Math.cos(a1)+r*V[2]*Math.sin(a1);
+			for (var t = a1; t <= a2 ; t = t+0.05) {
+				M0[0] = M[0];
+				M0[1] = M[1];
+				M0[2] = M[2];
+				M[0] = C[0]+r*U[0]*Math.cos(t)+r*V[0]*Math.sin(t);
+				M[1] = C[0]+r*U[1]*Math.cos(t)+r*V[1]*Math.sin(t);
+				M[2] = C[0]+r*U[2]*Math.cos(t)+r*V[2]*Math.sin(t);
+				this.segment(M,M0,P);
+				}
+			
 			}
 		this.rectangle = function (A,L,l,P) {
 			if ( !P ) { P = [] }
@@ -724,7 +768,32 @@ class SarmateGraphe {
 			Q[1] = (P[0]-D[0])*( U[0]*U[1]*(1-c)+U[2]*s )+(P[1]-D[1])*( U[1]*U[1]*(1-c)+c )+(P[2]-D[2])*( U[1]*U[2]*(1-c)-U[0]*s )+D[1];
 			Q[2] = (P[0]-D[0])*( U[0]*U[2]*(1-c)-U[1]*s )+(P[1]-D[1])*( U[1]*U[2]*(1-c)+U[0]*s )+(P[2]-D[2])*( U[2]*U[2]*(1-c)+c )+D[2];		
 			return Q
-			}	
+			}
+		this.baseOrtho = function (A,N){
+			let a = N[0];
+			let b = N[1];
+			let c = N[2];
+			let d = -a*A[0]-b*A[1]-c*A[2];
+			let B = [0,0,0];
+			if (a == 0){
+				if ( b == 0) {
+					B = [1,1,-d/c];
+					}
+				if ( c == 0) {
+					B = [1,-d/b,1];
+					}
+				}
+			else {
+				B = [(-b-c-d)/a,1,1];
+				}
+			let Ub = [B[0]-A[0], B[1]-A[1], B[2]-A[2]];
+			let NUb = Math.sqrt( Ub[0]*Ub[0]+Ub[1]*Ub[1]+Ub[2]*Ub[2] );
+			let U = [ Ub[0]/NUb , Ub[1]/NUb , Ub[2]/NUb ];
+			let I = [A[0]+U[0] , A[1]+U[1], A[2]+U[2] ];
+			let J = this.rotation3d(N, Math.PI/2, A, I);
+			
+			return [I,J];
+			}
 		this.proj = function (U,C,P) {
 			if ( U.length < 3) {
 				var D = [0,0];
@@ -788,7 +857,8 @@ class SarmateGraphe {
 			}		
 		this.traceAxes3d = function () {
 			var O = [0,0,0];
-			var I = [this.Ymax/0.4-2,0,0];
+			//var I = [this.Ymax/0.4-2,0,0];
+			var I = [-(this.Xmin+2)/0.3,0,0];
 			var J = [0,this.Xmax+2,0];
 			var K = [0,0,this.Ymax+2];
 			this.segment(O,I);
@@ -2034,3 +2104,7 @@ function mathpad(){
 	$('.clicGauche').remove();
 	$('.clicDroit').remove();
 }
+
+
+
+
