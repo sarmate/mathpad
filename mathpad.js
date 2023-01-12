@@ -405,14 +405,11 @@ class SarmateGraphe {
 		this.Grille = false;
 		
 		this.convert3_2 = function (P) {
-			
 			let T = [-2,-2];
 			T[0] = -2-0.2*P[0]+P[1];
 			T[1] = -2-0.15*P[0]+0.99*P[2];
-			
-			
 			return T;
-			}	
+			}
 		this.coordX = function (x) {
 			var a = this.dimensionL/(this.Xmax-this.Xmin);
 			var b = -this.Xmin*a;
@@ -446,8 +443,31 @@ class SarmateGraphe {
 			context.fill();
 			context.closePath();	
 			}	
-		this.traceG = function () {
+		this.traceG = function (nbSx, nbSy) {
+			if ( !nbSx ) { nbSx = 0; }
+			if ( !nbSy ) { 
+				if ( nbSx == 0 ) { nbSy = 0; }else{ nbSy = nbSx; }
+				}
 			var coul = this.couleur;
+			this.couleur = "rgb(220,220,220)";
+			if ( nbSx > 0 ) {
+				let pas = 1/(nbSx+1);
+				for (var i = 0; i < (this.Xmax)/this.GradX ; i = i+pas) {
+					this.segment( [i*this.GradX,this.Ymin],[i*this.GradX,this.Ymax] );
+					}
+				for (var i = 0; i > (this.Xmin)/this.GradX ; i = i-pas) {
+					this.segment( [i*this.GradX,this.Ymin],[i*this.GradX,this.Ymax] );
+					}
+				}
+			if ( nbSy > 0 ) {
+				let pas = 1/(nbSy+1);
+				for (var i = 0;i < (this.Ymax)/this.GradY ; i = i+pas) {
+					this.segment([this.Xmin,i*this.GradY],[this.Xmax,i*this.GradY]);
+					}
+				for (var i = 0; i > (this.Ymin)/this.GradY ; i = i-pas) {
+					this.segment([this.Xmin,i*this.GradY],[this.Xmax,i*this.GradY]);
+					}
+				}
 			this.couleur = "#c0c0c0";
 			for (var i = 0; i < (this.Xmax)/this.GradX ; i++) {
 				this.segment([i*this.GradX,this.Ymin],[i*this.GradX,this.Ymax]);
@@ -476,20 +496,66 @@ class SarmateGraphe {
 			context.fill();
 			context.closePath();
 			}
-		this.traceX = function () {
+		this.traceX = function (unit,nbS) {
+			if ( !unit) { unit = false; }
+			if ( !nbS ){ nbS = 0; }
 			this.segment([this.Xmin,0],[this.Xmax,0]);
-			this.trait = 2*this.trait;
-			this.segment([this.Xmax-(this.Xmax-this.Xmin)/100,(this.Ymax-this.Ymin)/100],[this.Xmax,0]);
-			this.segment([this.Xmax-(this.Xmax-this.Xmin)/100,-(this.Ymax-this.Ymin)/100],[this.Xmax,0]);
-			this.trait = this.trait/2;
+			this.trait = 1*this.trait;
+			this.segment([this.Xmax-(this.Xmax-this.Xmin)/100,(this.Ymax-this.Ymin)/150],[this.Xmax,0]);
+			this.segment([this.Xmax-(this.Xmax-this.Xmin)/100,-(this.Ymax-this.Ymin)/150],[this.Xmax,0]);
+			this.trait = this.trait/1;
+			var coul = this.couleur;
+			this.couleur = "rgb(100,100,100)";
+			if ( unit ) {
+				if ( nbS > 0 ) {
+					let pas = 1/(nbS+1);
+					for (var i = 0; i < (this.Xmax)/this.GradX ; i = i+pas) {
+						this.segment( [i*this.GradX,-(this.Ymax-this.Ymin)/150],[i*this.GradX,(this.Ymax-this.Ymin)/150] );
+						}
+					for (var i = 0; i > (this.Xmin)/this.GradX ; i = i-pas) {
+						this.segment( [i*this.GradX,-(this.Ymax-this.Ymin)/150],[i*this.GradX,(this.Ymax-this.Ymin)/150] );
+						}
+					}
+				this.couleur = "rgb(0,0,0)";
+				for (var i = 0; i < (this.Xmax)/this.GradX ; i++) {
+					this.segment([i*this.GradX,-(this.Ymax-this.Ymin)/150],[i*this.GradX,(this.Ymax-this.Ymin)/150]);
+					}
+				for (var i = 0; i > (this.Xmin)/this.GradX ; i--) {
+					this.segment([i*this.GradX,-(this.Ymax-this.Ymin)/150],[i*this.GradX,(this.Ymax-this.Ymin)/150]);
+					}
+				}
+			this.couleur = coul;			
 			}
-		this.traceY = function () {
+		this.traceY = function (unit, nbS) {
+			if ( !unit) { unit = false; }
+			if ( !nbS ){ nbS = 0; }
 			this.segment([0,this.Ymin],[0,this.Ymax]);
-			this.trait = 2*this.trait;
-			this.segment([(this.Xmax-this.Xmin)/100,this.Ymax-(this.Ymax-this.Ymin)/100],[0,this.Ymax]);
-			this.segment([-(this.Xmax-this.Xmin)/100,this.Ymax-(this.Ymax-this.Ymin)/100],[0,this.Ymax])
-			this.trait = this.trait/2;
-			}	
+			this.trait = 1*this.trait;
+			this.segment([(this.Xmax-this.Xmin)/150,this.Ymax-(this.Ymax-this.Ymin)/100],[0,this.Ymax]);
+			this.segment([-(this.Xmax-this.Xmin)/150,this.Ymax-(this.Ymax-this.Ymin)/100],[0,this.Ymax])
+			this.trait = this.trait/1;
+			var coul = this.couleur;
+			this.couleur = "rgb(100,100,100)";
+			if ( unit ) {
+				if ( nbS > 0 ) {
+					let pas = 1/(nbS+1);
+					for (var i = 0;i < (this.Ymax)/this.GradY ; i = i+pas) {
+						this.segment([-(this.Xmax-this.Xmin)/150,i*this.GradY],[(this.Xmax-this.Xmin)/150,i*this.GradY]);
+						}
+					for (var i = 0; i > (this.Ymin)/this.GradY ; i = i-pas) {
+						this.segment([-(this.Xmax-this.Xmin)/150,i*this.GradY],[(this.Xmax-this.Xmin)/150,i*this.GradY]);
+						}
+					}
+				this.couleur = "rgb(0,0,0)";
+				for (var i = 0;i < (this.Ymax)/this.GradY ; i++) {
+					this.segment([-(this.Xmax-this.Xmin)/150,i*this.GradY],[(this.Xmax-this.Xmin)/150,i*this.GradY]);
+					}
+				for (var i = 0; i > (this.Ymin)/this.GradY ; i--) {
+					this.segment([-(this.Xmax-this.Xmin)/150,i*this.GradY],[(this.Xmax-this.Xmin)/150,i*this.GradY]);
+					}
+				}
+			this.couleur = coul;
+			}
 		this.segment = function (A,B,P) {
 			if (A.length == 3) {
 				A = this.convert3_2(A);
@@ -530,7 +596,24 @@ class SarmateGraphe {
 			context.font = fs+"px Helvetica";
 			context.fillStyle = this.couleur;
 			context.fillText( T, this.coordX(A[0]), this.coordY(A[1]) );
-			}	
+			}
+		this.texteMath = function (T,A,fs) {
+			let g = document.createElement('div');
+			g.setAttribute("id", "captureAZD");
+			document.body.appendChild(g)
+			g.style.color = this.couleur;
+			g.style.fontSize = fs+"px";
+			katex.render(T, document.getElementById("captureAZD"), { displayMode: false });
+			html2canvas( document.querySelector("#captureAZD"), {backgroundColor:null, height:100} ).then(canvas => {
+	   		let pngUrl = canvas.toDataURL();
+    			let img = new Image();
+    			img.onload = () => {
+    				context.drawImage(img, this.coordX(A[0]), this.coordY(A[1]));
+  					};
+    			img.src = pngUrl;
+				});
+			g.remove();
+			}
 		this.cercle = function (X,r,P) {
 			if ( !P ) { P = [] }
 			context.setLineDash(P);
@@ -858,9 +941,11 @@ class SarmateGraphe {
 		this.traceAxes3d = function () {
 			var O = [0,0,0];
 			//var I = [this.Ymax/0.4-2,0,0];
-			var I = [-(this.Xmin+2)/0.3,0,0];
+			let x1 = -(2+this.Xmin)/0.2;
+			let x2 = -(2+this.Ymin)/0.15;
+			var I = [Math.max(x1,x2),0,0];
 			var J = [0,this.Xmax+2,0];
-			var K = [0,0,this.Ymax+2];
+			var K = [0,0,this.Ymax+3];
 			this.segment(O,I);
 			this.segment(O,J);
 			this.segment(O,K);
