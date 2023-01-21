@@ -22,7 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 
 //
-// mathpad.js utilise python skulpt et jQuery
+// mathpad.js utilise python Skulpt et jQuery
 //
 
 
@@ -670,21 +670,21 @@ class SarmateGraphe {
 			}
 		this.arcCercle3d = function (C,N,r,a1,a2,P) {
 			let base = this.baseOrtho(C,N);
-			let U = base[0];
-			let V = base[1];
+			let U = [base[1][0]-base[0][0], base[1][1]-base[0][1], base[1][2]-base[0][2]];
+			let V = [base[2][0]-base[0][0], base[2][1]-base[0][1], base[2][2]-base[0][2]];
 			if ( !P ) { P = [] }
 			let M = [0,0,0];
 			let M0 = [0,0,0];
 			M[0] = C[0]+r*U[0]*Math.cos(a1)+r*V[0]*Math.sin(a1);
-			M[1] = C[0]+r*U[1]*Math.cos(a1)+r*V[1]*Math.sin(a1);
-			M[2] = C[0]+r*U[2]*Math.cos(a1)+r*V[2]*Math.sin(a1);
+			M[1] = C[1]+r*U[1]*Math.cos(a1)+r*V[1]*Math.sin(a1);
+			M[2] = C[2]+r*U[2]*Math.cos(a1)+r*V[2]*Math.sin(a1);
 			for (var t = a1; t <= a2 ; t = t+0.05) {
 				M0[0] = M[0];
 				M0[1] = M[1];
 				M0[2] = M[2];
 				M[0] = C[0]+r*U[0]*Math.cos(t)+r*V[0]*Math.sin(t);
-				M[1] = C[0]+r*U[1]*Math.cos(t)+r*V[1]*Math.sin(t);
-				M[2] = C[0]+r*U[2]*Math.cos(t)+r*V[2]*Math.sin(t);
+				M[1] = C[1]+r*U[1]*Math.cos(t)+r*V[1]*Math.sin(t);
+				M[2] = C[2]+r*U[2]*Math.cos(t)+r*V[2]*Math.sin(t);
 				this.segment(M,M0,P);
 				}
 			
@@ -859,11 +859,14 @@ class SarmateGraphe {
 			let d = -a*A[0]-b*A[1]-c*A[2];
 			let B = [0,0,0];
 			if (a == 0){
-				if ( b == 0) {
+				if ( b == 0 && c != 0) {
 					B = [1,1,-d/c];
 					}
-				if ( c == 0) {
+				if ( c == 0 && b != 0) {
 					B = [1,-d/b,1];
+					}
+				if ( b !=0 && c != 0) {
+					B = [1,1,(-b-d)/c];
 					}
 				}
 			else {
@@ -874,8 +877,8 @@ class SarmateGraphe {
 			let U = [ Ub[0]/NUb , Ub[1]/NUb , Ub[2]/NUb ];
 			let I = [A[0]+U[0] , A[1]+U[1], A[2]+U[2] ];
 			let J = this.rotation3d(N, Math.PI/2, A, I);
-			
-			return [I,J];
+			console.log([A,I,J]);
+			return [A,I,J];
 			}
 		this.proj = function (U,C,P) {
 			if ( U.length < 3) {
