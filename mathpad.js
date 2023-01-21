@@ -1079,6 +1079,7 @@ function algoGraphe(nNn,dimensionL,dimensionH) {
 	var canvasGraphe = document.getElementById("resultatsGraphe"+nNn);
 	var context = canvasGraphe.getContext('2d');
 	let sarmateGraphe = new SarmateGraphe(dimensionL, dimensionH, context);
+	$("#textareaCodeGraphe"+nNn).val(editorCodeGraphe[nNn].getValue());
 	let Texte = convertSarmateGraphe("textareaCodeGraphe", nNn);
 	sarmateGraphe.effaceEcran();
 	eval(Texte);	
@@ -1704,7 +1705,7 @@ function mathpad(){
 		$(this).append( newCanvas );
 		}
 	);
-
+	
 	var nbAlgoGrapheInv = -1;
 	var dimensionLInv = [];
 	var dimensionHInv = [];
