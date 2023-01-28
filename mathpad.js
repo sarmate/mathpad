@@ -924,7 +924,7 @@ class SarmateGraphe {
 			var Q = this.symC(Q,P);
 			return Q;
 			}	
-		this.ht = function (C,k,P) {
+		this.hmt = function (C,k,P) {
 			var Q = [];
 			for (var i = 0; i < C.length; i++) {
 				Q.push( k*(P[i]-C[i])+C[i] );
