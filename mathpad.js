@@ -638,8 +638,8 @@ class SarmateGraphe {
 			let M = [0,0,0];
 			let M0 = [0,0,0];
 			M[0] = C[0]+r*U[0];
-			M[1] = C[0]+r*U[1];
-			M[2] = C[0]+r*U[2];
+			M[1] = C[1]+r*U[1];
+			M[2] = C[2]+r*U[2];
 			for (var t = 0; t <= 2*Math.PI+0.05 ; t = t+0.05) {
 				M0[0] = M[0];
 				M0[1] = M[1];
