@@ -645,8 +645,8 @@ class SarmateGraphe {
 				M0[1] = M[1];
 				M0[2] = M[2];
 				M[0] = C[0]+r*U[0]*Math.cos(t)+r*V[0]*Math.sin(t);
-				M[1] = C[0]+r*U[1]*Math.cos(t)+r*V[1]*Math.sin(t);
-				M[2] = C[0]+r*U[2]*Math.cos(t)+r*V[2]*Math.sin(t);
+				M[1] = C[1]+r*U[1]*Math.cos(t)+r*V[1]*Math.sin(t);
+				M[2] = C[2]+r*U[2]*Math.cos(t)+r*V[2]*Math.sin(t);
 				this.segment(M,M0,P);
 				}
 			
