@@ -632,8 +632,8 @@ class SarmateGraphe {
 			}
 		this.cercle3d = function (C,N,r,P) {
 			let base = this.baseOrtho(C,N);
-			let U = base[0];
-			let V = base[1];
+			let U = [base[1][0]-base[0][0], base[1][1]-base[0][1], base[1][2]-base[0][2]];
+			let V = [base[2][0]-base[0][0], base[2][1]-base[0][1], base[2][2]-base[0][2]];
 			if ( !P ) { P = [] }
 			let M = [0,0,0];
 			let M0 = [0,0,0];
