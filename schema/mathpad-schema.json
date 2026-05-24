@@ -1,0 +1,474 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sarmate.net/mathpad/schema/v1",
+  "title": "Mathpad Grammar v1",
+  "version": "1.0.0-draft",
+  "perimeterLockedAt": "2026-05-12",
+  "formalFreezeTarget": "2027-03-31",
+  "description": "Machine-readable description of the mathpad HTML grammar for sarmate.net. Consumed by the runtime validator and by LLM converters. The human-readable counterpart is mathpad-grammar.md.",
+
+  "contentModels": {
+    "phrasing": "Inline content: text, KaTeX/MathJax math ($...$, $$...$$), <strong>, <em>, <sub>, <sup>, <br>, <code>, <kbd>, <a>, mp-color, mp-highlight, mp-underline, mp-spacer, mp-ref, mp-blank.",
+    "blocks": "Block content: <p>, <ul>, <ol>, <table>, <figure>, mp-box, mp-figure, mp-code, mp-graph, mp-vartable, mp-center, mp-checkbox, mp-blank.",
+    "formal": "Formal blocks: mp-definition, mp-theorem, mp-property, mp-proposition, mp-lemma, mp-corollary, mp-remark, mp-method, mp-warning.",
+    "pedagogical": "Pedagogical blocks: mp-example, mp-exercise, mp-activity."
+  },
+
+  "elements": {
+    "mp-course": {
+      "category": "sectioning",
+      "role": "root",
+      "label": { "en": null, "fr": null },
+      "autoInjectable": true,
+      "attributes": {
+        "lang": { "type": "string", "format": "bcp47", "required": false, "default": "navigator" },
+        "id": { "type": "string", "required": false },
+        "version": { "type": "string", "required": false, "default": "1.0.0" }
+      },
+      "children": ["mp-meta?", "mp-chapter*", "blocks", "formal", "pedagogical"]
+    },
+
+    "mp-meta": {
+      "category": "metadata",
+      "role": "metadata-container",
+      "autoInjectable": false,
+      "attributes": {},
+      "children": [
+        "mp-doc-title?",
+        "mp-author*",
+        "mp-level?",
+        "mp-subject?",
+        "mp-tag*",
+        "mp-cover-image?",
+        "mp-description?"
+      ]
+    },
+    "mp-doc-title": { "category": "metadata", "children": ["text"] },
+    "mp-author": { "category": "metadata", "children": ["text"] },
+    "mp-level": {
+      "category": "metadata",
+      "children": ["text"],
+      "enum": ["college-6e", "college-5e", "college-4e", "college-3e", "lycee-2nde", "lycee-1ere", "terminale-spe", "terminale-comp", "bts", "prepa", "universite", "autre"]
+    },
+    "mp-subject": {
+      "category": "metadata",
+      "children": ["text"],
+      "enum": ["mathematics", "physics", "chemistry", "biology", "cs", "other"]
+    },
+    "mp-tag": { "category": "metadata", "children": ["text"] },
+    "mp-cover-image": {
+      "category": "metadata",
+      "attributes": { "src": { "type": "string", "required": true } },
+      "children": []
+    },
+    "mp-description": { "category": "metadata", "children": ["text"] },
+
+    "mp-chapter": {
+      "category": "sectioning",
+      "label": { "en": "Chapter", "fr": "Chapitre" },
+      "numbered": "roman",
+      "autoInjectable": true,
+      "attributes": {
+        "id": { "type": "string", "required": false }
+      },
+      "children": ["mp-title?", "mp-section*", "blocks", "formal", "pedagogical"]
+    },
+    "mp-section": {
+      "category": "sectioning",
+      "label": { "en": "Section", "fr": "Partie" },
+      "numbered": "arabic",
+      "autoInjectable": true,
+      "attributes": { "id": { "type": "string", "required": false } },
+      "children": ["mp-title?", "mp-subsection*", "blocks", "formal", "pedagogical"]
+    },
+    "mp-subsection": {
+      "category": "sectioning",
+      "label": { "en": "Subsection", "fr": "Sous-partie" },
+      "numbered": "arabic-dotted",
+      "autoInjectable": false,
+      "attributes": { "id": { "type": "string", "required": false } },
+      "children": ["mp-title?", "blocks", "formal", "pedagogical"]
+    },
+    "mp-title": {
+      "category": "sectioning",
+      "role": "section-heading",
+      "children": ["phrasing"],
+      "attributes": {}
+    },
+
+    "mp-definition": {
+      "category": "formal",
+      "label": { "en": "Definition", "fr": "Définition" },
+      "numbered": "arabic",
+      "color": "var(--mp-def-color)",
+      "attributes": {
+        "id": { "type": "string", "required": false },
+        "name": { "type": "string", "required": false },
+        "numbering": { "type": "string", "enum": ["auto", "none", "manual"], "default": "auto" }
+      },
+      "children": ["blocks", "phrasing"]
+    },
+    "mp-theorem": {
+      "category": "formal",
+      "label": { "en": "Theorem", "fr": "Théorème" },
+      "numbered": "arabic",
+      "color": "var(--mp-theorem-color)",
+      "attributes": {
+        "id": { "type": "string", "required": false },
+        "name": { "type": "string", "required": false },
+        "roc": { "type": "boolean", "required": false },
+        "numbering": { "type": "string", "enum": ["auto", "none", "manual"], "default": "auto" }
+      },
+      "children": ["blocks", "phrasing"]
+    },
+    "mp-property": {
+      "category": "formal",
+      "label": { "en": "Property", "fr": "Propriété" },
+      "numbered": "arabic",
+      "color": "var(--mp-prop-color)",
+      "attributes": {
+        "id": { "type": "string", "required": false },
+        "name": { "type": "string", "required": false },
+        "roc": { "type": "boolean", "required": false },
+        "numbering": { "type": "string", "enum": ["auto", "none", "manual"], "default": "auto" }
+      },
+      "children": ["blocks", "phrasing"]
+    },
+    "mp-proposition": {
+      "category": "formal",
+      "label": { "en": "Proposition", "fr": "Proposition" },
+      "numbered": "arabic",
+      "color": "var(--mp-prop-color)",
+      "note": "Distinct from mp-property. A proposition is a provable statement hierarchically between lemma and theorem.",
+      "attributes": {
+        "id": { "type": "string", "required": false },
+        "name": { "type": "string", "required": false },
+        "roc": { "type": "boolean", "required": false },
+        "numbering": { "type": "string", "enum": ["auto", "none", "manual"], "default": "auto" }
+      },
+      "children": ["blocks", "phrasing"]
+    },
+    "mp-lemma": {
+      "category": "formal",
+      "label": { "en": "Lemma", "fr": "Lemme" },
+      "numbered": "arabic",
+      "color": "var(--mp-lemma-color)",
+      "attributes": {
+        "id": { "type": "string", "required": false },
+        "name": { "type": "string", "required": false },
+        "numbering": { "type": "string", "enum": ["auto", "none", "manual"], "default": "auto" }
+      },
+      "children": ["blocks", "phrasing"]
+    },
+    "mp-corollary": {
+      "category": "formal",
+      "label": { "en": "Corollary", "fr": "Corollaire" },
+      "numbered": "arabic",
+      "color": "var(--mp-lemma-color)",
+      "attributes": {
+        "id": { "type": "string", "required": false },
+        "name": { "type": "string", "required": false },
+        "numbering": { "type": "string", "enum": ["auto", "none", "manual"], "default": "auto" }
+      },
+      "children": ["blocks", "phrasing"]
+    },
+    "mp-remark": {
+      "category": "formal",
+      "label": { "en": "Remark", "fr": "Remarque" },
+      "numbered": "arabic",
+      "color": "var(--mp-remark-color)",
+      "attributes": {
+        "id": { "type": "string", "required": false },
+        "numbering": { "type": "string", "enum": ["auto", "none", "manual"], "default": "auto" }
+      },
+      "children": ["blocks", "phrasing"]
+    },
+    "mp-method": {
+      "category": "formal",
+      "label": { "en": "Method", "fr": "Méthode" },
+      "numbered": "arabic",
+      "color": "var(--mp-method-color)",
+      "note": "Step-by-step procedure. Encourage <ol> as direct child.",
+      "attributes": {
+        "id": { "type": "string", "required": false },
+        "name": { "type": "string", "required": false },
+        "numbering": { "type": "string", "enum": ["auto", "none", "manual"], "default": "auto" }
+      },
+      "children": ["blocks", "phrasing"]
+    },
+    "mp-warning": {
+      "category": "formal",
+      "label": { "en": "Warning", "fr": "Attention" },
+      "numbered": "arabic",
+      "color": "var(--mp-warning-color)",
+      "note": "Common pitfall. Distinct from mp-remark (informational).",
+      "attributes": {
+        "id": { "type": "string", "required": false },
+        "numbering": { "type": "string", "enum": ["auto", "none", "manual"], "default": "auto" }
+      },
+      "children": ["blocks", "phrasing"]
+    },
+    "mp-proof": {
+      "category": "formal",
+      "label": { "en": "Proof", "fr": "Preuve" },
+      "color": "var(--mp-proof-color)",
+      "attributes": {
+        "of": { "type": "string", "required": false, "description": "id of the proven element. If absent, binds to immediately previous formal block." }
+      },
+      "children": ["blocks", "phrasing"]
+    },
+
+    "mp-example": {
+      "category": "pedagogical",
+      "label": { "en": "Example", "fr": "Exemple" },
+      "numbered": "arabic",
+      "color": "var(--mp-example-color)",
+      "attributes": {
+        "id": { "type": "string", "required": false },
+        "numbering": { "type": "string", "enum": ["auto", "none", "manual"], "default": "auto" }
+      },
+      "children": ["blocks", "phrasing"]
+    },
+    "mp-exercise": {
+      "category": "pedagogical",
+      "label": { "en": "Exercise", "fr": "Exercice" },
+      "numbered": "arabic",
+      "color": "var(--mp-exercise-color)",
+      "attributes": {
+        "id": { "type": "string", "required": false },
+        "difficulty": { "type": "integer", "minimum": 1, "maximum": 3, "required": false },
+        "duration": { "type": "string", "pattern": "^[0-9]+(min|h|h[0-9]+)$", "required": false },
+        "topics": { "type": "string", "required": false, "description": "Space-separated topic keywords." },
+        "numbering": { "type": "string", "enum": ["auto", "none", "manual"], "default": "auto" }
+      },
+      "children": ["mp-statement?", "mp-correction?", "blocks", "phrasing"]
+    },
+    "mp-statement": {
+      "category": "pedagogical-part",
+      "role": "exercise-statement",
+      "children": ["blocks", "phrasing"]
+    },
+    "mp-correction": {
+      "category": "pedagogical-part",
+      "role": "correction-reveal",
+      "attributes": {
+        "id": { "type": "string", "required": false }
+      },
+      "children": ["blocks", "phrasing"]
+    },
+    "mp-activity": {
+      "category": "pedagogical",
+      "label": { "en": "Activity", "fr": "Activité" },
+      "numbered": "arabic",
+      "color": "var(--mp-activity-color)",
+      "attributes": {
+        "id": { "type": "string", "required": false },
+        "duration": { "type": "string", "required": false },
+        "numbering": { "type": "string", "enum": ["auto", "none", "manual"], "default": "auto" }
+      },
+      "children": ["blocks", "phrasing"]
+    },
+
+    "mp-box": {
+      "category": "container",
+      "attributes": {
+        "style": { "type": "string", "enum": ["accent", "grey", "info", "subtle"], "default": "accent" },
+        "id": { "type": "string", "required": false }
+      },
+      "children": ["blocks", "phrasing"]
+    },
+    "mp-figure": {
+      "category": "container",
+      "attributes": { "id": { "type": "string", "required": false } },
+      "children": ["img|canvas|svg|mp-graph|mp-code", "mp-caption?"]
+    },
+    "mp-caption": {
+      "category": "container-part",
+      "children": ["phrasing"]
+    },
+
+    "mp-blank": {
+      "category": "interactive",
+      "role": "progressive-reveal",
+      "note": "Also accepts <pause> as alias (legacy short form). LLM converters don't generate these; only human editors do. Single-step buttons advance/retreat by 1; fast buttons by 10. Each action smooth-scrolls to the affected blank and highlights it for 1 second.",
+      "attributes": {},
+      "children": ["blocks", "phrasing"]
+    },
+    "mp-checkbox": {
+      "category": "interactive",
+      "role": "persistent-checkbox",
+      "note": "Inner content is rendered as the label. Persistent state via localStorage. NEVER use self-closing <mp-checkbox/> — invalid HTML for custom elements, parser will consume the following sibling text.",
+      "attributes": {
+        "id": { "type": "string", "required": false }
+      },
+      "children": ["phrasing"]
+    },
+    "mp-ref": {
+      "category": "interactive",
+      "role": "cross-reference",
+      "attributes": {
+        "target": { "type": "string", "required": true },
+        "format": { "type": "string", "enum": ["number", "label", "name", "full"], "default": "number" }
+      },
+      "children": []
+    },
+
+    "mp-code": {
+      "category": "code",
+      "note": "Python only (executed via Skulpt). No lang attribute — Python is implicit.",
+      "attributes": {
+        "runnable": { "type": "boolean", "default": false },
+        "editable": { "type": "boolean", "default": true },
+        "width": { "type": "integer", "required": false },
+        "height": { "type": "integer", "required": false },
+        "theme": { "type": "string", "default": "neat" }
+      },
+      "children": ["text"]
+    },
+    "mp-align": {
+      "category": "math",
+      "note": "Chained equations/inequalities with vertical column alignment. LaTeX align-like syntax: rows separated by newlines, cells separated by '&'. First cell of each row = optional prefix (right-aligned, e.g. ⇒). Last cell of each row (if row has > 3 cells) = comment (italic, muted, left-aligned). Cells in between alternate value/operator/value/... Pauses can be placed inside any cell with <pause>...</pause>.",
+      "attributes": {
+        "id": { "type": "string", "required": false }
+      },
+      "children": ["text"]
+    },
+    "mp-spreadsheet": {
+      "category": "interactive",
+      "note": "Excel-like grid with formulas (SOMME, MOYENNE, MIN, MAX, NB), drag-fill with relative reference shifting, click-to-reference. State is persisted in the data-state attribute as JSON. Round-trip safe: saving the cours HTML stores the spreadsheet content, reloading rebuilds it identically.",
+      "attributes": {
+        "rows":       { "type": "integer", "default": 10 },
+        "cols":       { "type": "integer", "default": 10 },
+        "max-height": { "type": "integer", "default": 350, "description": "Vertical scroll threshold in px." },
+        "id":         { "type": "string",  "required": false },
+        "data-state": {
+          "type": "string",
+          "required": false,
+          "description": "JSON: {cells: {A1:..., B2:...}, colors: {A1:'#rgb'}}. Source of truth after the first save. Empty/omitted on first insert → spreadsheet starts blank."
+        }
+      },
+      "children": ["mp-cell*"]
+    },
+    "mp-jsxgraph": {
+      "category": "figure",
+      "note": "Preferred for curves. Interactive JSXGraph figure. Text content is JS code with `board` and `JXG` bound. JSXGraph is lazy-loaded when any mp-jsxgraph is found on the page.",
+      "attributes": {
+        "width":  { "type": "integer", "default": 400 },
+        "height": { "type": "integer", "default": 400 },
+        "bounds": { "type": "string", "default": "-5,5,5,-5", "description": "xmin,ymax,xmax,ymin" },
+        "axis":   { "type": "boolean", "default": true },
+        "grid":   { "type": "boolean", "default": false },
+        "id":     { "type": "string", "required": false }
+      },
+      "children": ["text"]
+    },
+    "mp-color": {
+      "category": "inline",
+      "attributes": {
+        "value": {
+          "type": "string",
+          "required": true,
+          "description": "Any valid CSS color: named ('red', 'crimson'), hex ('#ff5733'), rgb()/hsl()/oklch() etc."
+        }
+      },
+      "children": ["phrasing"]
+    },
+    "mp-highlight": {
+      "category": "inline",
+      "attributes": {
+        "value": { "type": "string", "required": true, "description": "Any valid CSS color (for background)." }
+      },
+      "children": ["phrasing"]
+    },
+    "mp-underline": { "category": "inline", "children": ["phrasing"] },
+    "mp-center": { "category": "block", "children": ["blocks", "phrasing"] },
+    "mp-spacer": {
+      "category": "inline",
+      "attributes": {
+        "n": { "type": "integer", "minimum": 1, "default": 1 }
+      },
+      "children": []
+    },
+
+    "mp-vartable": {
+      "category": "table",
+      "attributes": { "id": { "type": "string", "required": false } },
+      "children": ["mp-vartable-abscissa", "mp-vartable-sign*", "mp-vartable-top?", "mp-vartable-middle?", "mp-vartable-bottom?"]
+    },
+    "mp-vartable-abscissa": { "category": "table-row", "children": ["mp-cell+"] },
+    "mp-vartable-sign":     { "category": "table-row", "children": ["mp-cell+"] },
+    "mp-vartable-top":      { "category": "table-row", "children": ["mp-cell+"] },
+    "mp-vartable-middle":   { "category": "table-row", "children": ["mp-cell+"] },
+    "mp-vartable-bottom":   { "category": "table-row", "children": ["mp-cell+"] },
+    "mp-cell": {
+      "category": "table-cell",
+      "specialValues": {
+        "0": "Vertical bar with '0' (sign row only)",
+        "forbidden": "Hatched cell, value not in domain",
+        "bar": "Vertical bar, no zero (sign row only)",
+        "increasing": "Upward arrow (middle row only)",
+        "decreasing": "Downward arrow (middle row only)"
+      },
+      "children": ["phrasing"]
+    }
+  },
+
+  "autoCompletion": [
+    {
+      "rule": "implicit-course",
+      "description": "If <body> contains any mp-* block but no mp-course ancestor, wrap content in an implicit mp-course."
+    },
+    {
+      "rule": "implicit-chapter",
+      "description": "If mp-course contains block content but no mp-chapter, wrap content in an implicit mp-chapter."
+    },
+    {
+      "rule": "implicit-section",
+      "description": "If mp-chapter contains formal/pedagogical blocks but no mp-section, wrap consecutive blocks in an implicit mp-section. A new implicit section starts after each explicit sectioning sibling."
+    },
+    {
+      "rule": "auto-id",
+      "description": "Any block without an id gets id='mp-{tag}-{counter}' at runtime."
+    },
+    {
+      "rule": "chapter-scoped-numbering",
+      "description": "Numbering counters reset at each mp-chapter unless mp-course numbering='auto-global'."
+    },
+    {
+      "rule": "overflow-wrap",
+      "description": "Elements with scrollWidth > parent.clientWidth (post-render + on resize) are wrapped in overflow-x:auto."
+    }
+  ],
+
+  "removedFromV1": {
+    "tags": ["slide", "depasse", "propN", "gras", "bold", "italic", "centre", "rouge", "bleu", "vert", "mp-graph", "mp-slider"],
+    "languagesDropped": ["sarmate", "html", "javascript", "css"],
+    "rationale": {
+      "slide": "Slide-presentation mode dropped — not used.",
+      "depasse": "Auto-handled at runtime via overflow detection.",
+      "propN": "Merged into mp-property.",
+      "gras/bold/italic": "Use native <strong> and <em>.",
+      "centre": "Renamed mp-center.",
+      "rouge/bleu/vert": "Replaced by mp-color value='...' supporting any CSS color.",
+      "mp-code lang attribute": "v1 supports Python only. lang attribute removed entirely. mp-code-style and mp-code-body sub-elements (HTML-specific) also removed.",
+      "mp-graph/mp-slider": "Replaced by mp-jsxgraph which provides genuine interactivity (draggable points, native sliders) instead of the legacy canvas+SarmateGraphe DSL."
+    }
+  },
+
+  "llmConverterRequirements": {
+    "mustEmit": [
+      "Full sectioning hierarchy (mp-course > mp-chapter > mp-section).",
+      "id attribute on every formal/pedagogical block.",
+      "Form B for exercises (explicit mp-statement / mp-correction).",
+      "name attribute on theorems/properties with a known mathematical name.",
+      "Math wrapped in $...$ or $$...$$.",
+      "mp-ref with target= for every cross-reference."
+    ],
+    "mustValidate": [
+      "Every mp-ref target resolves to an existing id.",
+      "Every required attribute is present.",
+      "No unknown mp-* tags are emitted.",
+      "Attribute values match declared enums."
+    ]
+  }
+}

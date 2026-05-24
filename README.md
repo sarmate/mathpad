@@ -1,127 +1,169 @@
+# mathpad
+
+A tiny **JavaScript + CSS runtime** that turns semantic `<mp-*>` HTML tags into
+clean, book-style math & science web pages — with KaTeX formulas, interactive
+figures (JSXGraph), runnable Python (Skulpt), syntax-highlighted code
+(CodeMirror), quizzes, variation tables, cross-references and automatic
+numbering.
+
+No build step, no framework. Drop in two files, write `<mp-*>` tags, open in a
+browser.
+
+```html
+<mp-definition>
+  <mp-statement>A sequence is arithmetic when the difference between
+  consecutive terms is constant.</mp-statement>
+</mp-definition>
+```
+
+---
+
+## History
+
+mathpad began in **2016**, hand-coded by **Fabrice Frattini** — a French maths
+teacher — as a JavaScript library for authoring mathematics on the web: a
+formula / grid editor built on jQuery, IPGrid, CodeMirror, Skulpt and
+MathJax/KaTeX. That original library powered sarmate.xyz for years. It is
+preserved untouched in [`legacy/`](legacy/).
+
+In **2024-2026** mathpad was redesigned from the ground up into a **semantic
+document runtime**. Instead of wiring widgets by hand, you write
+meaning-carrying tags — `<mp-course>`, `<mp-chapter>`, `<mp-definition>`,
+`<mp-theorem>`, `<mp-exercise>`, `<mp-align>`, `<mp-figure>`, `<mp-quiz>`… — and
+the runtime renders them book-style, numbers them, builds the table of contents,
+resolves cross-references and handles theming. This new generation was developed
+with AI assistance and is what lives at the repository root today.
+
+---
+
+## Quick start
+
+mathpad needs **jQuery** and **KaTeX** (with its auto-render extension) on the
+page. It lazy-loads CodeMirror, Skulpt and JSXGraph from public CDNs only when a
+document actually uses them.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- KaTeX + auto-render -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex/dist/contrib/auto-render.min.js"></script>
+
+  <!-- mathpad -->
+  <link rel="stylesheet" href="mathpad.css">
+</head>
+<body>
+
+  <mp-course theme="ocean">
+    <mp-meta><mp-doc-title>My first lesson</mp-doc-title></mp-meta>
+
+    <mp-chapter>
+      <mp-title>Sequences</mp-title>
+
+      <mp-definition>
+        <mp-statement>A sequence is arithmetic when the difference between
+        consecutive terms is constant.</mp-statement>
+      </mp-definition>
+
+      <p>For example, $u_n = 3 + 2n$ defines an arithmetic sequence with
+      first term $3$ and common difference $2$.</p>
+
+      <mp-exercise>
+        <mp-statement>Find the common difference of $7, 11, 15, 19$.</mp-statement>
+      </mp-exercise>
+    </mp-chapter>
+  </mp-course>
+
+  <!-- Render math, then start mathpad -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$',  right: '$',  display: false }
+        ]
+      });
+    });
+  </script>
+  <script src="mathpad.js"></script>
+</body>
+</html>
+```
+
+---
 
+## LLM-friendly: convert `.tex` / `.docx` / `.odt` into a web page
 
-Mathpad is a javascript library for creating math web contents.
+mathpad's tag set is documented in an **LLM-targeted** specification:
 
-The officials links are :
+- [`schema/mathpad-grammar.md`](schema/mathpad-grammar.md) — human-readable grammar
+- [`schema/mathpad-schema.json`](schema/mathpad-schema.json) — machine-readable schema
 
+Because that grammar is compact and self-contained, you can hand it to any
+capable LLM (Claude, GPT, Gemini, Mistral…) together with a source document and
+ask it to produce a ready-to-host mathpad page. Example prompt:
 
-&lt;link rel="stylesheet" type="text/css" href="https://sarmate.xyz/mathpad/mathpad.css" />
+> You are given the mathpad grammar (attached: `mathpad-grammar.md`).
+> Convert the attached LaTeX file `lesson.tex` into a single self-contained
+> HTML page using mathpad `<mp-*>` tags. Preserve every definition, theorem and
+> exercise. Use `$...$` / `$$...$$` for formulas. Output only the HTML.
 
-&lt;script type="text/javascript" src="https://sarmate.xyz/mathpad/mathpad.js"></script>
+The model returns the HTML; you save it, drop `mathpad.css` and `mathpad.js`
+next to it (plus the jQuery + KaTeX `<head>` from the quick start), and open it.
+The same approach works for Word / LibreOffice documents (`.docx` / `.odt`) —
+either feed the file directly if your LLM can read it, or convert it to
+text/markdown first.
 
+This is exactly how [sarmate.net](https://www.sarmate.net) converts teacher
+documents into interactive web lessons.
 
-You need in your document to add these librarys : JQuery, Skulpt, Mathjax or KaTeX, IPGrid and CodeMirror.
+---
 
-We recommend to use JSXGraph too.
+## Themes
 
+Several built-in palettes (Ocean, Forest, Lavender, Coral, Slate, Sepia, Night,
+Midnight…) are selectable via the floating palette button or the
+`theme="…"` attribute on `<mp-course>`. A flat **"Compatibilité"** palette
+(solid backgrounds, no gradients / no `color-mix()`) is included for older
+institutional browsers that cannot render CSS gradients.
 
+---
 
-A minimun code page is :
+## Tags overview
 
+See [`schema/mathpad-grammar.md`](schema/mathpad-grammar.md) for the complete
+reference. In short:
 
-<pre>
-&lt;!DOCTYPE html>
-&lt;html>
-&lt;head>
-&lt;meta charset="utf-8" />
-&lt;meta name="viewport" content="width=device-width, initial-scale=1.0">
+- **Sectioning** — `mp-course`, `mp-chapter`, `mp-section`, `mp-subsection`
+- **Formal blocks** — `mp-definition`, `mp-theorem`, `mp-property`,
+  `mp-proposition`, `mp-lemma`, `mp-corollary`, `mp-remark`, `mp-method`,
+  `mp-warning`, `mp-proof`
+- **Pedagogical** — `mp-example`, `mp-activity`, `mp-exercise`
+- **Math & figures** — `mp-align`, `mp-vartable`, `mp-figure`, `mp-jsxgraph`
+- **Code & data** — `mp-code` (CodeMirror, optional runnable Python),
+  `mp-spreadsheet`
+- **Interactive & references** — `mp-blank`, `mp-checkbox`, cross-references
+  (`mp-ref`), table of contents, footnotes and bibliography
 
-&lt;title>&lt;/title>
+---
 
-&lt;!-- JSX Graph-->
-&lt;link rel="stylesheet" type="text/css" href="https://jsxgraph.uni-bayreuth.de/distrib/jsxgraph.css" />
-&lt;script type="text/javascript" src="https://jsxgraph.uni-bayreuth.de/distrib/jsxgraphcore.js"></script>
+## The original library
 
-&lt;!-- JQuery -->
-&lt;script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+The 2016 hand-coded version (formula / grid editor) lives in
+[`legacy/`](legacy/) with its own README, for reference and history.
 
-&lt;!-- Python with Skulpt -->
-&lt;script src="https://skulpt.org/js/skulpt.min.js" type="text/javascript"></script> 
-&lt;script src="https://skulpt.org/js/skulpt-stdlib.js" type="text/javascript"></script>
+---
 
-&lt;!-- CodeMirror -->
-&lt;script src="https://www.sarmate.xyz/Cours/codemirror-5.58.3/lib/codemirror.js"></script>
-&lt;link rel="stylesheet" href="https://www.sarmate.xyz/Cours/codemirror-5.58.3/lib/codemirror.css">
-&lt;link rel="stylesheet" href="https://www.sarmate.xyz/Cours/codemirror-5.58.3/theme/abcdef.css">
-&lt;script src="https://www.sarmate.xyz/Cours/codemirror-5.58.3/mode/python/python.js"></script>
-&lt;script src="https://www.sarmate.xyz/Cours/codemirror-5.58.3/mode/xml/xml.js"></script>
-&lt;script src="https://www.sarmate.xyz/Cours/codemirror-5.58.3/mode/javascript/javascript.js"></script>
+## License
 
-&lt;!-- IP Grid -->
-&lt;script src="https://www.sarmate.xyz/ipgrid/scripts/jquery-ui-1.9.2.custom.min.js"></script>    
-&lt;script src="https://www.sarmate.xyz/ipgrid/scripts/ip.grid.js"></script>
-&lt;link href="https://www.sarmate.xyz/ipgrid/css/ip.grid.css" rel="stylesheet" />
+[MIT](LICENSE) — © 2016-2026 Fabrice Frattini.
 
-&lt;!-- MathPad -->
-&lt;link rel="stylesheet" type="text/css" href="https://www.sarmate.xyz/mathpad/mathpad.css" />
-&lt;script type="text/javascript" src="https://www.sarmate.xyz/mathpad/mathpad.js"></script>
-
-&lt;script>
-var rouge = true;
-&lt;/script>
-
-
-&lt;/head>
-
-&lt;body>
-
-
-
-
-
-&lt;!-- Katex ------------------------------------------------------------------------>
-
-
-
-&lt;link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.css">
-&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.9.0/katex.min.js" ></script>
-&lt;script src="https://cdn.jsdelivr.net/npm/katex@0.10.2/dist/contrib/auto-render.min.js" ></script>
-&lt;script>
-renderMathInElement(
-	document.body,
-	{
-		delimiters: [
-			{left: "$$", right: "$$", display: true},
-			{left: "$", right: "$", display: false}
-		]
-	}
-);
-&lt;/script>
-
-
-&lt;/body>
-&lt;/html>
-</pre>
-
-
-
-
-
-
-
-
-
-
-
-
-A tutorial can be find at https://www.sarmate.net
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Built and maintained at [sarmate.net](https://www.sarmate.net).
