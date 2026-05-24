@@ -16,6 +16,11 @@ browser.
 </mp-definition>
 ```
 
+mathpad is the open-source runtime behind **[sarmate.net](https://www.sarmate.net)**,
+which adds `.tex` / `.docx` / `.odt` conversion, server-side LaTeX compilation, a
+drive and a visual editor on top of it. The runtime here is fully usable on its
+own — MIT licensed, self-hostable, no account or external service required.
+
 ## ▶ Live demo
 
 **[See everything in action →](https://www.sarmate.net/mathpad/demo.html)**
