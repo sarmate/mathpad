@@ -263,21 +263,35 @@
     </mp-section>
 
     <mp-section id="sec-graph"><mp-title>Interactive graph (JSXGraph)</mp-title>
-      <p>The area under the curve $f(x) = \tfrac{1}{2}x(5 - x)$ on $[0, 5]$,
-      approximated by 10 rectangles (a middle Riemann sum):</p>
-      <mp-jsxgraph width="520" height="380" bounds="-0.6,3.9,5.6,-0.7" axis="true" grid="true">
+      <p>Drag the <strong>n</strong> slider to change the number of rectangles
+      approximating the area under $f(x) = \tfrac{1}{2}x(5 - x)$ on $[0, 5]$
+      (a middle Riemann sum), and watch the estimate converge:</p>
+      <mp-jsxgraph width="520" height="400" bounds="-0.6,4.3,5.6,-0.8" axis="true" grid="true" highlight>
         var f = function (x) { return 0.5 * x * (5 - x); };
-        var a = 0, b = 5, N = 10, w = (b - a) / N, area = 0;
-        for (var i = 0; i < N; i++) {
-          var xl = a + i * w, xr = xl + w, h = f(xl + w / 2);
-          area += w * h;
-          board.create('polygon', [[xl, 0], [xl, h], [xr, h], [xr, 0]], {
-            fillColor: '#0891b2', fillOpacity: 0.35, fixed: true, hasInnerPoints: false,
-            vertices: { visible: false }, borders: { strokeColor: '#0e7490', strokeWidth: 1 }
-          });
-        }
+        var a = 0, b = 5;
+        var n = board.create('slider', [[0.3, 4.0], [1.9, 4.0], [1, 8, 40]],
+          { name: 'n', snapWidth: 1, size: 5, fillColor: '#0891b2', strokeColor: '#0e7490' });
+        // One closed sub-path per rectangle (NaN separators) so each bar fills
+        // cleanly from the x-axis up to the curve. updateDataArray re-runs on
+        // every slider move, so the rectangles follow the slider live.
+        var rects = board.create('curve', [[], []],
+          { fillColor: '#0891b2', fillOpacity: 0.35, strokeColor: '#0e7490', strokeWidth: 1 });
+        rects.updateDataArray = function () {
+          this.dataX = []; this.dataY = [];
+          var N = Math.round(n.Value()), w = (b - a) / N, i, xl, xr, h;
+          for (i = 0; i < N; i++) {
+            xl = a + i * w; xr = xl + w; h = f(xl + w / 2);
+            this.dataX.push(xl, xl, xr, xr, xl, NaN);
+            this.dataY.push(0, h, h, 0, 0, NaN);
+          }
+        };
         board.create('functiongraph', [f, a, b], { strokeColor: '#be185d', strokeWidth: 2.5 });
-        board.create('text', [2.4, 3.6, N + ' rectangles &middot; area &#8776; ' + area.toFixed(3)]);
+        board.update();
+        board.create('text', [3.4, 4.0, function () {
+          var N = Math.round(n.Value()), w = (b - a) / N, s = 0, i;
+          for (i = 0; i < N; i++) s += w * f(a + i * w + w / 2);
+          return 'area &#8776; ' + s.toFixed(3);
+        }]);
       </mp-jsxgraph>
     </mp-section>
   </mp-chapter>
