@@ -126,8 +126,8 @@
         We prove the slope of an affine function is constant. Take two points
         $M(x_1, y_1)$ and $N(x_2, y_2)$ on the line $y = ax + b$:
         <mp-align>
-          y_2 - y_1 &= (a x_2 + b) - (a x_1 + b) & \text{definition}\\
-                    &= a(x_2 - x_1)
+          $y_2 - y_1$ & $=$ & $(a x_2 + b) - (a x_1 + b)$ & definition
+           & $=$ & $a(x_2 - x_1)$
         </mp-align>
         so the slope $\dfrac{y_2 - y_1}{x_2 - x_1} = a$ does not depend on the
         chosen points.
@@ -196,21 +196,54 @@
       <p>An <code>&lt;mp-align&gt;</code> aligns on the relation symbol; an
       optional trailing cell becomes a muted comment:</p>
       <mp-align>
-        2x + 3 &= 7 & \text{start}\\
-        2x &= 4 & \text{subtract } 3\\
-        x &= 2 & \text{divide by } 2
+        $2x + 3$ & $=$ & $7$ & start
+        $2x$ & $=$ & $4$ & subtract 3
+        $x$ & $=$ & $2$ & divide by 2
       </mp-align>
     </mp-section>
 
     <mp-section id="sec-vartable"><mp-title>Variation table</mp-title>
       <p>Sign and variation tables are built from dedicated tags; the arrows are
       drawn automatically:</p>
-      <mp-vartable>
-        <mp-vartable-abscissa><mp-cell>$x$</mp-cell><mp-cell>$-\infty$</mp-cell><mp-cell></mp-cell><mp-cell>$0$</mp-cell><mp-cell></mp-cell><mp-cell>$+\infty$</mp-cell></mp-vartable-abscissa>
-        <mp-vartable-sign><mp-cell>$f'(x)$</mp-cell><mp-cell>$-$</mp-cell><mp-cell>bar0</mp-cell><mp-cell>$+$</mp-cell><mp-cell></mp-cell><mp-cell></mp-cell></mp-vartable-sign>
-        <mp-vartable-top><mp-cell></mp-cell><mp-cell>$+\infty$</mp-cell><mp-cell></mp-cell><mp-cell></mp-cell><mp-cell></mp-cell><mp-cell>$+\infty$</mp-cell></mp-vartable-top>
-        <mp-vartable-middle><mp-cell>$f$</mp-cell><mp-cell></mp-cell><mp-cell>decreasing</mp-cell><mp-cell></mp-cell><mp-cell>increasing</mp-cell><mp-cell></mp-cell></mp-vartable-middle>
-        <mp-vartable-bottom><mp-cell></mp-cell><mp-cell></mp-cell><mp-cell></mp-cell><mp-cell>$0$</mp-cell><mp-cell></mp-cell><mp-cell></mp-cell></mp-vartable-bottom>
+      <mp-vartable scale="0.75">
+        <mp-vartable-abscissa>
+          <mp-cell>$x$</mp-cell>
+          <mp-cell>$-\infty$</mp-cell>
+          <mp-cell></mp-cell>
+          <mp-cell>$4$</mp-cell>
+          <mp-cell></mp-cell>
+          <mp-cell>$+\infty$</mp-cell>
+        </mp-vartable-abscissa>
+        <mp-vartable-sign>
+          <mp-cell>$f'(x)$</mp-cell>
+          <mp-cell></mp-cell>
+          <mp-cell>$+$</mp-cell>
+          <mp-cell>bar0</mp-cell>
+          <mp-cell>$-$</mp-cell>
+          <mp-cell></mp-cell>
+        </mp-vartable-sign>
+        <mp-vartable-top>
+          <mp-cell></mp-cell>
+          <mp-cell></mp-cell>
+          <mp-cell></mp-cell>
+          <mp-cell>$3$</mp-cell>
+        </mp-vartable-top>
+        <mp-vartable-middle>
+          <mp-cell>$f(x)$</mp-cell>
+          <mp-cell></mp-cell>
+          <mp-cell>increasing</mp-cell>
+          <mp-cell></mp-cell>
+          <mp-cell>decreasing</mp-cell>
+          <mp-cell></mp-cell>
+        </mp-vartable-middle>
+        <mp-vartable-bottom>
+          <mp-cell></mp-cell>
+          <mp-cell>$-\infty$</mp-cell>
+          <mp-cell></mp-cell>
+          <mp-cell></mp-cell>
+          <mp-cell></mp-cell>
+          <mp-cell>$-10$</mp-cell>
+        </mp-vartable-bottom>
       </mp-vartable>
     </mp-section>
 
@@ -225,19 +258,23 @@
           <text x="8" y="75" font-size="14" text-anchor="middle">b</text>
           <text x="108" y="62" font-size="14" text-anchor="middle">c</text>
         </svg>
-        <mp-caption>A right triangle, illustrating $a^2 + b^2 = c^2$.</mp-caption>
+        <mp-caption>A right triangle illustrating the Pythagorean theorem.</mp-caption>
       </mp-figure>
     </mp-section>
 
     <mp-section id="sec-graph"><mp-title>Interactive graph (JSXGraph)</mp-title>
-      <p>Drag the slider to change the coefficient and watch the parabola
-      update in real time:</p>
-      <mp-jsxgraph width="500" height="380" bounds="-5,8,5,-3" grid="true" highlight>
-        var a = board.create('slider', [[-4, 6.5], [2, 6.5], [-3, 1, 3]], {name: 'a'});
-        board.create('functiongraph', [function (x) { return a.Value() * x * x; }],
-          { strokeColor: '#be185d', strokeWidth: 2 });
-        board.create('functiongraph', [function (x) { return 2 * x + 1; }],
-          { strokeColor: '#0891b2', strokeWidth: 2, dash: 2 });
+      <p>Drag the slider to change the number of rectangles approximating the
+      area under the curve $f(x) = \tfrac{1}{2}x(5 - x)$ on $[0, 5]$ (a Riemann
+      sum), and watch the estimate converge:</p>
+      <mp-jsxgraph width="520" height="380" bounds="-0.5,4.2,5.5,-0.6" axis="true" grid="true" highlight>
+        var f = function (x) { return 0.5 * x * (5 - x); };
+        var n = board.create('slider', [[0.2, 3.85], [1.9, 3.85], [1, 8, 40]], { name: 'n', snapWidth: 1 });
+        board.create('functiongraph', [f, 0, 5], { strokeColor: '#be185d', strokeWidth: 2.5 });
+        board.create('riemannsum', [f, function () { return n.Value(); }, 'middle', 0, 5],
+          { fillColor: '#0891b2', fillOpacity: 0.3 });
+        board.create('text', [2.9, 3.8, function () {
+          return 'area &#8776; ' + JXG.Math.Numerics.riemannsum(f, n.Value(), 'middle', 0, 5).toFixed(3);
+        }]);
       </mp-jsxgraph>
     </mp-section>
   </mp-chapter>
