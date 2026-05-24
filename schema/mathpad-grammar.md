@@ -160,6 +160,7 @@ The `of` attribute is optional but recommended (LLM should emit it). Without it,
 | `mp-example` | Example | yes | |
 | `mp-exercise` | Exercise | yes | May contain `mp-statement` and `mp-correction` children. |
 | `mp-activity` | Activity | yes | Guided discovery activity. |
+| `mp-quiz` | Quiz | yes | Single-question multiple-choice with immediate feedback. See below. |
 
 #### `mp-exercise` attributes
 
@@ -195,6 +196,31 @@ Two valid forms:
 LLM converters should emit Form B (more explicit). Human editors may use either.
 
 `<mp-correction>` may also appear standalone outside any `<mp-exercise>` for in-line corrections of subparts.
+
+#### `mp-quiz`
+
+Interactive single-question multiple-choice quiz with immediate feedback,
+auto-numbered per chapter (Quiz 1, 2…). It contains exactly one `<mp-question>`
+followed by two or more `<mp-answer>`; mark every correct option with the
+boolean `correct` attribute. Both children are KaTeX-friendly.
+
+| Attr | Type | Notes |
+|---|---|---|
+| `multiple` | boolean | Multi-select (checkbox semantics + a *Validate* button). Without it, single-select: the first click reveals the result and locks the quiz. |
+| `shuffle` | boolean | Randomize answer order on each page load. |
+| `numbering` | enum: `auto` (default), `none` | Opt out of numbering with `none`. |
+
+`<mp-answer>` carries the boolean `correct` attribute on each valid option — a
+single-select quiz expects exactly one, a `multiple` quiz accepts any subset.
+
+```html
+<mp-quiz>
+  <mp-question>What is the sign of $-(-3)^2$ ?</mp-question>
+  <mp-answer correct>Negative</mp-answer>
+  <mp-answer>Positive</mp-answer>
+  <mp-answer>Zero</mp-answer>
+</mp-quiz>
+```
 
 ### 3.6 Generic containers
 

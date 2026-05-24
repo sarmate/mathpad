@@ -146,7 +146,7 @@ reference. In short:
 - **Formal blocks** — `mp-definition`, `mp-theorem`, `mp-property`,
   `mp-proposition`, `mp-lemma`, `mp-corollary`, `mp-remark`, `mp-method`,
   `mp-warning`, `mp-proof`
-- **Pedagogical** — `mp-example`, `mp-activity`, `mp-exercise`
+- **Pedagogical** — `mp-example`, `mp-activity`, `mp-exercise`, `mp-quiz`
 - **Math & figures** — `mp-align`, `mp-vartable`, `mp-figure`, `mp-jsxgraph`
 - **Code & data** — `mp-code` (CodeMirror, optional runnable Python),
   `mp-spreadsheet`

@@ -269,6 +269,35 @@
       "children": ["blocks", "phrasing"]
     },
 
+    "mp-quiz": {
+      "category": "pedagogical",
+      "label": { "en": "Quiz", "fr": "Quiz" },
+      "numbered": "arabic",
+      "color": "var(--mp-quiz-color)",
+      "attributes": {
+        "id": { "type": "string", "required": false },
+        "multiple": { "type": "boolean", "default": false },
+        "shuffle": { "type": "boolean", "default": false },
+        "numbering": { "type": "string", "enum": ["auto", "none"], "default": "auto" }
+      },
+      "children": ["mp-question", "mp-answer"]
+    },
+
+    "mp-question": {
+      "category": "pedagogical-part",
+      "role": "quiz-question",
+      "children": ["phrasing"]
+    },
+
+    "mp-answer": {
+      "category": "pedagogical-part",
+      "role": "quiz-answer",
+      "attributes": {
+        "correct": { "type": "boolean", "default": false }
+      },
+      "children": ["phrasing"]
+    },
+
     "mp-box": {
       "category": "container",
       "attributes": {
