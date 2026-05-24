@@ -266,13 +266,13 @@
       <p>Drag the slider to change the number of rectangles approximating the
       area under the curve $f(x) = \tfrac{1}{2}x(5 - x)$ on $[0, 5]$ (a Riemann
       sum), and watch the estimate converge:</p>
-      <mp-jsxgraph width="520" height="380" bounds="-0.5,4.2,5.5,-0.6" axis="true" grid="true" highlight>
+      <mp-jsxgraph width="520" height="400" bounds="-0.8,4.3,5.8,-1.2" axis="true" grid="true" highlight>
         var f = function (x) { return 0.5 * x * (5 - x); };
-        var n = board.create('slider', [[0.2, 3.85], [1.9, 3.85], [1, 8, 40]], { name: 'n', snapWidth: 1 });
+        var n = board.create('slider', [[0.2, 4.0], [1.9, 4.0], [1, 8, 40]], { name: 'n', snapWidth: 1 });
         board.create('functiongraph', [f, 0, 5], { strokeColor: '#be185d', strokeWidth: 2.5 });
         board.create('riemannsum', [f, function () { return n.Value(); }, 'middle', 0, 5],
           { fillColor: '#0891b2', fillOpacity: 0.3 });
-        board.create('text', [2.9, 3.8, function () {
+        board.create('text', [3.0, 4.0, function () {
           return 'area &#8776; ' + JXG.Math.Numerics.riemannsum(f, n.Value(), 'middle', 0, 5).toFixed(3);
         }]);
       </mp-jsxgraph>
