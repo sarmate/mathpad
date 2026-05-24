@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>mathpad — live demo</title>
+
+  <!-- mathpad -->
+  <link rel="stylesheet" href="mathpad.css">
+
+  <!-- KaTeX (math rendering) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+
+  <!-- jQuery (required by the mathpad bottom bar) -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- mathpad runtime (lazy-loads CodeMirror / Skulpt / JSXGraph when needed) -->
+  <script defer src="mathpad.js"></script>
+</head>
+<body>
+<mp-course lang="en" theme="ocean" theme-picker="on">
+
+  <mp-meta>
+    <mp-doc-title>mathpad — a guided tour</mp-doc-title>
+    <mp-author>The mathpad library</mp-author>
+    <mp-date>2026</mp-date>
+  </mp-meta>
+
+  <p>This page is written entirely with mathpad's semantic <code>&lt;mp-*&gt;</code>
+  tags. Everything below — numbering, the table of contents, cross-references,
+  the interactive figures, Python, the spreadsheet and the quizzes — is produced
+  by a single CSS file and a single JavaScript file. Try the
+  <strong>palette button</strong> at the bottom-right to switch themes.</p>
+
+  <mp-toc depth="2"></mp-toc>
+
+  <!-- ============================================================= -->
+  <mp-chapter id="ch-text"><mp-title>Text, structure and inline formatting</mp-title>
+
+    <mp-section id="sec-structure"><mp-title>Headings and paragraphs</mp-title>
+      <p>mathpad organises a document into <em>chapters</em>, <em>sections</em>
+      and <em>subsections</em>, all numbered automatically. Plain paragraphs use
+      ordinary <code>&lt;p&gt;</code> tags, and inline mathematics is written
+      between dollar signs, e.g. $a^2 + b^2 = c^2$ or
+      $\displaystyle \lim_{n \to \infty} \frac{1}{n} = 0$.</p>
+
+      <mp-subsection><mp-title>A subsection</mp-title>
+        <p>Subsections nest under sections and inherit the numbering
+        (<strong>1.1.1</strong>, and so on). Lists work as usual:</p>
+        <ul>
+          <li>an unordered item with math $x \in \mathbb{R}$,</li>
+          <li>another item.</li>
+        </ul>
+        <ol>
+          <li>first ordered step,</li>
+          <li>second ordered step.</li>
+        </ol>
+      </mp-subsection>
+    </mp-section>
+
+    <mp-section id="sec-inline"><mp-title>Inline helpers and boxes</mp-title>
+      <p>You can <mp-color value="#be185d">colour text</mp-color>,
+      <mp-highlight value="#fef3c7">highlight it</mp-highlight>, or
+      <mp-underline>underline it</mp-underline> with the accent colour.</p>
+
+      <mp-box style="info"><mp-title>Good to know</mp-title>
+        A <code>&lt;mp-box&gt;</code> is a generic callout. It comes in several
+        variants: <code>accent</code>, <code>grey</code>, <code>info</code> and
+        <code>subtle</code>.
+      </mp-box>
+
+      <mp-box style="grey">
+        This one is the <code>grey</code> variant, without a title banner.
+      </mp-box>
+
+      <p>A self-assessment checkbox (state is remembered in your browser):</p>
+      <mp-checkbox id="demo-check">I understand how mathpad structures a document.</mp-checkbox>
+    </mp-section>
+  </mp-chapter>
+
+  <!-- ============================================================= -->
+  <mp-chapter id="ch-formal"><mp-title>Formal blocks</mp-title>
+
+    <mp-section id="sec-formal"><mp-title>Definitions, theorems and friends</mp-title>
+
+      <mp-definition name="Derivative">
+        A function $f$ is <em>differentiable</em> at $a$ when the limit
+        $$f'(a) = \lim_{h \to 0} \frac{f(a+h) - f(a)}{h}$$
+        exists and is finite.
+      </mp-definition>
+
+      <mp-theorem id="thm-pythagore" name="Pythagoras" roc>
+        In a right triangle with legs $a$, $b$ and hypotenuse $c$,
+        $$a^2 + b^2 = c^2.$$
+        The <strong>ROC</strong> badge marks a result worth memorising.
+      </mp-theorem>
+
+      <mp-property name="Linearity">
+        For any constants $\alpha, \beta$, $\displaystyle \int (\alpha f + \beta g) = \alpha \int f + \beta \int g$.
+      </mp-property>
+
+      <mp-proposition>Every differentiable function is continuous.</mp-proposition>
+
+      <mp-lemma><mp-title>Triangle inequality</mp-title>
+        For all real $x, y$, $\; |x + y| \le |x| + |y|$.
+      </mp-lemma>
+
+      <mp-corollary>Every monotonic bounded sequence converges.</mp-corollary>
+
+      <mp-remark>Each formal block is numbered automatically and carries its
+      own colour and icon.</mp-remark>
+
+      <mp-method><mp-title>Finding an affine function from two points</mp-title>
+        <ol>
+          <li>Compute the slope $a = \dfrac{y_2 - y_1}{x_2 - x_1}$.</li>
+          <li>Substitute into $y = ax + b$ to find $b$.</li>
+        </ol>
+      </mp-method>
+
+      <mp-warning>Do not confuse the value $f(a)$ with the derivative $f'(a)$.</mp-warning>
+
+      <mp-proof>
+        We prove the slope of an affine function is constant. Take two points
+        $M(x_1, y_1)$ and $N(x_2, y_2)$ on the line $y = ax + b$:
+        <mp-align>
+          y_2 - y_1 &= (a x_2 + b) - (a x_1 + b) & \text{definition}\\
+                    &= a(x_2 - x_1)
+        </mp-align>
+        so the slope $\dfrac{y_2 - y_1}{x_2 - x_1} = a$ does not depend on the
+        chosen points.
+      </mp-proof>
+
+      <p>Cross-references resolve by id — for instance, see
+      <mp-ref target="thm-pythagore" format="full"></mp-ref>.</p>
+    </mp-section>
+  </mp-chapter>
+
+  <!-- ============================================================= -->
+  <mp-chapter id="ch-pedago"><mp-title>Pedagogical blocks</mp-title>
+
+    <mp-section id="sec-pedago"><mp-title>Examples, activities and exercises</mp-title>
+
+      <mp-example><mp-title>Arithmetic sequence</mp-title>
+        The sequence defined by $u_n = 2n + 1$ is arithmetic with common
+        difference $2$: $\;1, 3, 5, 7, \dots$
+      </mp-example>
+
+      <mp-activity><mp-title>Warm-up</mp-title>
+        For $f(x) = 3x - 2$, compute $f(0)$, $f(1)$ and $f(2)$, then plot the
+        three points.
+      </mp-activity>
+
+      <mp-exercise duration="10 min" difficulty="2">
+        <mp-title>Determining an affine function</mp-title>
+        <mp-statement>An affine function $f$ satisfies $f(2) = 5$ and
+        $f(-1) = -1$. Find $f(x)$, then compute $f(10)$.</mp-statement>
+        <mp-correction>
+          Slope: $a = \dfrac{5 - (-1)}{2 - (-1)} = 2$. From $f(2) = 4 + b = 5$
+          we get $b = 1$, so $f(x) = 2x + 1$ and $f(10) = 21$.
+        </mp-correction>
+      </mp-exercise>
+
+      <p>Progressive reveal: the value below stays hidden until you step through
+      it with the navigation buttons in the bottom bar —
+      <mp-blank>$f(0) = -2$</mp-blank></p>
+    </mp-section>
+
+    <mp-section id="sec-quiz"><mp-title>Quizzes</mp-title>
+      <p>Single-answer quiz (the first click locks it and reveals the result):</p>
+      <mp-quiz>
+        <mp-question>What is the sign of $-(-3)^2$ ?</mp-question>
+        <mp-answer correct>Negative</mp-answer>
+        <mp-answer>Positive</mp-answer>
+        <mp-answer>Zero</mp-answer>
+      </mp-quiz>
+
+      <p>Multiple-answer quiz (tick every correct option, then press
+      <em>Validate</em>):</p>
+      <mp-quiz multiple>
+        <mp-question>Which of these functions are increasing on $\mathbb{R}$ ?</mp-question>
+        <mp-answer correct>$x \mapsto 2x + 1$</mp-answer>
+        <mp-answer>$x \mapsto -x$</mp-answer>
+        <mp-answer correct>$x \mapsto x^3$</mp-answer>
+        <mp-answer>$x \mapsto \dfrac{1}{x}$</mp-answer>
+      </mp-quiz>
+    </mp-section>
+  </mp-chapter>
+
+  <!-- ============================================================= -->
+  <mp-chapter id="ch-math"><mp-title>Mathematical layout</mp-title>
+
+    <mp-section id="sec-align"><mp-title>Aligned equations</mp-title>
+      <p>An <code>&lt;mp-align&gt;</code> aligns on the relation symbol; an
+      optional trailing cell becomes a muted comment:</p>
+      <mp-align>
+        2x + 3 &= 7 & \text{start}\\
+        2x &= 4 & \text{subtract } 3\\
+        x &= 2 & \text{divide by } 2
+      </mp-align>
+    </mp-section>
+
+    <mp-section id="sec-vartable"><mp-title>Variation table</mp-title>
+      <p>Sign and variation tables are built from dedicated tags; the arrows are
+      drawn automatically:</p>
+      <mp-vartable>
+        <mp-vartable-abscissa><mp-cell>$x$</mp-cell><mp-cell>$-\infty$</mp-cell><mp-cell></mp-cell><mp-cell>$0$</mp-cell><mp-cell></mp-cell><mp-cell>$+\infty$</mp-cell></mp-vartable-abscissa>
+        <mp-vartable-sign><mp-cell>$f'(x)$</mp-cell><mp-cell>$-$</mp-cell><mp-cell>bar0</mp-cell><mp-cell>$+$</mp-cell><mp-cell></mp-cell><mp-cell></mp-cell></mp-vartable-sign>
+        <mp-vartable-top><mp-cell></mp-cell><mp-cell>$+\infty$</mp-cell><mp-cell></mp-cell><mp-cell></mp-cell><mp-cell></mp-cell><mp-cell>$+\infty$</mp-cell></mp-vartable-top>
+        <mp-vartable-middle><mp-cell>$f$</mp-cell><mp-cell></mp-cell><mp-cell>decreasing</mp-cell><mp-cell></mp-cell><mp-cell>increasing</mp-cell><mp-cell></mp-cell></mp-vartable-middle>
+        <mp-vartable-bottom><mp-cell></mp-cell><mp-cell></mp-cell><mp-cell></mp-cell><mp-cell>$0$</mp-cell><mp-cell></mp-cell><mp-cell></mp-cell></mp-vartable-bottom>
+      </mp-vartable>
+    </mp-section>
+
+    <mp-section id="sec-figure"><mp-title>Figures</mp-title>
+      <p>A figure is numbered and listed automatically. This one embeds a small
+      inline SVG, but it could equally hold an image or a canvas:</p>
+      <mp-figure id="fig-triangle">
+        <svg viewBox="0 0 200 140" width="220" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="20,120 180,120 20,20" fill="none" stroke="#0891b2" stroke-width="3"/>
+          <rect x="20" y="104" width="16" height="16" fill="none" stroke="#0891b2" stroke-width="2"/>
+          <text x="95" y="135" font-size="14" text-anchor="middle">a</text>
+          <text x="8" y="75" font-size="14" text-anchor="middle">b</text>
+          <text x="108" y="62" font-size="14" text-anchor="middle">c</text>
+        </svg>
+        <mp-caption>A right triangle, illustrating $a^2 + b^2 = c^2$.</mp-caption>
+      </mp-figure>
+    </mp-section>
+
+    <mp-section id="sec-graph"><mp-title>Interactive graph (JSXGraph)</mp-title>
+      <p>Drag the slider to change the coefficient and watch the parabola
+      update in real time:</p>
+      <mp-jsxgraph width="500" height="380" bounds="-5,8,5,-3" grid="true" highlight>
+        var a = board.create('slider', [[-4, 6.5], [2, 6.5], [-3, 1, 3]], {name: 'a'});
+        board.create('functiongraph', [function (x) { return a.Value() * x * x; }],
+          { strokeColor: '#be185d', strokeWidth: 2 });
+        board.create('functiongraph', [function (x) { return 2 * x + 1; }],
+          { strokeColor: '#0891b2', strokeWidth: 2, dash: 2 });
+      </mp-jsxgraph>
+    </mp-section>
+  </mp-chapter>
+
+  <!-- ============================================================= -->
+  <mp-chapter id="ch-interactive"><mp-title>Code and data</mp-title>
+
+    <mp-section id="sec-python"><mp-title>Runnable Python</mp-title>
+      <p>Press <em>Run</em> to execute this Python in the browser (no server):</p>
+      <mp-code runnable width="600">def factorial(n):
+    return 1 if n &lt;= 1 else n * factorial(n - 1)
+
+for n in range(6):
+    print(n, "->", factorial(n))</mp-code>
+    </mp-section>
+
+    <mp-section id="sec-sheet"><mp-title>Spreadsheet</mp-title>
+      <p>An editable grid with formulas (SUM/AVERAGE/MIN/MAX). Click a cell and
+      type; formulas recalculate live:</p>
+      <mp-spreadsheet rows="5" cols="3">
+        <mp-cell at="A1">10</mp-cell>
+        <mp-cell at="A2">20</mp-cell>
+        <mp-cell at="A3">30</mp-cell>
+        <mp-cell at="A4" color="#fef3c7">=SOMME(A1:A3)</mp-cell>
+        <mp-cell at="B1">Mean:</mp-cell>
+        <mp-cell at="B4">=MOYENNE(A1:A3)</mp-cell>
+      </mp-spreadsheet>
+    </mp-section>
+  </mp-chapter>
+
+  <!-- ============================================================= -->
+  <mp-chapter id="ch-refs"><mp-title>References and notes</mp-title>
+    <mp-section id="sec-refs"><mp-title>Citations, footnotes, lists</mp-title>
+      <p>mathpad supports inline citations such as <mp-cite ref="hardy1908"></mp-cite>
+      and footnotes<mp-footnote>Footnotes are gathered at the end of the chapter.</mp-footnote>
+      that collect at the foot of the chapter.</p>
+
+      <p>It also builds a list of figures on request:</p>
+      <mp-lof></mp-lof>
+
+      <mp-bibliography style="numeric">
+        <mp-cite-entry id="hardy1908" type="article" author="Hardy, G. H."
+          title="Mendelian proportions in a mixed population" journal="Science"
+          volume="28" year="1908" pages="49-50"></mp-cite-entry>
+        <mp-cite-entry id="lang2002" type="book" author="Lang, S."
+          title="Algebra" publisher="Springer" year="2002"></mp-cite-entry>
+      </mp-bibliography>
+    </mp-section>
+  </mp-chapter>
+
+</mp-course>
+</body>
+</html>

@@ -16,6 +16,18 @@ browser.
 </mp-definition>
 ```
 
+## ▶ Live demo
+
+**[See everything in action →](https://www.sarmate.net/mathpad/demo.html)**
+
+A single page showcasing every feature in English — headings, definitions,
+theorems, properties, remarks, warnings, proofs, examples, exercises with
+hidden corrections, single- and multiple-choice quizzes, aligned equations, a
+variation table, a figure, an **interactive JSXGraph** plot, **runnable
+Python**, an editable **spreadsheet**, cross-references, footnotes and a
+bibliography. Use the palette button (bottom-right) to switch themes. The page
+source is [`demo.html`](demo.html) in this repository.
+
 ---
 
 ## History
