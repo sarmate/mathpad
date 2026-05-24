@@ -6,7 +6,7 @@
   <title>mathpad — live demo</title>
 
   <!-- mathpad -->
-  <link rel="stylesheet" href="mathpad.css">
+  <link rel="stylesheet" href="mathpad.css?v=20260524b">
 
   <!-- KaTeX (math rendering) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
@@ -18,7 +18,7 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <!-- mathpad runtime (lazy-loads CodeMirror / Skulpt / JSXGraph when needed) -->
-  <script defer src="mathpad.js"></script>
+  <script defer src="mathpad.js?v=20260524b"></script>
 </head>
 <body>
 <mp-course lang="en" theme="ocean" theme-picker="on">
@@ -263,18 +263,21 @@
     </mp-section>
 
     <mp-section id="sec-graph"><mp-title>Interactive graph (JSXGraph)</mp-title>
-      <p>Drag the slider to change the number of rectangles approximating the
-      area under the curve $f(x) = \tfrac{1}{2}x(5 - x)$ on $[0, 5]$ (a Riemann
-      sum), and watch the estimate converge:</p>
-      <mp-jsxgraph width="520" height="400" bounds="-0.8,4.3,5.8,-1.2" axis="true" grid="true" highlight>
+      <p>The area under the curve $f(x) = \tfrac{1}{2}x(5 - x)$ on $[0, 5]$,
+      approximated by 10 rectangles (a middle Riemann sum):</p>
+      <mp-jsxgraph width="520" height="380" bounds="-0.6,3.9,5.6,-0.7" axis="true" grid="true">
         var f = function (x) { return 0.5 * x * (5 - x); };
-        var n = board.create('slider', [[0.2, 4.0], [1.9, 4.0], [1, 8, 40]], { name: 'n', snapWidth: 1 });
-        board.create('functiongraph', [f, 0, 5], { strokeColor: '#be185d', strokeWidth: 2.5 });
-        board.create('riemannsum', [f, function () { return n.Value(); }, 'middle', 0, 5],
-          { fillColor: '#0891b2', fillOpacity: 0.3 });
-        board.create('text', [3.0, 4.0, function () {
-          return 'area &#8776; ' + JXG.Math.Numerics.riemannsum(f, n.Value(), 'middle', 0, 5).toFixed(3);
-        }]);
+        var a = 0, b = 5, N = 10, w = (b - a) / N, area = 0;
+        for (var i = 0; i < N; i++) {
+          var xl = a + i * w, xr = xl + w, h = f(xl + w / 2);
+          area += w * h;
+          board.create('polygon', [[xl, 0], [xl, h], [xr, h], [xr, 0]], {
+            fillColor: '#0891b2', fillOpacity: 0.35, fixed: true, hasInnerPoints: false,
+            vertices: { visible: false }, borders: { strokeColor: '#0e7490', strokeWidth: 1 }
+          });
+        }
+        board.create('functiongraph', [f, a, b], { strokeColor: '#be185d', strokeWidth: 2.5 });
+        board.create('text', [2.4, 3.6, N + ' rectangles &middot; area &#8776; ' + area.toFixed(3)]);
       </mp-jsxgraph>
     </mp-section>
   </mp-chapter>

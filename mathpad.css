@@ -1433,6 +1433,14 @@ mp-align {
   background: var(--bg-primary);
   box-shadow: var(--shadow-sm);
 }
+/* The board's own <svg> must NOT inherit the 350px image cap (the rule for
+   mp-course img/canvas/svg): JSXGraph sizes the board itself from its
+   width/height, so capping shrinks and squashes every interactive figure.
+   Narrow screens still scroll horizontally via the parent .mp-overflow-wrap. */
+.mp-jsxgraph .jxgbox svg,
+.jxgbox svg {
+  max-width: none;
+}
 
 /* ==========================================================
    16. Variation tables (classes preserved from v0)
