@@ -1441,6 +1441,14 @@ mp-align {
 .jxgbox svg {
   max-width: none;
 }
+/* Same exclusion for KaTeX-generated <svg> (arrows \vec / \overrightarrow,
+   accents \widehat, stretchy arrows, \sqrt radicals): they live in a 0-width
+   KaTeX vlist, so `max-width: min(350px,100%)` resolves 100% to 0 and collapses
+   the glyph to 0px wide (e.g. \vec{u} loses its arrow). Let them keep their
+   intrinsic size; wide katex-display still scrolls via .mp-overflow-wrap. */
+.katex svg {
+  max-width: none;
+}
 
 /* ==========================================================
    16. Variation tables (classes preserved from v0)
