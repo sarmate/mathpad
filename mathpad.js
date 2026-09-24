@@ -150,7 +150,12 @@
   // ============================================================
   // 5. Entry point
   // ============================================================
-  $(document).ready(function() {
+  // boot() is only REGISTERED at the very end of this file, never here: when
+  // the DOM is already ready (jQuery loaded with defer, mathpad injected late…)
+  // $(document).ready runs its callback synchronously, and module-level vars
+  // declared further down (themesDisponibles, blankCount, bibIndex,
+  // VARTABLE_SCALES) would still be undefined → makeThemeSelector crashed.
+  function boot() {
     detectLanguage();
     initTheme();
 
@@ -204,7 +209,7 @@
       clearTimeout(resizeT);
       resizeT = setTimeout(autoWrapOverflow, 150);
     });
-  });
+  }
 
   // ============================================================
   // 6. Language detection
@@ -2843,5 +2848,8 @@
   // ============================================================
   window.mathpad = window.mathpad || {};
   window.mathpad.renderVartables = renderVartables;
+
+  // Registered last, once every module-level var above is initialised.
+  $(document).ready(boot);
 
 })();
