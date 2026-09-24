@@ -2047,14 +2047,21 @@ body.mp-has-credit-floating { padding-bottom: 44px; }
     border-radius: 2px !important;
   }
 
-  /* Code blocks: print only the source */
+  /* Code blocks : en thème « impression », on garde l'éditeur CodeMirror
+     VISIBLE à l'impression (exactement comme à l'écran). Sans ça, le base
+     masque `.CodeMirror` en print et le code Python n'apparaît pas sur le PDF.
+     (CodeMirror est en height:auto/overflow:visible → aucun rognage.) */
   .mp-code textarea { display: none !important; }
-  .mp-code::before {
-    content: attr(data-print-label);
-    display: block;
-    font-style: italic;
-    color: #666;
-  }
+  [data-theme="impression"] .mp-code .CodeMirror { display: block !important; }
+  /* `.mp-code` est en overflow:auto (scroll horizontal à l'écran). À l'impression
+     Chrome réserve la gouttière de scrollbar → espace vide parasite sous le code.
+     On repasse en overflow:visible en print : pas de réserve, code affiché en entier. */
+  [data-theme="impression"] .mp-code { overflow: visible !important; }
+  /* CodeMirror mesure la hauteur des lignes à l'écran (body 17px) et FIGE une
+     min-height inline sur .CodeMirror-sizer. En print le base passe body à
+     10.5pt → le code rétrécit mais cette min-height reste → grand espace vide
+     sous le code. On lève ce plancher pour que le cadre épouse le code. */
+  [data-theme="impression"] .mp-code .CodeMirror-sizer { min-height: 0 !important; }
 
   /* Avoid widows/orphans on headers */
   mp-title, mp-chapter > mp-title, mp-section > mp-title, mp-subsection > mp-title {
@@ -2207,3 +2214,390 @@ mp-course li:has(.katex-display) {
   padding-block: 0.5em;
   line-height: 2.4;
 }
+
+/* ---- Tables de données legacy (class="tableau") : bordures restaurees (ajout 2026-06-30) ---- */
+.tableau{ border:solid 1px black; border-collapse:collapse; width:95%!important; margin-top:10px!important; margin-bottom:10px!important; }
+.tableau td{ border:solid 1px black; text-align:center; padding:10px; }
+.tableau th{ border:solid 1px black; text-align:center; padding:10px; }
+
+/* ==========================================================
+   22. Thème « impression » — cours à trous à imprimer en PDF.
+   Niveaux de gris TRÈS clairs (économie d'encre au photocopieur) mais
+   agréable et lisible. Réutilisable : il suffit de mettre
+       <mp-course theme="impression" theme-picker="off">
+   sur n'importe quel fichier d'impression. Rien à bricoler par cours.
+   Ajout 2026-07-01.
+   ========================================================== */
+[data-theme="impression"] {
+  /* Surfaces : blanc / gris très clair */
+  --bg-primary:#ffffff; --bg-secondary:#fafafa; --bg-tertiary:#f2f2f2;
+  --text-primary:#1a1a1a; --text-secondary:#3d3d3d; --text-muted:#6b6b6b;
+  --border-soft:#d9d9d9;
+  /* Accent neutre (gris) */
+  --accent-primary:#555555; --accent-secondary:#777777; --accent-gradient:#666666;
+  /* Couleurs de blocs → gris (n'encre que le fin filet d'accent) */
+  --mp-def-color:#555; --mp-theorem-color:#444; --mp-prop-color:#555;
+  --mp-lemma-color:#555; --mp-remark-color:#5f5f5f; --mp-method-color:#555;
+  --mp-warning-color:#444; --mp-example-color:#5f5f5f; --mp-exercise-color:#555;
+  --mp-activity-color:#555; --mp-quiz-color:#555; --mp-proof-color:#555;
+  /* Correction / nav en gris */
+  --correction-bg:#fafafa; --correction-border:#999999;
+  --correction-btn-bg:#f1f1f1; --correction-btn-text:#333333;
+  --nav-btn-primary:#888888; --nav-btn-secondary:#666666;
+}
+
+/* Blocs : corps blanc, fin filet gris + un seul trait d'accent à gauche
+   (au lieu des barres d'en-tête pleines colorées, gourmandes en encre). */
+[data-theme="impression"] .mp-formal,
+[data-theme="impression"] .mp-pedagogical {
+  background:#ffffff;
+  border:1px solid #cccccc;
+  border-left:3px solid var(--mp-block-color, #666666);
+  border-radius:4px;
+  box-shadow:none;
+}
+[data-theme="impression"] .mp-formal-header,
+[data-theme="impression"] .mp-pedagogical-header {
+  background:#f2f2f2;
+  color:#1a1a1a;
+  border-bottom:1px solid #dddddd;
+  border-radius:3px 3px 0 0;
+}
+[data-theme="impression"] .mp-formal-header,
+[data-theme="impression"] .mp-pedagogical-label,
+[data-theme="impression"] .mp-pedagogical-title,
+[data-theme="impression"] .mp-pedagogical-sep { color:#1a1a1a; }
+[data-theme="impression"] .mp-roc-badge { color:#333333; border:1px solid #bbbbbb; }
+
+/* Titres document / chapitre / section : fond clair + filet */
+[data-theme="impression"] mp-course > mp-title,
+[data-theme="impression"] mp-chapter > mp-title,
+[data-theme="impression"] mp-section > mp-title {
+  background:#f2f2f2 !important;
+  color:#1a1a1a !important;
+  border-left:3px solid #666666 !important;
+  box-shadow:none !important;
+  font-size: 1.1em;
+}
+[data-theme="impression"] mp-meta::before { display:none !important; }
+
+/* Bloc de titre du document (<mp-meta>, ou <mp-doc-title> employé seul).
+   Le rendu par défaut est un aplat en dégradé sombre sur toute la largeur :
+   à l'impression c'est un pavé noir qui vide le toner d'une photocopieuse.
+   En thème « impression » on le remplace par un cartouche façon sujet
+   d'examen : double filet fin, titre en serif, sous-titre en petites
+   capitales espacées. Tout est en traits d'un demi-point → encre négligeable. */
+[data-theme="impression"] mp-meta,
+[data-theme="impression"] mp-doc-title:not(mp-meta mp-doc-title) {
+  position:relative !important;
+  background:#ffffff !important;
+  color:#1a1a1a !important;
+  border:1.5px solid #2b2b2b !important;
+  border-radius:2px !important;
+  padding:1.05em 1.2em .9em !important;
+  margin:0 0 1.1em !important;
+  box-shadow:none !important;
+  text-align:center !important;
+}
+/* Filet intérieur : on réutilise le pseudo-élément décoratif du thème par
+   défaut (masqué plus haut) en réécrivant TOUTES ses propriétés de base. */
+[data-theme="impression"] mp-meta::before,
+[data-theme="impression"] mp-doc-title:not(mp-meta mp-doc-title)::before {
+  content:"" !important;
+  display:block !important;
+  position:absolute !important;
+  top:3.5px !important; right:3.5px !important; bottom:3.5px !important; left:3.5px !important;
+  width:auto !important; height:auto !important;
+  border:0.5px solid #9a9a9a !important;
+  border-radius:1px !important;
+  background:none !important;
+  pointer-events:none !important;
+}
+[data-theme="impression"] mp-meta mp-doc-title,
+[data-theme="impression"] mp-doc-title {
+  font-family:Georgia,'Liberation Serif','Times New Roman','DejaVu Serif',serif !important;
+  font-size:1.85em !important;
+  font-weight:700 !important;
+  letter-spacing:0 !important;
+  line-height:1.16 !important;
+  color:#111111 !important;
+  margin:0 !important;
+  padding:0 !important;
+  text-shadow:none !important;
+}
+/* Petit filet centré sous le titre */
+[data-theme="impression"] mp-meta mp-doc-title::after,
+[data-theme="impression"] mp-doc-title::after {
+  content:"" !important;
+  display:block !important;
+  width:64px; height:1.5px;
+  background:#2b2b2b;
+  margin:.5em auto 0;
+}
+[data-theme="impression"] mp-meta mp-author,
+[data-theme="impression"] mp-author {
+  font-family:var(--font-ui) !important;
+  text-transform:uppercase !important;
+  letter-spacing:.14em !important;
+  font-size:.74em !important;
+  font-weight:600 !important;
+  color:#3a3a3a !important;
+  margin:.62em 0 .18em !important;
+}
+[data-theme="impression"] mp-meta mp-date,
+[data-theme="impression"] mp-date {
+  font-family:Georgia,'Liberation Serif','Times New Roman','DejaVu Serif',serif !important;
+  font-style:italic !important;
+  font-size:.9em !important;
+  color:#5a5a5a !important;
+  margin:0 !important;
+}
+
+/* Corrections : encadré clair */
+[data-theme="impression"] .correction .intCorr {
+  background:#fafafa;
+  border-left:3px solid #999999;
+}
+/* À l'impression, mathpad masque le bouton « Correction » mais déplie la
+   correction : on remet un petit libellé compact en tête (peu de place). */
+@media print {
+  [data-theme="impression"] .correction .intCorr::before {
+    content:"Correction";
+    display:block;
+    font-family:var(--font-ui);
+    font-weight:700;
+    font-size:0.82em;
+    letter-spacing:0.03em;
+    color:#333333;
+    margin-bottom:3px;
+  }
+  /* La correction occupe toute la largeur de son bloc, sans aucune bordure. */
+  [data-theme="impression"] .correction { margin:6px 0 !important; }
+  [data-theme="impression"] .correction .intCorr {
+    background:none !important;
+    border:none !important;
+    border-radius:0 !important;
+    box-shadow:none !important;
+    padding:2px 0 !important;
+  }
+  /* Une correction peut s'étaler sur plusieurs pages (le base la rend insécable).
+     Les figures/tableaux internes restent, eux, protégés (règles plus haut). */
+  [data-theme="impression"] .correction,
+  [data-theme="impression"] .correction .intCorr {
+    break-inside:auto !important;
+    page-break-inside:auto !important;
+  }
+}
+/* Quiz : cases de réponses claires */
+[data-theme="impression"] .mp-answer { background:#ffffff; border:1px solid #cccccc; }
+
+/* Quiz en mode impression = « QCM de bac » : compact, sans en-tête « Quiz »,
+   numéroté comme une question classique (1. 2. 3. …), propositions EN LIGNE. */
+[data-theme="impression"] mp-quiz {
+  background:none !important;
+  border:none !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+  margin:4px 0 !important;
+  break-inside:avoid;
+  page-break-inside:avoid;
+}
+[data-theme="impression"] mp-quiz .mp-pedagogical-header { display:none !important; }  /* enlève « Quiz N » */
+[data-theme="impression"] mp-quiz .mp-pedagogical-body   { padding:2px 0 !important; }
+[data-theme="impression"] mp-quiz .mp-quiz-feedback      { display:none !important; }
+/* Numérotation type question de bac */
+[data-theme="impression"] mp-exercise { counter-reset: mpq; }
+[data-theme="impression"] mp-quiz     { counter-increment: mpq; counter-reset: mpa; }
+[data-theme="impression"] mp-quiz .mp-question { font-weight:600; margin:0 0 3px; }
+[data-theme="impression"] mp-quiz .mp-question::before { content: counter(mpq) ". "; font-weight:700; }
+/* Propositions alignées sur une même ligne (au pire deux), étiquetées a. b. c. d. */
+[data-theme="impression"] mp-quiz .mp-answer {
+  display:inline-block;
+  width:auto;
+  vertical-align:top;
+  counter-increment: mpa;
+  margin:0 8px 3px 0;
+  padding:2px 10px;
+  border:1px solid #cccccc !important;
+  border-radius:4px;
+  background:#fff !important;
+}
+/* Remplace la pastille ronde interactive (::before absolu) par une lettre a. b. c. d. */
+[data-theme="impression"] mp-quiz .mp-answer::before {
+  content: counter(mpa, lower-alpha) ". " !important;
+  position:static !important;
+  border:none !important;
+  width:auto !important;
+  height:auto !important;
+  background:none !important;
+  margin:0 2px 0 0 !important;
+  font-weight:700;
+  color:#000;
+}
+
+/* Tableur (`<mp-spreadsheet>`) en thème impression : conçu pour le PDF.
+   - conteneur sans hauteur figée ni scroll → le tableur complet s'affiche (le
+     `max-height` inline + overflow:auto donnaient une scrollbar et une coupure) ;
+   - police cellules réduite : appliquée AVANT que setupSpreadsheets ne calcule
+     les hauteurs (auto-resize au chargement, data-theme posé avant) → les lignes
+     se compactent d'elles-mêmes ;
+   - tableur insécable (une fois compact il tient sur une page).
+   Les LARGEURS de colonnes, spécifiques à chaque tableau, se règlent en local
+   dans le fichier _impr. */
+[data-theme="impression"] .mp-spreadsheet-container { max-height:none !important; overflow:visible !important; }
+[data-theme="impression"] .mp-spreadsheet { break-inside:avoid; page-break-inside:avoid; }
+[data-theme="impression"] .mp-spreadsheet-grid td,
+[data-theme="impression"] .mp-spreadsheet-grid th { height:auto !important; }
+[data-theme="impression"] .mp-spreadsheet-grid textarea {
+  font-size:11px !important;
+  line-height:1.2 !important;
+  padding:2px 5px !important;
+  min-height:0 !important;
+}
+[data-theme="impression"] .mp-spreadsheet-grid th { font-size:10px !important; }
+
+/* Exemples / exercices / activités / remarques : AUTORISÉS à s'étaler sur deux
+   pages. (Par défaut mathpad les rend insécables, ce qui casse la mise en page
+   dès qu'un bloc est plus haut qu'une page.) Les définitions/propriétés, elles,
+   restent insécables — énoncés courts qu'on ne veut pas couper. */
+[data-theme="impression"] mp-example,
+[data-theme="impression"] mp-exercise,
+[data-theme="impression"] mp-activity,
+[data-theme="impression"] mp-remark {
+  break-inside:auto !important;
+  page-break-inside:auto !important;
+}
+/* …mais on ne coupe JAMAIS au milieu d'une figure, d'un graphe ou d'un tableau. */
+[data-theme="impression"] mp-figure,
+[data-theme="impression"] mp-vartable,
+[data-theme="impression"] mp-jsxgraph,
+[data-theme="impression"] .jxgbox,
+[data-theme="impression"] .mp-statement,
+[data-theme="impression"] table {
+  break-inside:avoid !important;
+  page-break-inside:avoid !important;
+}
+
+/* Trous : simple espace blanc réservé pour écrire (pas de ligne) */
+[data-theme="impression"] .mp-blank {
+  visibility:hidden;
+  display:inline-block;
+  min-width:46px; padding:0 8px; margin:0 1px;
+  background:none; box-shadow:none;
+}
+
+/* Aperçu écran = rendu PDF : feuille A4 centrée, nav/crédit masqués */
+@media screen {
+  html[data-theme="impression"] { background:#e8e8e8; }
+  [data-theme="impression"] body {
+    width:210mm; max-width:210mm; margin:20px auto;
+    padding:12mm 14mm;
+    box-shadow:0 2px 14px rgba(0,0,0,0.28);
+  }
+  [data-theme="impression"] #mp-nav,
+  [data-theme="impression"] .mp-bottom-bar,
+  [data-theme="impression"] .sarmate-credit { display:none !important; }
+}
+
+/* Utilitaires « colonnes » (généraux, utilisables dans tout cours) : entoure
+   des blocs d'un <div class="cols2"> (ou cols3) pour les aligner côte à côte. */
+.cols2, .cols3 { display:flex; gap:8mm; align-items:flex-start; }
+.cols2 > *, .cols3 > * { flex:1; min-width:0; }
+
+
+/* ==========================================================
+   22b. Thème « impression » — DENSIFICATION du PDF (v2, 2026-07-29).
+   Raccourcit les cours/fiches au photocopieur : espace vertical reduit
+   (interligne, marges/paddings des blocs, titres, listes, equations,
+   figures, tableaux), SANS toucher au rendu ecran et en gardant la place
+   d'ecrire dans les trous (.mp-blank inchange).
+   Scope : @media print + [data-theme="impression"] uniquement.
+   Titre document = mp-course>mp-chapter>mp-title (mathpad enveloppe le
+   titre dans un mp-chapter auto) : font-size augmentee, padding reduit.
+   Figures JSXGraph : cadre retire, marges mini (l'espace vide INTERNE d'un
+   board a axe centre se regle au cas par cas dans le fichier via height/bounds).
+   Rollback : mathpad.css.bak_imprdensity_20260729 (meme dossier).
+   ========================================================== */
+/* Marges papier A4 reduites (le defaut mathpad etait 12mm 14mm). Usage : PDF
+   eleves photocopies, pas d'edition → on gagne de la hauteur ET de la largeur
+   (moins de retours a la ligne). Sur pour impression (bord non-imprimable ~5mm). */
+@page { size: auto; margin: 6mm 8mm; }
+
+@media print {
+  [data-theme="impression"] body { font-size:9.5pt !important; line-height:1.1 !important; }
+  [data-theme="impression"] .mp-formal-body,
+  [data-theme="impression"] .mp-pedagogical-body { padding-top:.2em !important; padding-bottom:.2em !important; }
+  [data-theme="impression"] .mp-formal-header,
+  [data-theme="impression"] .mp-pedagogical-header { padding-top:.12em !important; padding-bottom:.12em !important; }
+  [data-theme="impression"] mp-section>mp-title,
+  [data-theme="impression"] mp-subsection>mp-title { margin-top:.3em !important; margin-bottom:.2em !important; padding-top:.18em !important; padding-bottom:.18em !important; }
+  [data-theme="impression"] mp-section>mp-title { font-size:1.12em !important; }
+  [data-theme="impression"] mp-subsection>mp-title { font-size:1.0em !important; }
+  [data-theme="impression"] li { margin:.03em 0 !important; }
+  [data-theme="impression"] ul,[data-theme="impression"] ol { margin:.15em 0 !important; padding-left:1.3em !important; }
+  /* Listes d'expressions en ligne (ul.exprs des fiches d'exos) : garder un vrai
+     écart horizontal ET vertical entre les calculs (la règle li ci-dessus, avec
+     son !important, écrasait sinon la marge droite → tout collé). */
+  [data-theme="impression"] ul.exprs { padding-left:0 !important; }
+  [data-theme="impression"] ul.exprs li { margin:5px 34px 5px 0 !important; }
+  [data-theme="impression"] p { margin:.2em 0 !important; }
+  [data-theme="impression"] mp-center,[data-theme="impression"] .mp-center { margin:.12em 0 !important; }
+  [data-theme="impression"] mp-align .mp-align-table td { line-height:1.05 !important; padding-top:.03em !important; padding-bottom:.03em !important; }
+  [data-theme="impression"] .tableau td,[data-theme="impression"] .tableau th { padding:1px 6px !important; }
+  /* Correction : séparation légère de l'énoncé (filet gris clair + retrait),
+     en plus du libellé « Correction ». Sobre en encre. */
+  [data-theme="impression"] .correction .intCorr { border-left:2px solid #cfcfcf !important; padding:3px 0 3px 12px !important; margin-top:3px !important; }
+}
+
+/* ==========================================================
+   22c. Thème « impression » — filet gauche des boîtes en GRIS CLAIR.
+   Le filet d'accent gauche (3px gris foncé #666) consommait de l'encre
+   foncée au photocopieur. On le remet a la meme teinte claire que les
+   autres bordures (bordure uniforme 1px). Applique au theme impression
+   (ecran + PDF) pour une previsualisation fidele.
+   ========================================================== */
+[data-theme="impression"] .mp-formal,
+[data-theme="impression"] .mp-pedagogical,
+[data-theme="impression"] .mp-box,
+[data-theme="impression"] mp-toc { border-left:1px solid #cccccc !important; }
+[data-theme="impression"] mp-course>mp-title,
+[data-theme="impression"] mp-chapter>mp-title,
+[data-theme="impression"] mp-section>mp-title,
+[data-theme="impression"] mp-subsection>mp-title { border-left:1px solid #d9d9d9 !important; }
+
+/* Figures : espace vertical resserre + pas de cadre, applique a l'ECRAN aussi
+   (la previsualisation impression montrait sinon ~36px de vide au-dessus/en
+   dessous de chaque graphique, alors que le PDF etait deja serre). */
+[data-theme="impression"] mp-jsxgraph { margin:2px auto !important; padding:0 !important; }
+[data-theme="impression"] .jxgbox { border:none !important; }
+[data-theme="impression"] mp-figure { margin-top:3px !important; margin-bottom:3px !important; }
+/* Preuves : AUTORISEES a se couper entre deux pages (elles peuvent etre longues,
+   comme les exemples/exercices). mathpad + le theme les rendaient insecables →
+   une preuve longue forcait un saut de page. Les mp-align/tableaux internes,
+   eux, restent proteges (regle table/mp-vartable plus haut). */
+[data-theme="impression"] mp-proof { break-inside:auto !important; page-break-inside:auto !important; }
+/* Le vrai verrou : le <table> interne d'un mp-align (calculs alignés) etait
+   protege par la regle generale table{break-inside:avoid} → preuves/corrections
+   effectivement insecables. On autorise la coupure ENTRE lignes du mp-align
+   (les LIGNES restent intactes). Les autres tables (donnees, mp-vartable) et
+   figures restent protegees. */
+[data-theme="impression"] mp-align .mp-align-table,
+[data-theme="impression"] mp-align table { break-inside:auto !important; page-break-inside:auto !important; }
+[data-theme="impression"] mp-align .mp-align-table tr,
+[data-theme="impression"] mp-align table tr { break-inside:avoid !important; page-break-inside:avoid !important; }
+[data-theme="impression"] mp-center { margin:.12em 0 !important; }
+/* Marges entre blocs resserrees a l'ecran aussi (gaps autour des figures). */
+[data-theme="impression"] .mp-formal,
+[data-theme="impression"] .mp-pedagogical,
+[data-theme="impression"] .mp-box,
+[data-theme="impression"] .mp-proof { margin-top:4px !important; margin-bottom:4px !important; }
+/* Tableaux de donnees : marges avant/apres reduites (wrapper .mp-overflow-wrap
+   ~17px + tableau ~10px = ~54px perdus autour de chaque tableau). */
+[data-theme="impression"] .mp-overflow-wrap { margin-top:4px !important; margin-bottom:2px !important; padding-bottom:0 !important; }
+[data-theme="impression"] table.tableau { margin-top:3px !important; margin-bottom:2px !important; }
+
+/* Titre du document (mp-course>mp-chapter>mp-title) : taille et padding
+   appliques a l'ecran ET au PDF (sinon le titre reste minuscule dans la
+   previsualisation « impression » a cause du <span> a 60% du fichier). */
+[data-theme="impression"] mp-chapter>mp-title,
+[data-theme="impression"] mp-course>mp-title { font-size:1.9em !important; padding:.24em .6em !important; margin:.1em 0 .4em !important; min-height:0 !important; }

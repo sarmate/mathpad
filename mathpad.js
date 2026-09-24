@@ -1147,6 +1147,14 @@
       wrapper.appendChild(modal);
       corr.parentNode.replaceChild(wrapper, corr);
     });
+    // Print theme: expand every correction at load. This makes the on-screen
+    // preview match the PDF (WYSIWYG) and — crucially — ensures any CodeMirror
+    // inside a correction is instantiated while VISIBLE (setupCodeBlocks runs
+    // right after). A hidden correction would otherwise measure the editor at
+    // height 0 and print an empty framed box.
+    if (document.documentElement.getAttribute('data-theme') === 'impression') {
+      document.querySelectorAll('.correction').forEach(function(modal) { showCorrection(modal); });
+    }
   }
   function showCorrection(modal) {
     modal.style.display = 'block';
@@ -1170,13 +1178,13 @@
   // ============================================================
   var blankCount = 0;
   function setupBlanks() {
-    // Only top-level pauses are tied to the global nav buttons.
-    // Pauses inside corrections (modal) are kept as static reveals — they show in
-    // full when the correction is opened, no progressive stepping inside.
+    // Every pause belongs to ONE global reveal sequence, in document order —
+    // including pauses inside corrections. When the nav reaches a pause that
+    // lives in a (still closed) correction, mpAdvance opens that correction
+    // first (see below), so a correction's steps reveal exactly like the rest
+    // of the document.
     var all = document.querySelectorAll('pause, mp-blank');
-    var blanks = Array.prototype.filter.call(all, function(el) {
-      return !el.closest('.mp-correction-wrapped, .correction');
-    });
+    var blanks = Array.prototype.slice.call(all);
     blankCount = blanks.length;
     blanks.forEach(function(el, i) {
       el.id = 'mp-blank-' + i;
@@ -1194,6 +1202,13 @@
 
   function scrollToBlank(el) {
     if (!el) return;
+    // Only move the page if the revealed blank isn't already within the
+    // visible viewport. If any part of it is on screen we leave the scroll
+    // untouched — re-centering a blank the user can already see is jarring
+    // when projecting in class.
+    var rect = el.getBoundingClientRect();
+    var vh = window.innerHeight || document.documentElement.clientHeight;
+    if (rect.bottom > 0 && rect.top < vh) return;
     el.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
@@ -1201,6 +1216,10 @@
     var revealedIdx = blankIdx;
     var el = document.getElementById('mp-blank-' + revealedIdx);
     if (el) {
+      // If this pause lives inside a closed correction, open it first so the
+      // step reveals in context — just like advancing anywhere else.
+      var corr = el.closest('.correction');
+      if (corr && !corr.classList.contains('show')) showCorrection(corr);
       el.style.visibility = 'visible';
       blankHighlight(revealedIdx, true);
       setTimeout(function() { blankHighlight(revealedIdx, false); }, 1000);
@@ -1215,6 +1234,8 @@
     if (el) {
       el.style.visibility = 'hidden';
       blankHighlight(blankIdx, false);
+      // A correction that mpAdvance opened stays open on retreat — we only
+      // re-hide the pause's content, never collapse the box.
       if (!skipScroll) scrollToBlank(el);
     }
     return el;
